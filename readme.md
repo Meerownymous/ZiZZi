@@ -14,27 +14,27 @@ It adopts the approach of the blog article [printers instead of getters](https:/
 
 ```csharp
 var menu =
-	new BxBlock("menu",
+    new BxBlock("menu",
     	new BxBlockArray("meals", "meal",
         	new BxBlock(
             	new BxProp("name", "Pizza Funghi"),
                 new BxProp("price", "9.50€")
             ),
-        	new BxBlock(
-        		new BxProp("name", "Burger Helene with Fritten"),
+            new BxBlock(
+        	    new BxProp("name", "Burger Helene with Fritten"),
 	            new BxProp("price", "10.50€")
     	    )
     	),
-	    new BxBlockArray("drinks", "drink",
-    		new BxBlock(
-        		new BxProp("name", "Beer"),
-            	new BxProp("price", "2.50€")
-	        ),
+	new BxBlockArray("drinks", "drink",
     	    new BxBlock(
-        		new BxProp("name", "Beer"),
+        	new BxProp("name", "Beer"),
+            	new BxProp("price", "2.50€")
+	    ),
+    	    new BxBlock(
+        	new BxProp("name", "Beer"),
             	new BxProp("price", "35.00€")
-	     	)
- 		)
+	    )
+ 	)
     );
 ```
 
@@ -44,7 +44,7 @@ And decide later which format you need:
 
 ```csharp
 Console.WriteLine(
-	menu.Print(new XmlMedia())
+    menu.Print(new XmlMedia())
 );
 ```
 
@@ -79,7 +79,7 @@ Will give you
 
 ```csharp
 Console.WriteLine(
-	menu.Print(new XmlMedia())
+    menu.Print(new XmlMedia())
 );
 ```
 
@@ -118,11 +118,11 @@ You can build Brix which will aggregate data only when printed:
 
 ```csharp
 var report =
-	new BxBlock("Weather Report",
+    new BxBlock("Weather Report",
     	new BxBlock(
-	    	new BxProp("Temperature", () => weatherServer.Degrees("Berlin").AsDouble()) //not yet read
-	    )
-	);
+	    new BxProp("Temperature", () => weatherServer.Degrees("Berlin").AsDouble()) //not yet read
+	)
+    );
 
 report.Print(new XmlMedia()); //Temperature is read while printing
 ```
@@ -155,14 +155,14 @@ else if(new Header.Of("accept", httpRequest) == "application/json")
 //Someone sends this:
 public void Send()
 {
-	var signal =
+    var signal =
     	new SignalOf("Event", "Something is on fire",
-        	new BxArray("Burning things"
+            new BxArray("Burning things"
             	new ListOf<string>(
-                	() => BurningThings()
-	            )
+                    () => BurningThings()
+	        )
     	    )
-	    );
+	);
 }
 
 public void BurningThings()
@@ -175,7 +175,6 @@ public void BurningThings()
 }
 
 
-
 //...control flow happens in between...
 
 //Someone receives:
@@ -185,20 +184,16 @@ if(signal.Prop("event" == "Something exploded")) //is false in this example
 {
     var payload = 
         signal.Payload()
-        	.Print(new XmlMedia()); //Only when you print, the burning things would be inspected.
+            .Print(new XmlMedia()); //Only when you print, the burning things would be inspected.
 }
 ```
 
 
-
 ## Data Conventions
-
 BriX can print XML and Json, and more media formats can be added by implementing the IMedia<TOutput> interface.
-
 Because XML and Json have different feature sets, BriX limits these features to ensure BriX are compatible to both xml and json. 
 
 ### Block names
-
 Every Block must have a name:
 
 ```
@@ -214,9 +209,9 @@ Every Block must have a name:
 
 //C#
 var brix =
-	new BxBlock("root", //name must be specified.
-		new BxProp("branch", "My Branch")
-	);
+    new BxBlock("root", //name must be specified.
+	new BxProp("branch", "My Branch")
+    );
 ```
 
 Obviously, the name "root" is lost when printing to Json. But Brix enforces that you specify it, because it is needed for Xml.
@@ -228,39 +223,33 @@ The same is the case for arrays:
 ```
 //Xml
 <shopping-list>
-	<fruits>
-		<fruit>Apple</fruit>
-		<fruit>Banana</fruit>		
-	</fruits>
+    <fruits>
+	<fruit>Apple</fruit>
+	<fruit>Banana</fruit>		
+    </fruits>
 </shopping-list>
 
 //Json
 {
-	"fruits":
-	[
-		"Apple", "Banana"
-	]
+    "fruits":
+    [
+        "Apple", "Banana"
+    ]
 }
 
 //C#
 var list =
-	new BxBlock("shopping-list",
-		new BxArray("fruits", "fruit", //"fruit" as name for entries must be specified
-			"Apple", "Banana"
+    new BxBlock("shopping-list",
+	new BxArray("fruits", "fruit", //"fruit" as name for entries must be specified
+	    "Apple", "Banana"
         )
-	);
+    );
 ```
 
-
-
 ### Xml Attributes
-
 Json does not support attributes, so they are not included in BriX objects. If you need them, you might implement or extend the JsonMedia interface to support them and write BriX objects.
 
-
-
 ## Conditional BriX
-
 Instead of using large if/else constructs:
 
 ```csharp
@@ -273,6 +262,3 @@ new BxBlock("Todos",
     )
 )
 ```
-
-
-
