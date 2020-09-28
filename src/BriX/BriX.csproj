@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>ICARUS Consulting GmbH</Authors>
+    <Description>Build object oriented data structures and format them when needed.</Description>
+    <Copyright>2020 ICARUS Consulting GmbH</Copyright>
+    <PackageProjectUrl>https://github.com/icarus-consulting/BriX</PackageProjectUrl>
+    <NeutralLanguage>en-001</NeutralLanguage>
+    <PackageTags>data structures, xml, json, intermediate, oop, cactoos</PackageTags>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile></PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
