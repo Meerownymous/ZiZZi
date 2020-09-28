@@ -16,13 +16,13 @@ It adopts the approach of the blog article [printers instead of getters](https:/
 var menu =
     new BxBlock("menu",
     	new BxBlockArray("meals", "meal",
-        	new BxBlock(
+            new BxBlock(
             	new BxProp("name", "Pizza Funghi"),
                 new BxProp("price", "9.50€")
             ),
             new BxBlock(
-        	    new BxProp("name", "Burger Helene with Fritten"),
-	            new BxProp("price", "10.50€")
+        	new BxProp("name", "Burger Helene with Fritten"),
+	        new BxProp("price", "10.50€")
     	    )
     	),
 	new BxBlockArray("drinks", "drink",
