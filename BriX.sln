@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{D144FF1C-1574-4269-98DC-04480144CD34}"
+	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
+		build.cake = build.cake
+		license = license
+		readme.md = readme.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BriX", "src\BriX\BriX.csproj", "{4100363A-8976-44B1-9483-68D486A51784}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.BriX", "tests\Test.BriX\Test.BriX.csproj", "{913504FE-C574-400D-807D-92176B43AA95}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4100363A-8976-44B1-9483-68D486A51784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4100363A-8976-44B1-9483-68D486A51784}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4100363A-8976-44B1-9483-68D486A51784}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4100363A-8976-44B1-9483-68D486A51784}.Release|Any CPU.Build.0 = Release|Any CPU
+		{913504FE-C574-400D-807D-92176B43AA95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{913504FE-C574-400D-807D-92176B43AA95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{913504FE-C574-400D-807D-92176B43AA95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{913504FE-C574-400D-807D-92176B43AA95}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {439ACD8D-8BE0-4852-9964-8D368A50E6E2}
+	EndGlobalSection
+EndGlobal
