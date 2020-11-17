@@ -79,7 +79,7 @@ Will give you
 
 ```csharp
 Console.WriteLine(
-    menu.Print(new XmlMedia())
+    menu.Print(new JsonMedia())
 );
 ```
 
