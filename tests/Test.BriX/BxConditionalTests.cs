@@ -32,7 +32,7 @@ namespace BriX.Test
         {
             var media = new XmlMedia().Block("root");
             new BxConditional(() => true,
-                new BxProp("Matched", "true")
+                () => new BxProp("Matched", "true")
             ).Print(media);
             Assert.Equal(
                 "<root><Matched>true</Matched></root>",
@@ -45,7 +45,7 @@ namespace BriX.Test
         {
             var media = new XmlMedia().Block("root");
             new BxConditional(() => false,
-                new BxProp("Matched", "true")
+                () => new BxProp("Matched", "true")
             ).Print(media);
             Assert.Equal(
                 "<root />",
