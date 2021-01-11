@@ -27,7 +27,7 @@ using Yaapii.Xml;
 
 namespace BriX.Test
 {
-    public sealed class BxTransportedTests
+    public sealed class BxRebuiltTests
     {
         [Fact]
         public void RebuildsEmptyRootBlock()
@@ -35,7 +35,7 @@ namespace BriX.Test
             Assert.Equal(
                 1,
                 new XMLCursor(
-                    new BxTransported(
+                    new BxRebuilt(
                         new BxBlock("root").Print(new RebuildMedia())
                     ).Print(new XmlMedia())
                 ).Nodes("/root")
@@ -49,7 +49,7 @@ namespace BriX.Test
             Assert.Equal(
                 1,
                 new XMLCursor(
-                    new BxTransported(
+                    new BxRebuilt(
                         new BxArray("root", "sub").Print(new RebuildMedia())
                     ).Print(new XmlMedia())
                 ).Nodes("/root")
@@ -63,7 +63,7 @@ namespace BriX.Test
             Assert.Equal(
                 1,
                 new XMLCursor(
-                    new BxTransported(
+                    new BxRebuilt(
                         new BxBlock("root",
                             new BxBlock("sub")
                         ).Print(new RebuildMedia())
@@ -79,7 +79,7 @@ namespace BriX.Test
             Assert.Equal(
                 1,
                 new XMLCursor(
-                    new BxTransported(
+                    new BxRebuilt(
                         new BxBlock("root",
                             new BxArray("items", "item", "content")
                         ).Print(new RebuildMedia())

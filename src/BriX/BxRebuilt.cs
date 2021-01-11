@@ -32,44 +32,44 @@ namespace BriX
     /// <summary>
     /// A brix which has been transported as raw data.
     /// </summary>
-    public sealed class BxTransported : IBrix
+    public sealed class BxRebuilt : IBrix
     {
         private readonly IBrix brix;
 
         /// <summary>
         /// A brix which has been transported as raw data.
         /// </summary>
-        public BxTransported(IInput data) : this(() => XDocument.Parse(new TextOf(data).AsString()), true)
+        public BxRebuilt(IInput data) : this(() => XDocument.Parse(new TextOf(data).AsString()), true)
         { }
 
         /// <summary>
         /// A brix which has been transported as raw data.
         /// </summary>
-        public BxTransported(string xml) : this(() => XDocument.Parse(xml), true)
+        public BxRebuilt(string xml) : this(() => XDocument.Parse(xml), true)
         { }
 
         /// <summary>
         /// A brix which has been transported as raw data.
         /// </summary>
-        public BxTransported(byte[] bytes) : this(() => XDocument.Parse(new TextOf(bytes).AsString()), true)
+        public BxRebuilt(byte[] bytes) : this(() => XDocument.Parse(new TextOf(bytes).AsString()), true)
         { }
 
         /// <summary>
         /// A brix which has been transported as raw data.
         /// </summary>
-        public BxTransported(XNode node) : this(() => node, true)
+        public BxRebuilt(XNode node) : this(() => node, true)
         { }
 
         /// <summary>
         /// A brix which has been transported as raw data.
         /// </summary>
-        private BxTransported(XNode node, bool isRoot) : this(() => node, isRoot)
+        private BxRebuilt(XNode node, bool isRoot) : this(() => node, isRoot)
         { }
 
         /// <summary>
         /// A brix which has been transported as raw data.
         /// </summary>
-        private BxTransported(Func<XNode> node, bool isRoot = true) : this(new ScalarOf<XElement>(() =>
+        private BxRebuilt(Func<XNode> node, bool isRoot = true) : this(new ScalarOf<XElement>(() =>
             {
                 var builtNode = node();
                 XElement result;
@@ -93,7 +93,7 @@ namespace BriX
         /// <summary>
         /// A brix which has been transported as raw data.
         /// </summary>
-        public BxTransported(IScalar<XElement> data)
+        public BxRebuilt(IScalar<XElement> data)
         {
             this.brix =
                 new BxChain(
@@ -102,7 +102,7 @@ namespace BriX
                         () =>
                         new BxBlock(data.Value().Name.LocalName,
                             new Mapped<XNode, IBrix>(
-                                elem => new BxTransported(elem, false),
+                                elem => new BxRebuilt(elem, false),
                                 data.Value().Elements()
                             )
                         )
