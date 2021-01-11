@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using System.Collections.Generic;
+using Yaapii.Atoms.Enumerable;
+
 namespace BriX
 {
     /// <summary>
@@ -39,13 +42,25 @@ namespace BriX
         /// <summary>
         /// A block which can be printed to an array.
         /// </summary>
-        public BxBlock(params IBrix[] content) : this(string.Empty, new BxChain(content))
+        public BxBlock(params IBrix[] content) : this(string.Empty, new ManyOf<IBrix>(content))
+        { }
+
+        /// <summary>
+        /// A block which can be printed to an array.
+        /// </summary>
+        public BxBlock(IEnumerable<IBrix> content) : this(string.Empty, new BxChain(content))
         { }
 
         /// <summary>
         /// A block which can be printed to a media.
         /// </summary>
-        public BxBlock(string name, params IBrix[] content) : this(name, new BxChain(content))
+        public BxBlock(string name, params IBrix[] content) : this(name, new ManyOf<IBrix>(content))
+        { }
+
+        /// <summary>
+        /// A block which can be printed to a media.
+        /// </summary>
+        public BxBlock(string name, IEnumerable<IBrix> content) : this(name, new BxChain(content))
         { }
 
         /// <summary>

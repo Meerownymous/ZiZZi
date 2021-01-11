@@ -1,38 +1,16 @@
-﻿//MIT License
-
-//Copyright (c) 2020 ICARUS Consulting GmbH
-
-//Permission is hereby granted, free of charge, to any person obtaining a copy
-//of this software and associated documentation files (the "Software"), to deal
-//in the Software without restriction, including without limitation the rights
-//to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//copies of the Software, and to permit persons to whom the Software is
-//furnished to do so, subject to the following conditions:
-
-//The above copyright notice and this permission notice shall be included in all
-//copies or substantial portions of the Software.
-
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-//SOFTWARE.
-
-using System;
+﻿using System;
 using System.Xml.Linq;
 using Xunit;
 using Yaapii.Xml;
 
 namespace BriX.Media.Test
 {
-    public sealed class XmlMediaTests
+    public sealed class TransportMediaTests
     {
         [Fact]
         public void CreatesPropertyInBlock()
         {
-            var media = new XmlMedia();
+            var media = new TransportMedia();
 
             media.Block("root")
                 .Prop("key");
@@ -47,7 +25,7 @@ namespace BriX.Media.Test
         public void RejectsPuttingPropertyToArray()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new XmlMedia()
+                new TransportMedia()
                     .Array("root", "item")
                     .Prop("key")
                     .Put("lock")
@@ -58,7 +36,7 @@ namespace BriX.Media.Test
         public void RejectsPuttingPropertyToRoot()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new XmlMedia()
+                new TransportMedia()
                     .Prop("key")
                     .Put("lock")
             );
@@ -67,7 +45,7 @@ namespace BriX.Media.Test
         [Fact]
         public void CreatesBlockInRoot()
         {
-            var media = new XmlMedia();
+            var media = new TransportMedia();
             media.Block("root")
                 .Prop("key")
                 .Put("value");
@@ -81,7 +59,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsSecondBlockInRoot()
         {
-            var media = new XmlMedia();
+            var media = new TransportMedia();
             media.Block("root");
 
             Assert.Throws<InvalidOperationException>(() =>
@@ -92,7 +70,7 @@ namespace BriX.Media.Test
         [Fact]
         public void CreatesBlockInProp()
         {
-            var media = new XmlMedia();
+            var media = new TransportMedia();
             media.Block("root")
                 .Prop("my-block")
                 .Block("contents");
@@ -107,14 +85,14 @@ namespace BriX.Media.Test
         [Fact]
         public void CreatesBlockInArray()
         {
-            var media = new XmlMedia();
+            var media = new TransportMedia();
             media.Array("array", "item")
                 .Block("item")
                 .Prop("prop")
                 .Put("eller");
 
             Assert.Equal(
-                "<array><item><prop>eller</prop></item></array>",
+                "<array bx-type=\"array\" bx-array-item-name=\"item\"><item bx-type=\"block\"><prop bx-type=\"prop\">eller</prop></item></array>",
                 media.Content().ToString(SaveOptions.DisableFormatting)
             );
         }
@@ -123,7 +101,7 @@ namespace BriX.Media.Test
         public void RejectsBlockInArrayWithDifferentName()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new XmlMedia()
+                new TransportMedia()
                     .Array("array", "item")
                     .Block("other-name")
             );
@@ -132,11 +110,11 @@ namespace BriX.Media.Test
         [Fact]
         public void BuildsBlockInBlock()
         {
-            var media = new XmlMedia();
+            var media = new TransportMedia();
             media.Block("root")
                 .Block("contents");
             Assert.Equal(
-                "<root><contents /></root>",
+                "<root bx-type=\"block\"><contents bx-type=\"block\" /></root>",
                 media.Content().ToString(SaveOptions.DisableFormatting)
             );
         }
@@ -144,11 +122,11 @@ namespace BriX.Media.Test
         [Fact]
         public void CreatesArrayAtRoot()
         {
-            var media = new XmlMedia();
+            var media = new TransportMedia();
             media.Array("root", "key");
 
             Assert.Equal(
-                "<root />",
+                "<root bx-type=\"array\" bx-array-item-name=\"key\" />",
                 media.Content().ToString()
             );
         }
@@ -156,14 +134,14 @@ namespace BriX.Media.Test
         [Fact]
         public void CreatesArrayInBlock()
         {
-            var media = new XmlMedia();
+            var media = new TransportMedia();
 
             media
                 .Block("root")
                 .Array("keys", "key");
 
             Assert.Equal(
-                "<root><keys /></root>",
+                "<root bx-type=\"block\"><keys bx-type=\"array\" bx-array-item-name=\"key\" /></root>",
                 media.Content().ToString(System.Xml.Linq.SaveOptions.DisableFormatting)
             );
         }
@@ -171,14 +149,14 @@ namespace BriX.Media.Test
         [Fact]
         public void CreatesArrayInArray()
         {
-            var media = new XmlMedia();
+            var media = new TransportMedia();
 
             media
                 .Array("keys", "key")
                 .Array("subarray", "subkey");
 
             Assert.Equal(
-                "<keys><subarray /></keys>",
+                "<keys bx-type=\"array\" bx-array-item-name=\"key\"><subarray bx-type=\"array\" bx-array-item-name=\"subkey\" /></keys>",
                 media.Content().ToString(System.Xml.Linq.SaveOptions.DisableFormatting)
             );
         }
@@ -186,7 +164,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsArrayInProp()
         {
-            var media = new XmlMedia();
+            var media = new TransportMedia();
 
             Assert.Throws<InvalidOperationException>(() =>
                 media
@@ -199,7 +177,7 @@ namespace BriX.Media.Test
         [Fact]
         public void PutsValueToProp()
         {
-            var media = new XmlMedia();
+            var media = new TransportMedia();
 
             media.Block("root")
                 .Prop("key")
@@ -214,7 +192,7 @@ namespace BriX.Media.Test
         [Fact]
         public void PutsValueToArray()
         {
-            var media = new XmlMedia();
+            var media = new TransportMedia();
 
             media
                 .Array("items", "item")
@@ -230,7 +208,7 @@ namespace BriX.Media.Test
         public void RejectsValueInBlock()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new XmlMedia()
+                new TransportMedia()
                     .Block("root")
                     .Put("lock")
             );
@@ -239,7 +217,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsDuplicateKeyForProp()
         {
-            IMedia<XNode> media = new XmlMedia();
+            IMedia<XNode> media = new TransportMedia();
 
             var block = media.Block("root");
             block
@@ -254,7 +232,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsDuplicateKeyForBlock()
         {
-            IMedia<XNode> media = new XmlMedia();
+            IMedia<XNode> media = new TransportMedia();
 
             media.Block("key");
 
@@ -266,7 +244,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsDuplicateKeyForArray()
         {
-            IMedia<XNode> media = new XmlMedia();
+            IMedia<XNode> media = new TransportMedia();
 
             media.Array("array", "item");
 
