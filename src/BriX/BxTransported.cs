@@ -1,8 +1,31 @@
-﻿using System;
+﻿//MIT License
+
+//Copyright (c) 2021 ICARUS Consulting GmbH
+
+//Permission is hereby granted, free of charge, to any person obtaining a copy
+//of this software and associated documentation files (the "Software"), to deal
+//in the Software without restriction, including without limitation the rights
+//to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//copies of the Software, and to permit persons to whom the Software is
+//furnished to do so, subject to the following conditions:
+
+//The above copyright notice and this permission notice shall be included in all
+//copies or substantial portions of the Software.
+
+//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//SOFTWARE.
+
+using System;
 using System.Xml.Linq;
 using Yaapii.Atoms;
 using Yaapii.Atoms.Enumerable;
 using Yaapii.Atoms.Scalar;
+using Yaapii.Atoms.Text;
 
 namespace BriX
 {
@@ -16,22 +39,47 @@ namespace BriX
         /// <summary>
         /// A brix which has been transported as raw data.
         /// </summary>
-        public BxTransported(XNode node) : this(node, true)
+        public BxTransported(IInput data) : this(() => XDocument.Parse(new TextOf(data).AsString()), true)
         { }
 
         /// <summary>
         /// A brix which has been transported as raw data.
         /// </summary>
-        private BxTransported(XNode node, bool isRoot = true) : this(new ScalarOf<XElement>(() =>
+        public BxTransported(string xml) : this(() => XDocument.Parse(xml), true)
+        { }
+
+        /// <summary>
+        /// A brix which has been transported as raw data.
+        /// </summary>
+        public BxTransported(byte[] bytes) : this(() => XDocument.Parse(new TextOf(bytes).AsString()), true)
+        { }
+
+        /// <summary>
+        /// A brix which has been transported as raw data.
+        /// </summary>
+        public BxTransported(XNode node) : this(() => node, true)
+        { }
+
+        /// <summary>
+        /// A brix which has been transported as raw data.
+        /// </summary>
+        private BxTransported(XNode node, bool isRoot) : this(() => node, isRoot)
+        { }
+
+        /// <summary>
+        /// A brix which has been transported as raw data.
+        /// </summary>
+        private BxTransported(Func<XNode> node, bool isRoot = true) : this(new ScalarOf<XElement>(() =>
             {
+                var builtNode = node();
                 XElement result;
-                if (node.NodeType == System.Xml.XmlNodeType.Element)
+                if (builtNode.NodeType == System.Xml.XmlNodeType.Element)
                 {
-                    result = isRoot ? node.Document.Root : node as XElement;
+                    result = isRoot ? builtNode.Document.Root : builtNode as XElement;
                 }
-                else if(node.NodeType == System.Xml.XmlNodeType.Document)
+                else if(builtNode.NodeType == System.Xml.XmlNodeType.Document)
                 {
-                    result = (node as XDocument).Root;
+                    result = (builtNode as XDocument).Root;
                 }
                 else
                 {
