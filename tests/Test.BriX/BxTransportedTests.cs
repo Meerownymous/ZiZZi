@@ -22,6 +22,7 @@
 
 using BriX.Media;
 using Xunit;
+using Yaapii.Atoms.IO;
 using Yaapii.Xml;
 
 namespace BriX.Test
@@ -35,7 +36,7 @@ namespace BriX.Test
                 1,
                 new XMLCursor(
                     new BxTransported(
-                        new BxBlock("root").Print(new TransportMedia())
+                        new BxBlock("root").Print(new RebuildMedia())
                     ).Print(new XmlMedia())
                 ).Nodes("/root")
                 .Count
@@ -49,7 +50,7 @@ namespace BriX.Test
                 1,
                 new XMLCursor(
                     new BxTransported(
-                        new BxArray("root", "sub").Print(new TransportMedia())
+                        new BxArray("root", "sub").Print(new RebuildMedia())
                     ).Print(new XmlMedia())
                 ).Nodes("/root")
                 .Count
@@ -65,7 +66,7 @@ namespace BriX.Test
                     new BxTransported(
                         new BxBlock("root",
                             new BxBlock("sub")
-                        ).Print(new TransportMedia())
+                        ).Print(new RebuildMedia())
                     ).Print(new XmlMedia())
                 ).Nodes("/root/sub")
                 .Count
@@ -81,7 +82,7 @@ namespace BriX.Test
                     new BxTransported(
                         new BxBlock("root",
                             new BxArray("items", "item", "content")
-                        ).Print(new TransportMedia())
+                        ).Print(new RebuildMedia())
                     ).Print(new XmlMedia())
                 ).Nodes("/root/items/item[text() = 'content']")
                 .Count
@@ -94,11 +95,13 @@ namespace BriX.Test
             Assert.Equal(
                 1,
                 new XMLCursor(
-                    new BxBlock("root",
-                        new BxBlockArray("items", "item",
-                            new BxBlock(new BxProp("name", "I-Tem"))
-                        )
-                    ).Print(new TransportMedia())
+                    new InputOf(
+                        new BxBlock("root",
+                            new BxBlockArray("items", "item",
+                                new BxBlock(new BxProp("name", "I-Tem"))
+                            )
+                        ).Print(new RebuildMedia())
+                    )
                 ).Nodes("/root/items/item[name/text() = 'I-Tem']")
                 .Count
             );
@@ -110,9 +113,11 @@ namespace BriX.Test
             Assert.Equal(
                 1,
                 new XMLCursor(
-                    new BxBlock("root",
-                        new BxProp("of", "all evil")
-                    ).Print(new TransportMedia())
+                    new InputOf(
+                        new BxBlock("root",
+                            new BxProp("of", "all evil")
+                        ).Print(new RebuildMedia())
+                    )
                 ).Nodes("/root/of[text() = 'all evil']")
                 .Count
             );
