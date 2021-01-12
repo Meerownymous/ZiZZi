@@ -4,6 +4,13 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat-square)](http://commitizen.github.io/cz-cli/)
 [![EO principles respected here](http://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org)
 
+## Repo Guidelines
+
+Main responsible for this reposotory is [icaOBU](https://github.com/icaOBU).
+Please request in every single PR a review from him. 
+
+He will try to review the PR´s within **1 week** and merge applied PR´s within **2 weeks** with a new release. Main review day is monday.
+
 # BriX
 
 Create data structures using *object oriented* bricks.
