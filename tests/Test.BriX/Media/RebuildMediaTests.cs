@@ -20,27 +20,30 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using Newtonsoft.Json.Linq;
 using System;
+using System.Xml.Linq;
 using Xunit;
-using Yaapii.JSON;
+using Yaapii.Atoms.IO;
+using Yaapii.Atoms.Text;
+using Yaapii.Xml;
 
 namespace BriX.Media.Test
 {
-    public sealed class JsonMediaTests
+    public sealed class RebuildMediaTests
     {
         [Fact]
         public void CreatesPropertyInBlock()
         {
-            var media = new JsonMedia();
+            var media = new RebuildMedia();
 
             media.Block("root")
-                .Prop("key")
-                .Put("lock");
+                .Prop("key");
 
             Assert.Equal(
-                "lock",
-                new JSONOf(media.Content()).Value("$.key")
+                "1",
+                new XMLCursor(
+                    new InputOf(media.Content())
+                ).Values("count(/root/key)")[0]
             );
         }
 
@@ -48,8 +51,8 @@ namespace BriX.Media.Test
         public void RejectsPuttingPropertyToArray()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new JsonMedia()
-                    .Array("array", "items")
+                new RebuildMedia()
+                    .Array("root", "item")
                     .Prop("key")
                     .Put("lock")
             );
@@ -59,7 +62,7 @@ namespace BriX.Media.Test
         public void RejectsPuttingPropertyToRoot()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new JsonMedia()
+                new RebuildMedia()
                     .Prop("key")
                     .Put("lock")
             );
@@ -68,21 +71,23 @@ namespace BriX.Media.Test
         [Fact]
         public void CreatesBlockInRoot()
         {
-            var media = new JsonMedia();
+            var media = new RebuildMedia();
             media.Block("root")
                 .Prop("key")
                 .Put("value");
 
             Assert.Contains(
                 "value",
-                new JSONOf(media.Content()).Values("$.key")
+                new XMLCursor(
+                    new InputOf(media.Content())
+                ).Values("/root/key/text()")
             );
         }
 
         [Fact]
         public void RejectsSecondBlockInRoot()
         {
-            var media = new JsonMedia();
+            var media = new RebuildMedia();
             media.Block("root");
 
             Assert.Throws<InvalidOperationException>(() =>
@@ -93,70 +98,31 @@ namespace BriX.Media.Test
         [Fact]
         public void CreatesBlockInProp()
         {
-            var media = new JsonMedia();
+            var media = new RebuildMedia();
             media.Block("root")
                 .Prop("my-block")
                 .Block("contents");
 
-            Assert.Equal(
-                "{\"my-block\":{}}",
-                media.Content().ToString(Newtonsoft.Json.Formatting.None)
+            Assert.Contains(
+                "1",
+                new XMLCursor(
+                    new InputOf(media.Content())
+                ).Values("count(/root/my-block/contents)")
             );
         }
 
         [Fact]
-        public void BuildsBlockInBlock()
+        public void CreatesBlockInArray()
         {
-            var media = new JsonMedia();
-            media.Block("root")
-                .Block("contents");
+            var media = new RebuildMedia();
+            media.Array("array", "item")
+                .Block("item")
+                .Prop("prop")
+                .Put("eller");
 
             Assert.Equal(
-                "{\"contents\":{}}",
-                media.Content().ToString(Newtonsoft.Json.Formatting.None)
-            );
-        }
-
-        [Fact]
-        public void CreatesArrayAtRoot()
-        {
-            var media = new JsonMedia();
-            media.Array("wealth", "dev")
-                .Put("100 coins");
-
-            Assert.Equal(
-                "100 coins",
-                new JSONOf(media.Content()).Value("$.[0]")
-            );
-        }
-
-        [Fact]
-        public void CreatesArrayInBlock()
-        {
-            var media = new JsonMedia();
-
-            media
-                .Block("root")
-                .Array("keys", "key");
-
-            Assert.Equal(
-                "{\"keys\":[]}",
-                media.Content().ToString(Newtonsoft.Json.Formatting.None)
-            );
-        }
-
-        [Fact]
-        public void CreatesArrayInArray()
-        {
-            var media = new JsonMedia();
-
-            media
-                .Array("keys", "key")
-                .Array("subarray", "subkey");
-
-            Assert.Equal(
-                "[[]]",
-                media.Content().ToString(Newtonsoft.Json.Formatting.None)
+                "<array bx-type=\"array\" bx-array-item-name=\"item\"><item bx-type=\"block\"><prop bx-type=\"prop\">eller</prop></item></array>",
+                new TextOf(media.Content()).AsString()
             );
         }
 
@@ -164,16 +130,70 @@ namespace BriX.Media.Test
         public void RejectsBlockInArrayWithDifferentName()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new JsonMedia()
+                new RebuildMedia()
                     .Array("array", "item")
                     .Block("other-name")
             );
         }
 
         [Fact]
+        public void BuildsBlockInBlock()
+        {
+            var media = new RebuildMedia();
+            media.Block("root")
+                .Block("contents");
+            Assert.Equal(
+                "<root bx-type=\"block\"><contents bx-type=\"block\" /></root>",
+                new TextOf(media.Content()).AsString()
+            );
+        }
+
+        [Fact]
+        public void CreatesArrayAtRoot()
+        {
+            var media = new RebuildMedia();
+            media.Array("root", "key");
+
+            Assert.Equal(
+                "<root bx-type=\"array\" bx-array-item-name=\"key\" />",
+                new TextOf(media.Content()).AsString()
+            );
+        }
+
+        [Fact]
+        public void CreatesArrayInBlock()
+        {
+            var media = new RebuildMedia();
+
+            media
+                .Block("root")
+                .Array("keys", "key");
+
+            Assert.Equal(
+                "<root bx-type=\"block\"><keys bx-type=\"array\" bx-array-item-name=\"key\" /></root>",
+                new TextOf(media.Content()).AsString()
+            );
+        }
+
+        [Fact]
+        public void CreatesArrayInArray()
+        {
+            var media = new RebuildMedia();
+
+            media
+                .Array("keys", "key")
+                .Array("subarray", "subkey");
+
+            Assert.Equal(
+                "<keys bx-type=\"array\" bx-array-item-name=\"key\"><subarray bx-type=\"array\" bx-array-item-name=\"subkey\" /></keys>",
+                new TextOf(media.Content()).AsString()
+            );
+        }
+
+        [Fact]
         public void RejectsArrayInProp()
         {
-            var media = new JsonMedia();
+            var media = new RebuildMedia();
 
             Assert.Throws<InvalidOperationException>(() =>
                 media
@@ -186,30 +206,34 @@ namespace BriX.Media.Test
         [Fact]
         public void PutsValueToProp()
         {
-            var media = new JsonMedia();
+            var media = new RebuildMedia();
 
             media.Block("root")
                 .Prop("key")
                 .Put("lock");
 
             Assert.Equal(
-                "{\"key\":\"lock\"}",
-                media.Content().ToString(Newtonsoft.Json.Formatting.None)
+                "lock",
+                new XMLCursor(
+                    new InputOf(media.Content())
+                ).Values("/root/key/text()")[0]
             );
         }
 
         [Fact]
         public void PutsValueToArray()
         {
-            var media = new JsonMedia();
+            var media = new RebuildMedia();
 
             media
                 .Array("items", "item")
-                .Put("lock");
+                .Put("ei");
 
-            Assert.Equal(
-                "[\"lock\"]",
-                media.Content().ToString(Newtonsoft.Json.Formatting.None)
+            Assert.Contains(
+                "ei",
+                new XMLCursor(
+                    new InputOf(media.Content())
+                ).Values("/items/item/text()")[0]
             );
         }
 
@@ -217,7 +241,7 @@ namespace BriX.Media.Test
         public void RejectsValueInBlock()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new XmlMedia()
+                new RebuildMedia()
                     .Block("root")
                     .Put("lock")
             );
@@ -226,7 +250,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsDuplicateKeyForProp()
         {
-            IMedia<JToken> media = new JsonMedia();
+            IMedia<byte[]> media = new RebuildMedia();
 
             var block = media.Block("root");
             block
@@ -241,7 +265,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsDuplicateKeyForBlock()
         {
-            IMedia<JToken> media = new JsonMedia();
+            IMedia<byte[]> media = new RebuildMedia();
 
             media.Block("key");
 
@@ -253,7 +277,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsDuplicateKeyForArray()
         {
-            IMedia<JToken> media = new JsonMedia();
+            IMedia<byte[]> media = new RebuildMedia();
 
             media.Array("array", "item");
 

@@ -22,14 +22,15 @@
 
 using System;
 using System.Xml.Linq;
+using Yaapii.Atoms.Bytes;
 using Yaapii.Atoms.List;
 
 namespace BriX.Media
 {
     /// <summary>
-    /// A media in XML format.
+    /// A media which can be used to rebuild a brix.
     /// </summary>
-    public sealed class XmlMedia : IMedia<XNode>
+    public sealed class RebuildMedia : IMedia<byte[]>
     {
         private readonly XContainer[] node;
         private readonly string arrayItemName;
@@ -37,15 +38,15 @@ namespace BriX.Media
         private readonly string[] brixType;
 
         /// <summary>
-        /// A media in XML format.
+        /// A media which can be used to rebuild a brix.
         /// </summary>
-        public XmlMedia() : this(new XDocument(), "block", string.Empty, true)
+        public RebuildMedia() : this(new XDocument(), "block", string.Empty, true)
         { }
 
         /// <summary>
-        /// A media in XML format.
+        /// A media which can be used to rebuild a brix.
         /// </summary>
-        private XmlMedia(XContainer node, string brixType, string arrayItemName, bool isRoot = false)
+        private RebuildMedia(XContainer node, string brixType, string arrayItemName, bool isRoot = false)
         {
             this.node = new XContainer[1] { node };
             this.brixType = new string[1] { brixType };
@@ -54,11 +55,13 @@ namespace BriX.Media
         }
 
         /// <summary>
-        /// A media in XML format.
+        /// A media which can be used to rebuild a brix.
         /// </summary>
-        public IMedia<XNode> Array(string arrayName, string itemName)
+        public IMedia<byte[]> Array(string arrayName, string itemName)
         {
             var array = new XElement(arrayName);
+            array.SetAttributeValue("bx-type", "array");
+            array.SetAttributeValue("bx-array-item-name", itemName);
             RejectDuplicates(arrayName);
             if (this.isRoot)
             {
@@ -82,15 +85,16 @@ namespace BriX.Media
                     this.Node().Add(array);
                 }
             }
-            return new XmlMedia(array, "array", itemName);
+            return new RebuildMedia(array, "array", itemName);
         }
 
         /// <summary>
-        /// A media in XML format.
+        /// A media which can be used to rebuild a brix.
         /// </summary>
-        public IMedia<XNode> Block(string name)
+        public IMedia<byte[]> Block(string name)
         {
             var block = new XElement("bootstrap");
+            block.SetAttributeValue("bx-type", "block");
             if (this.isRoot)
             {
                 RejectDuplicateRoot();
@@ -123,15 +127,18 @@ namespace BriX.Media
                     this.Node().Add(block);
                 }
             }
-            return new XmlMedia(block, "block", String.Empty);
+            return new RebuildMedia(block, "block", String.Empty);
         }
 
-        public XNode Content()
+        public byte[] Content()
         {
-            return this.node[0] as XNode;
+            return 
+                new BytesOf(
+                    this.node[0].Document.Root.ToString(SaveOptions.DisableFormatting)
+                ).AsBytes();
         }
 
-        public IMedia<XNode> Prop(string name)
+        public IMedia<byte[]> Prop(string name)
         {
             if (isRoot)
             {
@@ -141,6 +148,7 @@ namespace BriX.Media
             RejectDuplicates(name);
 
             var prop = new XElement(name);
+            prop.SetAttributeValue("bx-type", "prop");
 
             if (Is("block"))
             {
@@ -150,10 +158,10 @@ namespace BriX.Media
             {
                 throw new InvalidOperationException($"You cannot put prop '{name}' into an array. Props can only exist in blocks.");
             }
-            return new XmlMedia(prop, "prop", string.Empty, false);
+            return new RebuildMedia(prop, "prop", string.Empty, false);
         }
 
-        public IMedia<XNode> Put(string value)
+        public IMedia<byte[]> Put(string value)
         {
             if (Is("array"))
             {

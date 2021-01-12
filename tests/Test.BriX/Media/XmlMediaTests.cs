@@ -1,6 +1,6 @@
 ﻿//MIT License
 
-//Copyright (c) 2020 ICARUS Consulting GmbH
+//Copyright (c) 2021 ICARUS Consulting GmbH
 
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -23,10 +23,9 @@
 using System;
 using System.Xml.Linq;
 using Xunit;
-using BriX.Media;
 using Yaapii.Xml;
 
-namespace BriX.Test
+namespace BriX.Media.Test
 {
     public sealed class XmlMediaTests
     {
