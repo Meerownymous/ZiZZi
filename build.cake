@@ -194,7 +194,7 @@ Task("GenerateCoverage")
             tool => 
             {
                 tool.DotNetCoreTest(
-                    "./tests/Yaapii.Atoms.Tests/",
+                    "./tests/Test.Brix/",
                     new DotNetCoreTestSettings
                     {
                         Configuration = configuration
@@ -205,7 +205,7 @@ Task("GenerateCoverage")
             new OpenCoverSettings()
             {
                 OldStyle = true
-            }.WithFilter("+[Yaapii.Atoms]*")
+            }.WithFilter("+[BriX]*")
         );
     }
     catch(Exception ex)
