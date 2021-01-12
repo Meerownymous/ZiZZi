@@ -2,15 +2,27 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <DocumentationFile>$(MSBuildThisFileDirectory)bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>ICARUS Consulting GmbH</Authors>
     <Description>Build object oriented data structures and format them when needed.</Description>
-    <Copyright>2020 ICARUS Consulting GmbH</Copyright>
-    <PackageProjectUrl>https://github.com/icarus-consulting/BriX</PackageProjectUrl>
-    <NeutralLanguage>en-001</NeutralLanguage>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <Copyright>Copyright (c) 2021 ICARUS Consulting GmbH</Copyright>
     <PackageTags>data structures, xml, json, intermediate, oop, cactoos</PackageTags>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageLicenseFile></PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/icarus-consulting/BriX</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/icarus-consulting/BriX.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>https://github.com/icarus-consulting/BriX/releases</PackageReleaseNotes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\LICENSE.txt">
+      <PackagePath></PackagePath>
+      <Visible>false</Visible>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
