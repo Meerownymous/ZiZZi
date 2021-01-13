@@ -225,7 +225,8 @@ Task("UploadCoverage")
 {
     Information(Figlet("Upload Coverage"));
     
-    Codecov($"{buildArtifacts.Path}/coverage.xml", codeCovToken);
+    //Codecov($"{buildArtifacts.Path}/coverage.xml", codeCovToken);
+    Codecov($"{buildArtifacts.Path}/coverage.xml");
 });
 
 ///////////////////////////////////////////////////////////////////////////////
