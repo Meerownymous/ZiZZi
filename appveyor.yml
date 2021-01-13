@@ -11,8 +11,6 @@ configuration: Release
 environment:
   GITHUB_TOKEN:
     secure: tvoyJ/iv8Y+9VaKvOFvxegvQFBNqPkhiwghS8lQDsrt7B/1MWU4e8uOHQzfTU580
-  CODECOV_TOKEN:
-    secure: MgJ441uo947FFr+iccrCjDHLzQA4TSKmvdVFKXUyl+M5sF5FKz9BS2LKbMdB9SYb
   NUGET_TOKEN:
     secure: P2AbVXF6ZhkWoNAFjmIhzMH3FEgJkFtXPozru7MTOWRn6HCRiq3Dz+TP36knnevg
 # Do not build feature branch with open Pull Requests
@@ -23,5 +21,3 @@ nuget:
 build_script:
 - ps: .\build.ps1
 test: off
-artifacts:
-  - path: artifacts\coverage.xml

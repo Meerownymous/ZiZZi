@@ -40,7 +40,6 @@ var nuGetSource             = "https://api.nuget.org/v3/index.json";
 // API key tokens for deployment
 var gitHubToken             = "";
 var nugetReleaseToken       = "";
-var codeCovToken            = "";
 
 ///////////////////////////////////////////////////////////////////////////////
 // Version
@@ -180,56 +179,6 @@ Task("UnitTests")
 });
 
 ///////////////////////////////////////////////////////////////////////////////
-// Generate Coverage
-///////////////////////////////////////////////////////////////////////////////
-Task("GenerateCoverage")
-.IsDependentOn("Build")
-.Does(() => 
-{
-    Information(Figlet("Generate Coverage"));
-    
-    try
-    {
-        OpenCover(
-            tool => 
-            {
-                tool.DotNetCoreTest(
-                    "./tests/Test.Brix/",
-                    new DotNetCoreTestSettings
-                    {
-                        Configuration = configuration
-                    }
-                );
-            },
-            new FilePath($"{buildArtifacts.Path}/coverage.xml"),
-            new OpenCoverSettings()
-            {
-                OldStyle = true
-            }.WithFilter("+[BriX]*")
-        );
-    }
-    catch(Exception ex)
-    {
-        Information("Error: " + ex.ToString());
-    }
-});
-
-///////////////////////////////////////////////////////////////////////////////
-// Upload Coverage
-///////////////////////////////////////////////////////////////////////////////
-Task("UploadCoverage")
-.IsDependentOn("GenerateCoverage")
-.IsDependentOn("Credentials")
-.WithCriteria(() => isAppVeyor)
-.Does(() =>
-{
-    Information(Figlet("Upload Coverage"));
-    
-    //Codecov($"{buildArtifacts.Path}/coverage.xml", codeCovToken);
-    Codecov($"{buildArtifacts.Path}/coverage.xml");
-});
-
-///////////////////////////////////////////////////////////////////////////////
 // NuGet
 ///////////////////////////////////////////////////////////////////////////////
 Task("NuGet")
@@ -280,7 +229,6 @@ Task("Credentials")
     
     gitHubToken = EnvironmentVariable("GITHUB_TOKEN");
     nugetReleaseToken = EnvironmentVariable("NUGET_TOKEN");
-    codeCovToken = EnvironmentVariable("CODECOV_TOKEN");
 });
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -362,9 +310,7 @@ Task("Default")
 .IsDependentOn("Restore")
 .IsDependentOn("Build")
 .IsDependentOn("UnitTests")
-.IsDependentOn("GenerateCoverage")
 .IsDependentOn("Credentials")
-.IsDependentOn("UploadCoverage")
 .IsDependentOn("NuGet")
 .IsDependentOn("GitHubRelease")
 .IsDependentOn("NuGetFeed");
