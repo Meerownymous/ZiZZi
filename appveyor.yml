@@ -2,7 +2,11 @@
 #     CI Build Configuration for master branch pre-release   #
 #------------------------------------------------------------#
 version: 1.0.0.{build}
-image: Visual Studio 2019
+# image: Visual Studio 2019
+
+image: Windows
+build_cloud: S-APPVEYOR
+
 configuration: Release
 environment:
   GITHUB_TOKEN:
