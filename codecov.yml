@@ -1,2 +1,4 @@
-fixes:
-   - "C:\Users\appveyor\projects\::"
+codecov:
+  disable_default_path_fixes: yes
+  fixes:
+    - "C:\Users\appveyor\projects\::"
