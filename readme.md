@@ -1,3 +1,4 @@
+
 [![Build status](https://ci.appveyor.com/api/projects/status/qhmposba71n8lvpo/branch/master?svg=true)](https://ci.appveyor.com/project/icarus-consulting/brix/branch/master)
 [![codecov](https://codecov.io/gh/icarus-consulting/BriX/branch/master/graph/badge.svg?token=4SZ8XXKXDU)](https://codecov.io/gh/icarus-consulting/BriX)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
@@ -216,8 +217,9 @@ Every Block must have a name:
 
 //C#
 var brix =
-    new BxBlock("root", //name must be specified.
-	new BxProp("branch", "My Branch")
+    new BxBlock(
+        "root", //name must be specified.
+	    new BxProp("branch", "My Branch")
     );
 ```
 
@@ -231,8 +233,8 @@ The same is the case for arrays:
 //Xml
 <shopping-list>
     <fruits>
-	<fruit>Apple</fruit>
-	<fruit>Banana</fruit>		
+    	<fruit>Apple</fruit>
+    	<fruit>Banana</fruit>		
     </fruits>
 </shopping-list>
 
@@ -240,22 +242,98 @@ The same is the case for arrays:
 {
     "fruits":
     [
-        "Apple", "Banana"
+        "Apple",
+        "Banana"
     ]
 }
 
 //C#
 var list =
     new BxBlock("shopping-list",
-	new BxArray("fruits", "fruit", //"fruit" as name for entries must be specified
-	    "Apple", "Banana"
+    	new BxArray("fruits", "fruit", //"fruit" as name for entries must be specified
+    	    "Apple", 
+    	    "Banana"
+        )
+    );
+```
+
+### Complex Arrays
+And for complex arrays:
+```
+//Xml
+<shopping-list>
+	<fruits>
+		<fruit>
+			<name>Apple</name>
+			<weight>500</weight>
+		</fruit>
+		<fruit>
+			<name>Banana</name>
+			<weight>300</weight>
+		</fruit>
+	</fruits>
+</shopping-list>
+
+
+//Json
+{
+	"fruits": [
+		{
+			"name": "Apple",
+			"weight": "500"
+		},
+		{
+			"name": "Banana",
+			"weight": "300"
+		}
+	]
+}
+
+//C#
+var list =
+    new BxBlock("shopping-list",
+	    new BxBlockArray("fruits", "fruit", //"fruit" as name for entries must be specified
+	        new BxBlock(
+	            new BxProp("name", "Apple"), 
+	            new BxProp("weight", "500")
+            ), 
+            new BxBlock(
+                new BxProp("name", "Banana"), 
+                new BxProp("weight", "300")
+            )
         )
     );
 ```
 
 ### Xml Attributes
 Json does not support attributes, so they are not included in BriX objects. If you need them, you might implement or extend the JsonMedia interface to support them and write BriX objects.
+### BxMap
+Easy way for adding mutiple Props by KeyValuePairs. Note: no duplicated keys are allowed!
+```
+//xml
+<person>
+    <name>George</name>
+    <age>23</age>
+    <gender>male</gender>
+</person>
 
+//json
+{
+    "name": "George",
+    "age": "23",
+    "gender": "male"
+}
+
+//C#
+new BxBlock(
+    "person",
+    new BxMap(
+        "name", "George",
+        "age", "23",
+        "gender", "male"
+    )
+)
+```
 ## Conditional BriX
 Instead of using large if/else constructs:
 
@@ -269,3 +347,27 @@ new BxBlock("Todos",
     )
 )
 ```
+
+## Rebuildable Brix
+For sending a BriX e.g. as a response of a request, it´s possible to print a BriX to a RebuildMedia. 
+
+```csharp
+    var response =
+        new BxBlock("Weather Report",
+    	    new BxBlock(
+	        new BxProp("Temperature", () => weatherServer.Degrees("Berlin").AsDouble())
+	    )
+    );
+
+report.Print(new RebuildMedia());
+return report.Content(); // the byte[] of the BriX as xml 
+```
+
+At the requesting side, you can reconstruct the BriX with BxRebuilt
+```csharp
+var brix = response.Body()
+var rebuildedBrix = new BxRebuild(brix);
+```
+
+
+
