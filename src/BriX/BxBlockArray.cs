@@ -23,7 +23,7 @@
 using System.Collections.Generic;
 using Yaapii.Atoms.Enumerable;
 
-namespace BriX.Media
+namespace BriX
 {
     /// <summary>
     /// A list of blocks.

@@ -77,7 +77,7 @@ namespace BriX
                 {
                     result = isRoot ? builtNode.Document.Root : builtNode as XElement;
                 }
-                else if(builtNode.NodeType == System.Xml.XmlNodeType.Document)
+                else if (builtNode.NodeType == System.Xml.XmlNodeType.Document)
                 {
                     result = (builtNode as XDocument).Root;
                 }
@@ -110,12 +110,24 @@ namespace BriX
                     new BxConditional(
                         () => data.Value().Attribute("bx-type").Value == "array",
                         () =>
-                        new BxArray(data.Value().Name.LocalName, data.Value().Attribute("bx-array-item-name").Value,
-                            new Mapped<XElement, string>(
-                                elem => elem.Value,
-                                data.Value().Elements()
+                        new Ternary<XNode, IBrix>(
+                            new LengthOf(data.Value().Elements()).Value() > 0 &&
+                            new LengthOf(
+                                new FirstOf<XElement>(data.Value().Elements()).Value().Attributes()
+                            ).Value() > 0,
+                            new BxBlockArray(data.Value().Name.LocalName, data.Value().Attribute("bx-array-item-name").Value,
+                                new Mapped<XNode, IBrix>(
+                                    elem => new BxRebuilt(elem, false),
+                                    data.Value().Elements()
+                                )
+                            ),
+                            new BxArray(data.Value().Name.LocalName, data.Value().Attribute("bx-array-item-name").Value,
+                                new Mapped<XElement, string>(
+                                    elem => elem.Value,
+                                    data.Value().Elements()
+                                )
                             )
-                        )
+                        ).Value()
                     ),
                     new BxConditional(
                         () => data.Value().Attribute("bx-type").Value == "prop",
