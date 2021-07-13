@@ -261,5 +261,16 @@ namespace BriX.Media.Test
                 media.Array("array", "item")
             );
         }
+
+        [Fact]
+        public void RejectsEmptyBlockAsRoot()
+        {
+            IMedia<JToken> media = new JsonMedia();
+            Assert.Contains("You are trying to make a block without a name",
+                Assert.Throws<InvalidOperationException>(() =>
+                    media.Block("")
+                ).Message
+            );
+        }
     }
 }

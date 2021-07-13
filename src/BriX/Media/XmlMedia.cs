@@ -94,6 +94,7 @@ namespace BriX.Media
             if (this.isRoot)
             {
                 RejectDuplicateRoot();
+                RejectEmpty("block", name);
                 block.Name = name;
                 this.Node().Add(block);
             }
