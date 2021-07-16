@@ -30,47 +30,20 @@ namespace BriX.Media.Test
     public sealed class YamlMediaTests
     {
         [Fact]
-        public void ComplexJson()
-        {
-            var media = new JsonMedia();
-            var brix = new BxBlock("root",
-                new BxProp("key", "value"),
-                new BxBlock("first",
-                    new BxBlock("second",
-                        new BxBlock("third",
-                            new BxProp("hello", "world")
-                        )
-                    ),
-                    new BxBlock("underFirst",
-                        new BxBlock("underUnderFirst",
-                            new BxProp("hello", "world")
-                        )
-                    )
-                ),
-                new BxBlockArray("blockarray", "blockarrayitem",
-                    new BxBlock(new BxProp("first", "blockArrayItem"), new BxBlock("firstBlock", new BxProp("firstBlockProp", "val"))),
-                    new BxBlock(new BxProp("second", "blockArrayItem"))
-                ),
-                new BxArray("array", "arrayItemName", "firstItem", "secondItem"),
-                new BxMap("key1", "value1", "key2", "value2")
-            );
-
-            var json = brix.Print(new JsonMedia()).ToString();
-            var yaml = brix.Print(new YamlMedia()).ToString();
-        }
-
-        [Fact]
         public void CreatesPropertyInBlock()
         {
-            var media = new JsonMedia();
+            var media = new YamlMedia();
 
             media.Block("root")
                 .Prop("key")
                 .Put("lock");
 
             Assert.Equal(
-                "lock",
-                media.Content().ToString()
+                "root:\r\n  key: lock\r\n",
+                media.Content().ToString(),
+                false,
+                true,
+                false
             );
         }
 
@@ -97,8 +70,11 @@ namespace BriX.Media.Test
                 .Block("contents");
 
             Assert.Equal(
-                "{\"my-block\":{}}",
-                media.Content()
+                "root:\r\n  my-block:  contents:\r\n",
+                media.Content(),
+                false,
+                true,
+                false
             );
         }
 
@@ -110,8 +86,11 @@ namespace BriX.Media.Test
                 .Block("contents");
 
             Assert.Equal(
-                "{\"contents\":{}}",
-                media.Content()
+                "root:\r\n  contents:\r\n",
+                media.Content(),
+                false,
+                true,
+                false
             );
         }
 
@@ -125,8 +104,11 @@ namespace BriX.Media.Test
                 .Put("200 coins");
 
             Assert.Equal(
-                "100 coins",
-                media.Content().ToString()
+                "wealth:\r\n  - 100 coins\r\n  - 200 coins\r\n",
+                media.Content().ToString(),
+                false,
+                true,
+                false
             );
         }
 
@@ -140,8 +122,11 @@ namespace BriX.Media.Test
                 .Array("keys", "key");
 
             Assert.Equal(
-                "{\"keys\":[]}",
-                media.Content()
+                "root:\r\n  keys:\r\n",
+                media.Content(),
+                false,
+                true,
+                false
             );
         }
 
@@ -155,8 +140,11 @@ namespace BriX.Media.Test
                 .Array("subarray", "subkey");
 
             Assert.Equal(
-                "[[]]",
-                media.Content()
+                "keys:\r\n  subarray:\r\n",
+                media.Content(),
+                false,
+                true,
+                false
             );
         }
 
