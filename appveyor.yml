@@ -1,20 +1,20 @@
 #------------------------------------------------------------#
 #     CI Build Configuration for master branch pre-release   #
 #------------------------------------------------------------#
-version: 1.0.0.{build}
+version: "{build}"
 image: Visual Studio 2019
 
 configuration: Release
 environment:
   GITHUB_TOKEN:
-    secure: tvoyJ/iv8Y+9VaKvOFvxegvQFBNqPkhiwghS8lQDsrt7B/1MWU4e8uOHQzfTU580
+    secure: z88FWf92t8OIzUQJL6/D7ef1cABAy05I9/oL6jcBSjZsPmj9Y8dy7sAulNCwV+xw
   NUGET_TOKEN:
-    secure: P2AbVXF6ZhkWoNAFjmIhzMH3FEgJkFtXPozru7MTOWRn6HCRiq3Dz+TP36knnevg
+    secure: ZDvc2hL3H+4ubTi1cibTM+XeOJVXEzhuMCnDxOL8Hs2e9unfRUHrCwYC52IVjXjh
 # Do not build feature branch with open Pull Requests
 skip_branch_with_pr: true
 # Automatically register private account and/or project AppVeyor NuGet feeds.
 nuget:
-  account_feed: true
+  account_feed: false
 build_script:
 - ps: .\build.ps1
 test: off

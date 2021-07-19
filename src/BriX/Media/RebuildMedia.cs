@@ -23,6 +23,7 @@
 using System;
 using System.Xml.Linq;
 using Yaapii.Atoms.Bytes;
+using Yaapii.Atoms.Error;
 using Yaapii.Atoms.List;
 
 namespace BriX.Media
@@ -98,6 +99,7 @@ namespace BriX.Media
             if (this.isRoot)
             {
                 RejectDuplicateRoot();
+                RejectEmpty("block", name);
                 block.Name = name;
                 this.Node().Add(block);
             }
@@ -132,7 +134,7 @@ namespace BriX.Media
 
         public byte[] Content()
         {
-            return 
+            return
                 new BytesOf(
                     this.node[0].Document.Root.ToString(SaveOptions.DisableFormatting)
                 ).AsBytes();
