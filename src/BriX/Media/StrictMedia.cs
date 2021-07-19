@@ -20,16 +20,14 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-
-#pragma warning disable IDE0060 // Remove unused parameter
 
 namespace BriX.Media
 {
     /// <summary>
-    /// A media in JSON format.
+    /// A strict media that forbids for example duplicate blocks on the same level
+    /// Also forbids empty root blocks, as they can not be build with xml or json-media
     /// </summary>
     public sealed class StrictMedia<T> : IMedia<T>
     {
@@ -40,14 +38,12 @@ namespace BriX.Media
         private readonly IList<string> existingNames;
 
         /// <summary>
-        /// A media in JSON format.
+        /// A strict media that forbids for example duplicate blocks on the same level
+        /// Also forbids empty root blocks, as they can not be build with xml or json-media
         /// </summary>
         public StrictMedia(IMedia<T> origin) : this(origin, string.Empty, string.Empty, true)
         { }
 
-        /// <summary>
-        /// A media in JSON format.
-        /// </summary>
         private StrictMedia(IMedia<T> origin, string arrayItemName, string type, bool isRoot = false)
         {
             this.origin = origin;
