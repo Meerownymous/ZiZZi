@@ -13,7 +13,7 @@ var configuration           = "Release";
 ///////////////////////////////////////////////////////////////////////////////
 var buildArtifacts          = Directory("./artifacts");
 var deployment              = Directory("./artifacts/deployment");
-var version                 = "3.1.0";
+var version                 = "1.0.0";
 
 ///////////////////////////////////////////////////////////////////////////////
 // MODULES
@@ -228,7 +228,15 @@ Task("Credentials")
     Information(Figlet("Credentials"));
     
     gitHubToken = EnvironmentVariable("GITHUB_TOKEN");
+    if (string.IsNullOrEmpty(gitHubToken))
+    {
+        throw new Exception("Environment variable 'GITHUB_TOKEN' is not set");
+    }
     nugetReleaseToken = EnvironmentVariable("NUGET_TOKEN");
+    if (string.IsNullOrEmpty(nugetReleaseToken))
+    {
+        throw new Exception("Environment variable 'NUGET_TOKEN' is not set");
+    }
 });
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -280,19 +288,9 @@ Task("NuGetFeed")
     var nugets = GetFiles($"{buildArtifacts.Path}/*.nupkg");
     foreach(var package in nugets)
     {
+        // pushes symbols package too (see https://docs.microsoft.com/en-us/nuget/create-packages/symbol-packages-snupkg)
         NuGetPush(
             package,
-            new NuGetPushSettings {
-                Source = nuGetSource,
-                ApiKey = nugetReleaseToken
-            }
-        );
-    }
-    var symbols = GetFiles($"{buildArtifacts.Path}/*.snupkg");
-    foreach(var symbol in symbols)
-    {
-        NuGetPush(
-            symbol,
             new NuGetPushSettings {
                 Source = nuGetSource,
                 ApiKey = nugetReleaseToken
