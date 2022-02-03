@@ -26,7 +26,7 @@ using Xunit;
 using BriX.Media;
 using Yaapii.Xml;
 
-namespace BriX.Test
+namespace BriX.Media.Test
 {
     public sealed class MeasuringXmlMediaTests
     {
