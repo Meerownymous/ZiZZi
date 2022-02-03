@@ -28,12 +28,12 @@ using Yaapii.Xml;
 
 namespace BriX.Test
 {
-    public sealed class MeasuringMediaTests
+    public sealed class MeasuringXmlMediaTests
     {
         [Fact]
         public void MeasuresRootBlockBuilding()
         {
-            IMedia<XNode> media = new MeasuringMedia();
+            IMedia<XNode> media = new MeasuringXmlMedia();
 
             media.Block("root");
 
@@ -49,7 +49,7 @@ namespace BriX.Test
         [Fact]
         public void MeasuresBlockBuildingIndependentFromRoot()
         {
-            IMedia<XNode> media = new MeasuringMedia();
+            IMedia<XNode> media = new MeasuringXmlMedia();
 
             var root = media.Block("root");
 
@@ -74,7 +74,7 @@ namespace BriX.Test
         [Fact]
         public void MeasuresRootArrayBuilding()
         {
-            IMedia<XNode> media = new MeasuringMedia();
+            IMedia<XNode> media = new MeasuringXmlMedia();
 
             media.Array("root", "sub");
 
@@ -90,7 +90,7 @@ namespace BriX.Test
         [Fact]
         public void MeasuresArrayBuildingIndependentFromRoot()
         {
-            IMedia<XNode> media = new MeasuringMedia();
+            IMedia<XNode> media = new MeasuringXmlMedia();
 
             var root = media.Array("root", "sub");
 
@@ -115,7 +115,7 @@ namespace BriX.Test
         [Fact]
         public void MeasuresSubBlock()
         {
-            IMedia<XNode> media = new MeasuringMedia();
+            IMedia<XNode> media = new MeasuringXmlMedia();
 
             var root = media.Block("root");
 
@@ -144,7 +144,7 @@ namespace BriX.Test
         [Fact]
         public void CreatesPropertyInBlock()
         {
-            var media = new MeasuringMedia();
+            var media = new MeasuringXmlMedia();
 
             media.Block("root")
                 .Prop("key");
@@ -159,7 +159,7 @@ namespace BriX.Test
         public void RejectsPuttingPropertyToArray()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new MeasuringMedia()
+                new MeasuringXmlMedia()
                     .Array("root", "item")
                     .Prop("key")
                     .Put("lock")
@@ -170,7 +170,7 @@ namespace BriX.Test
         public void RejectsPuttingPropertyToRoot()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new MeasuringMedia()
+                new MeasuringXmlMedia()
                     .Prop("key")
                     .Put("lock")
             );
@@ -179,7 +179,7 @@ namespace BriX.Test
         [Fact]
         public void CreatesBlockInRoot()
         {
-            var media = new MeasuringMedia();
+            var media = new MeasuringXmlMedia();
             media.Block("root")
                 .Prop("key")
                 .Put("value");
@@ -193,7 +193,7 @@ namespace BriX.Test
         [Fact]
         public void RejectsSecondBlockInRoot()
         {
-            var media = new MeasuringMedia();
+            var media = new MeasuringXmlMedia();
             media.Block("root");
 
             Assert.Throws<InvalidOperationException>(() =>
@@ -204,7 +204,7 @@ namespace BriX.Test
         [Fact]
         public void CreatesBlockInProp()
         {
-            var media = new MeasuringMedia();
+            var media = new MeasuringXmlMedia();
             media.Block("root")
                 .Prop("my-block")
                 .Block("contents");
@@ -219,7 +219,7 @@ namespace BriX.Test
         [Fact]
         public void CreatesBlockInArray()
         {
-            var media = new MeasuringMedia();
+            var media = new MeasuringXmlMedia();
             media.Array("array", "item")
                 .Block("item")
                 .Prop("prop")
@@ -235,7 +235,7 @@ namespace BriX.Test
         public void RejectsBlockInArrayWithDifferentName()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new MeasuringMedia()
+                new MeasuringXmlMedia()
                     .Array("array", "item")
                     .Block("other-name")
             );
@@ -244,7 +244,7 @@ namespace BriX.Test
         [Fact]
         public void BuildsBlockInBlock()
         {
-            var media = new MeasuringMedia();
+            var media = new MeasuringXmlMedia();
             media.Block("root")
                 .Block("contents");
             Assert.Equal(
@@ -256,7 +256,7 @@ namespace BriX.Test
         [Fact]
         public void CreatesArrayAtRoot()
         {
-            var media = new MeasuringMedia();
+            var media = new MeasuringXmlMedia();
             media.Array("root", "key");
 
             Assert.Equal(
@@ -268,7 +268,7 @@ namespace BriX.Test
         [Fact]
         public void CreatesArrayInBlock()
         {
-            var media = new MeasuringMedia();
+            var media = new MeasuringXmlMedia();
 
             media
                 .Block("root")
@@ -283,7 +283,7 @@ namespace BriX.Test
         [Fact]
         public void CreatesArrayInArray()
         {
-            var media = new MeasuringMedia();
+            var media = new MeasuringXmlMedia();
 
             media
                 .Array("keys", "key")
@@ -298,7 +298,7 @@ namespace BriX.Test
         [Fact]
         public void RejectsArrayInProp()
         {
-            var media = new MeasuringMedia();
+            var media = new MeasuringXmlMedia();
 
             Assert.Throws<InvalidOperationException>(() =>
                 media
@@ -311,7 +311,7 @@ namespace BriX.Test
         [Fact]
         public void PutsValueToProp()
         {
-            var media = new MeasuringMedia();
+            var media = new MeasuringXmlMedia();
 
             media.Block("root")
                 .Prop("key")
@@ -326,7 +326,7 @@ namespace BriX.Test
         [Fact]
         public void PutsValueToArray()
         {
-            var media = new MeasuringMedia();
+            var media = new MeasuringXmlMedia();
 
             media
                 .Array("items", "item")
@@ -342,7 +342,7 @@ namespace BriX.Test
         public void RejectsValueInBlock()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new MeasuringMedia()
+                new MeasuringXmlMedia()
                     .Block("root")
                     .Put("lock")
             );
@@ -351,7 +351,7 @@ namespace BriX.Test
         [Fact]
         public void RejectsDuplicateKeyForProp()
         {
-            IMedia<XNode> media = new MeasuringMedia();
+            IMedia<XNode> media = new MeasuringXmlMedia();
 
             var block = media.Block("root");
             block
@@ -366,7 +366,7 @@ namespace BriX.Test
         [Fact]
         public void RejectsDuplicateKeyForBlock()
         {
-            IMedia<XNode> media = new MeasuringMedia();
+            IMedia<XNode> media = new MeasuringXmlMedia();
 
             media.Block("key");
 
@@ -378,7 +378,7 @@ namespace BriX.Test
         [Fact]
         public void RejectsDuplicateKeyForArray()
         {
-            IMedia<XNode> media = new MeasuringMedia();
+            IMedia<XNode> media = new MeasuringXmlMedia();
 
             media.Array("array", "item");
 

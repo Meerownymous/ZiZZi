@@ -32,7 +32,7 @@ namespace BriX.Media
     /// <summary>
     /// A media in XML format.
     /// </summary>
-    public sealed class MeasuringMedia : IMedia<XNode>
+    public sealed class MeasuringXmlMedia : IMedia<XNode>
     {
         private readonly IDictionary<string, XNode> nodes;
         private readonly IDictionary<string, bool> switches;
@@ -42,13 +42,13 @@ namespace BriX.Media
         /// <summary>
         /// A media in XML format.
         /// </summary>
-        public MeasuringMedia() : this(new XDocument(), "block", string.Empty, new Stopwatch())
+        public MeasuringXmlMedia() : this(new XDocument(), "block", string.Empty, new Stopwatch())
         { }
 
         /// <summary>
         /// A media in XML format.
         /// </summary>
-        private MeasuringMedia(XContainer node, string brixType, string arrayItemName, Stopwatch stopWatch, bool isRoot = false)
+        private MeasuringXmlMedia(XContainer node, string brixType, string arrayItemName, Stopwatch stopWatch, bool isRoot = false)
         {
             this.stopWatch = stopWatch;
             this.nodes =
@@ -106,7 +106,7 @@ namespace BriX.Media
             }
             var newStopwatch = new Stopwatch();
             newStopwatch.Start();
-            return new MeasuringMedia(array, "array", itemName, newStopwatch, false);
+            return new MeasuringXmlMedia(array, "array", itemName, newStopwatch, false);
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace BriX.Media
 
             var newStopwatch = new Stopwatch();
             newStopwatch.Start();
-            return new MeasuringMedia(block, "block", String.Empty, newStopwatch, false);
+            return new MeasuringXmlMedia(block, "block", String.Empty, newStopwatch, false);
         }
 
         public XNode Content()
@@ -182,7 +182,7 @@ namespace BriX.Media
                 throw new InvalidOperationException($"You cannot put prop '{name}' into an array. Props can only exist in blocks.");
             }
             var newStopwatch = new Stopwatch();
-            return new MeasuringMedia(prop, "prop", string.Empty, newStopwatch, IsRoot());
+            return new MeasuringXmlMedia(prop, "prop", string.Empty, newStopwatch, IsRoot());
         }
 
         public IMedia<XNode> Put(string value)
