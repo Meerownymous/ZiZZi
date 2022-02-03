@@ -42,7 +42,7 @@ namespace BriX.Media.Test
 
             Assert.True(
                 Convert.ToInt32(
-                    (media.Content() as XDocument).Root.Attribute("building-time").Value
+                    (media.Content() as XDocument).Root.Attribute("time").Value
                 ) >= 500
             );
         }
@@ -64,10 +64,10 @@ namespace BriX.Media.Test
 
             Assert.True(
                 Convert.ToInt32(
-                    (content as XDocument).Root.Element("block").Attribute("building-time").Value
+                    (content as XDocument).Root.Element("block").Attribute("time").Value
                 ) <
                 Convert.ToInt32(
-                    (content as XDocument).Root.Attribute("building-time").Value
+                    (content as XDocument).Root.Attribute("time").Value
                 )
             );
         }
@@ -83,7 +83,7 @@ namespace BriX.Media.Test
 
             Assert.True(
                 Convert.ToInt32(
-                    (media.Content() as XDocument).Root.Attribute("building-time").Value
+                    (media.Content() as XDocument).Root.Attribute("time").Value
                 ) >= 500
             );
         }
@@ -105,10 +105,10 @@ namespace BriX.Media.Test
 
             Assert.True(
                 Convert.ToInt32(
-                    (content as XDocument).Root.Element("sub").Attribute("building-time").Value
+                    (content as XDocument).Root.Element("sub").Attribute("time").Value
                 ) <
                 Convert.ToInt32(
-                    (content as XDocument).Root.Attribute("building-time").Value
+                    (content as XDocument).Root.Attribute("time").Value
                 )
             );
         }
@@ -137,7 +137,7 @@ namespace BriX.Media.Test
 
             Assert.True(
                 Convert.ToInt32(
-                    (content as XDocument).Root.Element("sub-2").Attribute("building-time").Value
+                    (content as XDocument).Root.Element("sub-2").Attribute("time").Value
                 ) < 150
             );
         }
@@ -263,7 +263,7 @@ namespace BriX.Media.Test
             media.Array("root", "key");
 
             Assert.Equal(
-                "<root building-time=\"0\" />",
+                "<root time=\"0\" />",
                 media.Content().ToString()
             );
         }

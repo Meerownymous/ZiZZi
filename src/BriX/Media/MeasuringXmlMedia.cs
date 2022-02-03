@@ -34,10 +34,10 @@ namespace BriX.Media
     /// </summary>
     public sealed class MeasuringXmlMedia : IMedia<XNode>
     {
+        private readonly bool isRootMedia;
         private readonly IDictionary<string, XNode> nodes;
-        private readonly IDictionary<string, bool> switches;
         private readonly IDictionary<string, string> attributes;
-        private readonly Stopwatch stopWatch;
+        private readonly IDictionary<string, Stopwatch> stopWatches;
 
         /// <summary>
         /// A media in XML format.
@@ -50,12 +50,20 @@ namespace BriX.Media
         /// </summary>
         private MeasuringXmlMedia(XContainer node, string brixType, string arrayItemName, Stopwatch stopWatch, bool isRoot = false)
         {
-            this.stopWatch = stopWatch;
+            this.isRootMedia = isRoot;
+            this.stopWatches =
+                new Dictionary<string, Stopwatch>(
+                    new MapOf<string, Stopwatch>(
+                        new KvpOf<string, Stopwatch>("my", stopWatch),
+                        new KvpOf<string, Stopwatch>("sub", new Stopwatch())
+                    )
+                );
+
             this.nodes =
                 new Dictionary<string, XNode>(
                     new MapOf<string, XNode>(
-                        new KvpOf<string, XNode>("working-node", node),
-                        new KvpOf<string, XNode>("last-node", node)
+                        new KvpOf<string, XNode>("my", node),
+                        new KvpOf<string, XNode>("sub", node)
                     )
                 );
             this.attributes =
@@ -64,14 +72,7 @@ namespace BriX.Media
                         "array-item-name", arrayItemName,
                         "brix-type", brixType
                     )
-                );
-
-            this.switches =
-                new Dictionary<string, bool>(
-                    new MapOf<string, bool>(
-                        new KvpOf<string, bool>("is-root", isRoot)
-                    )
-                );
+                ); ;
         }
 
         /// <summary>
@@ -79,10 +80,12 @@ namespace BriX.Media
         /// </summary>
         public IMedia<XNode> Array(string arrayName, string itemName)
         {
+            EnsureRootMeasurement();
             var array = new XElement(arrayName);
-            Measure(array);
+            SaveSubMeasurement();
+            PrepareSubMeasurement(array);
             RejectDuplicates(arrayName);
-            if (IsRoot())
+            if (this.isRootMedia)
             {
                 RejectEmpty("array", arrayName);
                 RejectDuplicateRoot();
@@ -104,9 +107,8 @@ namespace BriX.Media
                     this.Node().Add(array);
                 }
             }
-            var newStopwatch = new Stopwatch();
-            newStopwatch.Start();
-            return new MeasuringXmlMedia(array, "array", itemName, newStopwatch);
+
+            return new MeasuringXmlMedia(array, "array", itemName, StartSubMeasurement());
         }
 
         /// <summary>
@@ -114,9 +116,11 @@ namespace BriX.Media
         /// </summary>
         public IMedia<XNode> Block(string name)
         {
+            EnsureRootMeasurement();
             var block = new XElement("bootstrap");
-            Measure(block);
-            if (IsRoot())
+            SaveSubMeasurement();
+            PrepareSubMeasurement(block);
+            if (this.isRootMedia)
             {
                 RejectDuplicateRoot();
                 block.Name = name;
@@ -149,40 +153,45 @@ namespace BriX.Media
                     this.Node().Add(block);
                 }
             }
-
-            var newStopwatch = new Stopwatch();
-            newStopwatch.Start();
-            return new MeasuringXmlMedia(block, "block", String.Empty, newStopwatch);
+            return new MeasuringXmlMedia(block, "block", String.Empty, StartSubMeasurement());
         }
 
         public XNode Content()
         {
-            Measure(this.nodes["last-node"]);
-            return this.nodes["working-node"];
+            if (!this.IsRootMeasurement())
+            {
+                SaveSubMeasurement();
+            }
+            else
+            {
+                EndRootMeasurement();
+            }
+            return this.nodes["my"];
         }
 
         public IMedia<XNode> Prop(string name)
         {
-            if (IsRoot())
+            EnsureRootMeasurement();
+            if (this.isRootMedia)
             {
                 throw new InvalidOperationException($"You cannot put prop '{name}' directly into a media. You must start with a block or an array.");
             }
-
             RejectDuplicates(name);
 
             var prop = new XElement(name);
-            Measure(prop);
+
+            SaveSubMeasurement();
+            PrepareSubMeasurement(prop);
 
             if (Is("block"))
             {
-                (this.nodes["working-node"] as XContainer).Add(prop);
+                (this.nodes["my"] as XContainer).Add(prop);
             }
             else if (Is("array"))
             {
                 throw new InvalidOperationException($"You cannot put prop '{name}' into an array. Props can only exist in blocks.");
             }
-            var newStopwatch = new Stopwatch();
-            return new MeasuringXmlMedia(prop, "prop", string.Empty, newStopwatch);
+            return new MeasuringXmlMedia(prop, "prop", string.Empty, StartSubMeasurement());
         }
 
         public IMedia<XNode> Put(string value)
@@ -204,8 +213,7 @@ namespace BriX.Media
 
         private XContainer Node()
         {
-            Measure(this.nodes["last-node"]);
-            return this.nodes["working-node"] as XContainer;
+            return this.nodes["my"] as XContainer;
         }
 
         private void RejectDuplicates(string name)
@@ -214,7 +222,7 @@ namespace BriX.Media
                 new ListOf<string>(
                     new Yaapii.Atoms.Enumerable.Mapped<XElement, string>(
                         elem => elem.Name.LocalName.ToLower(),
-                        (this.nodes["working-node"] as XContainer).Elements()
+                        (this.nodes["my"] as XContainer).Elements()
                     )
                 );
 
@@ -242,9 +250,9 @@ namespace BriX.Media
             }
         }
 
-        private bool IsRoot()
+        private bool IsRootMeasurement()
         {
-            return this.switches["is-root"];
+            return this.nodes["my"] == this.nodes["my"].Document.Root;
         }
 
         private bool Is(string brixType)
@@ -257,14 +265,44 @@ namespace BriX.Media
             return this.attributes["array-item-name"];
         }
 
-        private void Measure(XNode xnode)
+        private void EnsureRootMeasurement()
         {
-            if (!this.stopWatch.IsRunning) this.stopWatch.Start();
-            if (this.nodes["last-node"] is XElement)
+            if (this.IsRootMeasurement())
             {
-                (this.nodes["last-node"] as XElement).SetAttributeValue("building-time", this.stopWatch.ElapsedMilliseconds);
+                this.stopWatches["my"].Start();
             }
-            this.nodes["last-node"] = xnode;
+        }
+
+        private void PrepareSubMeasurement(XNode xnode)
+        {
+            if (xnode.NodeType == System.Xml.XmlNodeType.Element)
+            {
+                (xnode as XElement).SetAttributeValue("time", "0");
+            }
+            this.nodes["sub"] = xnode;
+        }
+
+        private void SaveSubMeasurement()
+        {
+            if (this.nodes["sub"] != this.nodes["my"])
+            {
+                this.stopWatches["sub"].Stop();
+
+                (this.nodes["sub"] as XElement).SetAttributeValue("time", this.stopWatches["sub"].ElapsedMilliseconds);
+            }
+        }
+
+        private Stopwatch StartSubMeasurement()
+        {
+            var newStopwatch = new Stopwatch();
+            newStopwatch.Start();
+            this.stopWatches["sub"] = newStopwatch;
+            return this.stopWatches["sub"];
+        }
+
+        private void EndRootMeasurement()
+        {
+            this.nodes["my"].Document.Root.SetAttributeValue("time", this.stopWatches["my"].ElapsedMilliseconds);
         }
     }
 }
