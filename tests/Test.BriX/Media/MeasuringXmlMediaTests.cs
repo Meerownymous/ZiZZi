@@ -52,6 +52,8 @@ namespace BriX.Media.Test
         {
             IMedia<XNode> media = new MeasuringXmlMedia();
 
+            var xml = new BxBlock("test").Print(media);
+
             var root = media.Block("root");
 
             System.Threading.Thread.Sleep(200);
