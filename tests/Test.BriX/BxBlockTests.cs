@@ -41,5 +41,19 @@ namespace BriX.Test
                 media.Content().ToString(SaveOptions.DisableFormatting)
             );
         }
+
+        [Fact]
+        public void PutsBlockInBlock()
+        {
+            var media = new XmlMedia();
+
+            new BxBlock("mein-block", new BxBlock("dein-block"))
+                .Print(media);
+
+            Assert.Equal(
+                "<mein-block><dein-block /></mein-block>",
+                media.Content().ToString(SaveOptions.DisableFormatting)
+            );
+        }
     }
 }
