@@ -42,7 +42,7 @@ namespace BriX.Media
         /// <summary>
         /// A media in XML format.
         /// </summary>
-        public MeasuringXmlMedia() : this(new XDocument(), "block", string.Empty, new Stopwatch())
+        public MeasuringXmlMedia() : this(new XDocument(), "block", string.Empty, new Stopwatch(), true)
         { }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace BriX.Media
             }
             var newStopwatch = new Stopwatch();
             newStopwatch.Start();
-            return new MeasuringXmlMedia(array, "array", itemName, newStopwatch, false);
+            return new MeasuringXmlMedia(array, "array", itemName, newStopwatch);
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace BriX.Media
 
             var newStopwatch = new Stopwatch();
             newStopwatch.Start();
-            return new MeasuringXmlMedia(block, "block", String.Empty, newStopwatch, false);
+            return new MeasuringXmlMedia(block, "block", String.Empty, newStopwatch);
         }
 
         public XNode Content()
@@ -182,7 +182,7 @@ namespace BriX.Media
                 throw new InvalidOperationException($"You cannot put prop '{name}' into an array. Props can only exist in blocks.");
             }
             var newStopwatch = new Stopwatch();
-            return new MeasuringXmlMedia(prop, "prop", string.Empty, newStopwatch, IsRoot());
+            return new MeasuringXmlMedia(prop, "prop", string.Empty, newStopwatch);
         }
 
         public IMedia<XNode> Put(string value)

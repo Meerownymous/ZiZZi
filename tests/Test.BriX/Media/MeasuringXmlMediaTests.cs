@@ -25,6 +25,7 @@ using System.Xml.Linq;
 using Xunit;
 using BriX.Media;
 using Yaapii.Xml;
+using Yaapii.Atoms.Enumerable;
 
 namespace BriX.Media.Test
 {
@@ -226,8 +227,8 @@ namespace BriX.Media.Test
                 .Put("eller");
 
             Assert.Equal(
-                "<array><item><prop>eller</prop></item></array>",
-                media.Content().ToString(SaveOptions.DisableFormatting)
+                "eller",
+                media.Content().Document.Root.Element("item").Element("prop").Value
             );
         }
 
@@ -248,8 +249,10 @@ namespace BriX.Media.Test
             media.Block("root")
                 .Block("contents");
             Assert.Equal(
-                "<root><contents /></root>",
-                media.Content().ToString(SaveOptions.DisableFormatting)
+                1,
+                new LengthOf(
+                    media.Content().Document.Root.Elements("contents")
+                ).Value()
             );
         }
 
@@ -260,7 +263,7 @@ namespace BriX.Media.Test
             media.Array("root", "key");
 
             Assert.Equal(
-                "<root />",
+                "<root building-time=\"0\" />",
                 media.Content().ToString()
             );
         }
@@ -275,8 +278,10 @@ namespace BriX.Media.Test
                 .Array("keys", "key");
 
             Assert.Equal(
-                "<root building-time=\"0\"><keys building-time=\"0\" /></root>",
-                media.Content().ToString(System.Xml.Linq.SaveOptions.DisableFormatting)
+                1,
+                new LengthOf(
+                    media.Content().Document.Root.Elements("keys")
+                ).Value()
             );
         }
 
@@ -290,8 +295,10 @@ namespace BriX.Media.Test
                 .Array("subarray", "subkey");
 
             Assert.Equal(
-                "<keys building-time=\"0\"><subarray building-time=\"0\" /></keys>",
-                media.Content().ToString(System.Xml.Linq.SaveOptions.DisableFormatting)
+                1,
+                new LengthOf(
+                    media.Content().Document.Root.Elements("subarray")
+                ).Value()
             );
         }
 
