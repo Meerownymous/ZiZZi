@@ -275,6 +275,10 @@ namespace BriX.Media
 
         private void PrepareSubMeasurement(XNode xnode)
         {
+            if (xnode.NodeType == System.Xml.XmlNodeType.Element)
+            {
+                (xnode as XElement).SetAttributeValue("time", "0");
+            }
             this.nodes["sub"] = xnode;
         }
 
