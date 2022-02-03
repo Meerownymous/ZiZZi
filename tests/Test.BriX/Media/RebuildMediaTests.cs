@@ -23,23 +23,27 @@
 using System;
 using System.Xml.Linq;
 using Xunit;
+using Yaapii.Atoms.IO;
+using Yaapii.Atoms.Text;
 using Yaapii.Xml;
 
 namespace BriX.Media.Test
 {
-    public sealed class XmlMediaTests
+    public sealed class RebuildMediaTests
     {
         [Fact]
         public void CreatesPropertyInBlock()
         {
-            var media = new XmlMedia();
+            var media = new RebuildMedia();
 
             media.Block("root")
                 .Prop("key");
 
             Assert.Equal(
                 "1",
-                new XMLCursor(media.Content()).Values("count(/root/key)")[0]
+                new XMLCursor(
+                    new InputOf(media.Content())
+                ).Values("count(/root/key)")[0]
             );
         }
 
@@ -47,7 +51,7 @@ namespace BriX.Media.Test
         public void RejectsPuttingPropertyToArray()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new XmlMedia()
+                new RebuildMedia()
                     .Array("root", "item")
                     .Prop("key")
                     .Put("lock")
@@ -58,7 +62,7 @@ namespace BriX.Media.Test
         public void RejectsPuttingPropertyToRoot()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new XmlMedia()
+                new RebuildMedia()
                     .Prop("key")
                     .Put("lock")
             );
@@ -67,21 +71,23 @@ namespace BriX.Media.Test
         [Fact]
         public void CreatesBlockInRoot()
         {
-            var media = new XmlMedia();
+            var media = new RebuildMedia();
             media.Block("root")
                 .Prop("key")
                 .Put("value");
 
             Assert.Contains(
                 "value",
-                new XMLCursor(media.Content()).Values("/root/key/text()")
+                new XMLCursor(
+                    new InputOf(media.Content())
+                ).Values("/root/key/text()")
             );
         }
 
         [Fact]
         public void RejectsSecondBlockInRoot()
         {
-            var media = new XmlMedia();
+            var media = new RebuildMedia();
             media.Block("root");
 
             Assert.Throws<InvalidOperationException>(() =>
@@ -92,30 +98,31 @@ namespace BriX.Media.Test
         [Fact]
         public void CreatesBlockInProp()
         {
-            var media = new XmlMedia();
+            var media = new RebuildMedia();
             media.Block("root")
                 .Prop("my-block")
                 .Block("contents");
 
             Assert.Contains(
                 "1",
-                new XMLCursor(media.Content())
-                    .Values("count(/root/my-block/contents)")
+                new XMLCursor(
+                    new InputOf(media.Content())
+                ).Values("count(/root/my-block/contents)")
             );
         }
 
         [Fact]
         public void CreatesBlockInArray()
         {
-            var media = new XmlMedia();
+            var media = new RebuildMedia();
             media.Array("array", "item")
                 .Block("item")
                 .Prop("prop")
                 .Put("eller");
 
             Assert.Equal(
-                "<array><item><prop>eller</prop></item></array>",
-                media.Content().ToString(SaveOptions.DisableFormatting)
+                "<array bx-type=\"array\" bx-array-item-name=\"item\"><item bx-type=\"block\"><prop bx-type=\"prop\">eller</prop></item></array>",
+                new TextOf(media.Content()).AsString()
             );
         }
 
@@ -123,7 +130,7 @@ namespace BriX.Media.Test
         public void RejectsBlockInArrayWithDifferentName()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new XmlMedia()
+                new RebuildMedia()
                     .Array("array", "item")
                     .Block("other-name")
             );
@@ -132,61 +139,61 @@ namespace BriX.Media.Test
         [Fact]
         public void BuildsBlockInBlock()
         {
-            var media = new XmlMedia();
+            var media = new RebuildMedia();
             media.Block("root")
                 .Block("contents");
             Assert.Equal(
-                "<root><contents /></root>",
-                media.Content().ToString(SaveOptions.DisableFormatting)
+                "<root bx-type=\"block\"><contents bx-type=\"block\" /></root>",
+                new TextOf(media.Content()).AsString()
             );
         }
 
         [Fact]
         public void CreatesArrayAtRoot()
         {
-            var media = new XmlMedia();
+            var media = new RebuildMedia();
             media.Array("root", "key");
 
             Assert.Equal(
-                "<root />",
-                media.Content().ToString()
+                "<root bx-type=\"array\" bx-array-item-name=\"key\" />",
+                new TextOf(media.Content()).AsString()
             );
         }
 
         [Fact]
         public void CreatesArrayInBlock()
         {
-            var media = new XmlMedia();
+            var media = new RebuildMedia();
 
             media
                 .Block("root")
                 .Array("keys", "key");
 
             Assert.Equal(
-                "<root><keys /></root>",
-                media.Content().ToString(System.Xml.Linq.SaveOptions.DisableFormatting)
+                "<root bx-type=\"block\"><keys bx-type=\"array\" bx-array-item-name=\"key\" /></root>",
+                new TextOf(media.Content()).AsString()
             );
         }
 
         [Fact]
         public void CreatesArrayInArray()
         {
-            var media = new XmlMedia();
+            var media = new RebuildMedia();
 
             media
                 .Array("keys", "key")
                 .Array("subarray", "subkey");
 
             Assert.Equal(
-                "<keys><subarray /></keys>",
-                media.Content().ToString(System.Xml.Linq.SaveOptions.DisableFormatting)
+                "<keys bx-type=\"array\" bx-array-item-name=\"key\"><subarray bx-type=\"array\" bx-array-item-name=\"subkey\" /></keys>",
+                new TextOf(media.Content()).AsString()
             );
         }
 
         [Fact]
         public void RejectsArrayInProp()
         {
-            var media = new XmlMedia();
+            var media = new RebuildMedia();
 
             Assert.Throws<InvalidOperationException>(() =>
                 media
@@ -199,7 +206,7 @@ namespace BriX.Media.Test
         [Fact]
         public void PutsValueToProp()
         {
-            var media = new XmlMedia();
+            var media = new RebuildMedia();
 
             media.Block("root")
                 .Prop("key")
@@ -207,14 +214,16 @@ namespace BriX.Media.Test
 
             Assert.Equal(
                 "lock",
-                new XMLCursor(media.Content()).Values("/root/key/text()")[0]
+                new XMLCursor(
+                    new InputOf(media.Content())
+                ).Values("/root/key/text()")[0]
             );
         }
 
         [Fact]
         public void PutsValueToArray()
         {
-            var media = new XmlMedia();
+            var media = new RebuildMedia();
 
             media
                 .Array("items", "item")
@@ -222,7 +231,9 @@ namespace BriX.Media.Test
 
             Assert.Contains(
                 "ei",
-                new XMLCursor(media.Content()).Values("/items/item/text()")[0]
+                new XMLCursor(
+                    new InputOf(media.Content())
+                ).Values("/items/item/text()")[0]
             );
         }
 
@@ -230,7 +241,7 @@ namespace BriX.Media.Test
         public void RejectsValueInBlock()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new XmlMedia()
+                new RebuildMedia()
                     .Block("root")
                     .Put("lock")
             );
@@ -239,7 +250,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsDuplicateKeyForProp()
         {
-            IMedia<XNode> media = new XmlMedia();
+            IMedia<byte[]> media = new RebuildMedia();
 
             var block = media.Block("root");
             block
@@ -254,7 +265,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsDuplicateKeyForBlock()
         {
-            IMedia<XNode> media = new XmlMedia();
+            IMedia<byte[]> media = new RebuildMedia();
 
             media.Block("key");
 
@@ -266,7 +277,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsDuplicateKeyForArray()
         {
-            IMedia<XNode> media = new XmlMedia();
+            IMedia<byte[]> media = new RebuildMedia();
 
             media.Array("array", "item");
 
@@ -278,7 +289,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsEmptyBlockAsRoot()
         {
-            IMedia<XNode> media = new XmlMedia();
+            IMedia<byte[]> media = new RebuildMedia();
             Assert.Contains("You are trying to make a block without a name",
                 Assert.Throws<InvalidOperationException>(() =>
                     media.Block("")

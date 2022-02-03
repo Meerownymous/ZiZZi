@@ -1,6 +1,6 @@
 ﻿//MIT License
 
-//Copyright (c) 2020 ICARUS Consulting GmbH
+//Copyright (c) 2022 ICARUS Consulting GmbH
 
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@ using Yaapii.JSON;
 
 namespace BriX.Media.Test
 {
-    public sealed class JsonMedia2Tests
+    public sealed class JsonMediaTests
     {
         [Fact]
         public void CreatesPropertyInBlock()
@@ -259,6 +259,17 @@ namespace BriX.Media.Test
 
             Assert.Throws<InvalidOperationException>(() =>
                 media.Array("array", "item")
+            );
+        }
+
+        [Fact]
+        public void RejectsEmptyBlockAsRoot()
+        {
+            IMedia<JToken> media = new JsonMedia();
+            Assert.Contains("You are trying to make a block without a name",
+                Assert.Throws<InvalidOperationException>(() =>
+                    media.Block("")
+                ).Message
             );
         }
     }

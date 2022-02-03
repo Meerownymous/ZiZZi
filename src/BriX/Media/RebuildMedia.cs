@@ -21,161 +21,188 @@
 //SOFTWARE.
 
 using System;
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
+using System.Xml.Linq;
+using Yaapii.Atoms.Bytes;
+using Yaapii.Atoms.Error;
+using Yaapii.Atoms.List;
 
 namespace BriX.Media
 {
     /// <summary>
-    /// A media in JSON format.
+    /// A media which can be used to rebuild a brix.
     /// </summary>
-    public sealed class JsonMedia : IMedia<JToken>
+    public sealed class RebuildMedia : IMedia<byte[]>
     {
-        private readonly JToken[] token;
-        private readonly bool isRoot;
+        private readonly XContainer[] node;
         private readonly string arrayItemName;
-        private readonly IList<string> existingNames;
+        private readonly bool isRoot;
+        private readonly string[] brixType;
 
         /// <summary>
-        /// A media in JSON format.
+        /// A media which can be used to rebuild a brix.
         /// </summary>
-        public JsonMedia() : this(new JObject(), string.Empty, true)
+        public RebuildMedia() : this(new XDocument(), "block", string.Empty, true)
         { }
 
         /// <summary>
-        /// A media in JSON format.
+        /// A media which can be used to rebuild a brix.
         /// </summary>
-        private JsonMedia(JToken token, string arrayItemName, bool isRoot = false)
+        private RebuildMedia(XContainer node, string brixType, string arrayItemName, bool isRoot = false)
         {
-            this.token = new JToken[1] { token };
+            this.node = new XContainer[1] { node };
+            this.brixType = new string[1] { brixType };
             this.arrayItemName = arrayItemName;
             this.isRoot = isRoot;
-            this.existingNames = new List<string>();
         }
 
-        public IMedia<JToken> Array(string arrayName, string itemName) //array- and itemName is not needed in json
+        /// <summary>
+        /// A media which can be used to rebuild a brix.
+        /// </summary>
+        public IMedia<byte[]> Array(string arrayName, string itemName)
         {
-            var array = new JArray();
+            var array = new XElement(arrayName);
+            array.SetAttributeValue("bx-type", "array");
+            array.SetAttributeValue("bx-array-item-name", itemName);
             RejectDuplicates(arrayName);
             if (this.isRoot)
             {
                 RejectEmpty("array", arrayName);
                 RejectDuplicateRoot();
-                this.token[0] = array;
+                this.brixType[0] = "array";
+                this.Node().Add(array);
             }
             else
             {
-                var token = this.Token();
-                if (Is(JTokenType.Property))
+                if (Is("prop"))
                 {
-                    throw new InvalidOperationException($"You cannot put array '{arrayName}/{itemName}' into a prop. You can create an array as root or inside a block.");
+                    throw new InvalidOperationException($"You cannot put array '{arrayName}/{arrayItemName}' into a prop. You can create an array as root or inside a block.");
                 }
-                else if (Is(JTokenType.Array))
+                else if (Is("array"))
                 {
-                    (token as JArray).Add(array);
+                    this.Node().Add(array);
                 }
-                else if (Is(JTokenType.Object))
+                else if (Is("block"))
                 {
-                    var prop = new JProperty(arrayName, array);
-                    (token as JObject).Add(prop);
+                    this.Node().Add(array);
                 }
             }
-            this.existingNames.Add(arrayName.ToLower());
-            return new JsonMedia(array, itemName);
+            return new RebuildMedia(array, "array", itemName);
         }
 
-        public IMedia<JToken> Block(string name)
+        /// <summary>
+        /// A media which can be used to rebuild a brix.
+        /// </summary>
+        public IMedia<byte[]> Block(string name)
         {
-            var obj = new JObject();
+            var block = new XElement("bootstrap");
+            block.SetAttributeValue("bx-type", "block");
             if (this.isRoot)
             {
-                RejectEmpty("block", name);
                 RejectDuplicateRoot();
-                obj = (this.Token() as JObject);
+                RejectEmpty("block", name);
+                block.Name = name;
+                this.Node().Add(block);
             }
             else
             {
-                if (Is(JTokenType.Property))
+                if (Is("prop"))
                 {
                     RejectEmpty("block", name);
                     RejectDuplicates(name);
-                    (this.Token() as JProperty).Value = obj;
+                    block.Name = name;
+                    this.Node().Add(block);
                 }
-                else if (Is(JTokenType.Array))
+                else if (Is("array"))
                 {
-                    if (name != string.Empty && this.arrayItemName.Length > 0 && !name.Equals(this.arrayItemName, StringComparison.OrdinalIgnoreCase))
+                    if (name != String.Empty && this.arrayItemName.Length > 0 && !name.Equals(this.arrayItemName, StringComparison.OrdinalIgnoreCase))
                     {
                         throw new InvalidOperationException($"You are putting block '{name}' into a list - but you gave it another name as you specified for the list items: '{this.arrayItemName}'. Blocks which are put into lists must have the same name.");
                     }
-                    (this.Token() as JArray).Add(obj);
+                    block.Name = this.arrayItemName;
+                    this.Node().Add(block);
                 }
-                else if (Is(JTokenType.Object))
+                else
                 {
                     RejectEmpty("block", name);
                     RejectDuplicates(name);
-                    (this.Token() as JObject).Add(new JProperty(name, obj));
+                    block.Name = name;
+                    this.Node().Add(block);
                 }
             }
-            this.existingNames.Add(name.ToLower());
-            return new JsonMedia(obj, string.Empty);
+            return new RebuildMedia(block, "block", String.Empty);
         }
 
-        public JToken Content()
+        public byte[] Content()
         {
-            return this.Token();
+            return
+                new BytesOf(
+                    this.node[0].Document.Root.ToString(SaveOptions.DisableFormatting)
+                ).AsBytes();
         }
 
-        public IMedia<JToken> Prop(string name)
+        public IMedia<byte[]> Prop(string name)
         {
             if (isRoot)
             {
                 throw new InvalidOperationException($"You cannot put prop '{name}' directly into a media. You must start with a block or an array.");
             }
+
             RejectDuplicates(name);
 
-            var prop = new JProperty(name, string.Empty);
-            if (Is(JTokenType.Object))
+            var prop = new XElement(name);
+            prop.SetAttributeValue("bx-type", "prop");
+
+            if (Is("block"))
             {
-                (this.Token() as JObject).Add(prop);
+                this.node[0].Add(prop);
             }
-            else if (Is(JTokenType.Array))
+            else if (Is("array"))
             {
                 throw new InvalidOperationException($"You cannot put prop '{name}' into an array. Props can only exist in blocks.");
             }
-            this.existingNames.Add(name.ToLower());
-            return new JsonMedia(prop, string.Empty);
+            return new RebuildMedia(prop, "prop", string.Empty, false);
         }
 
-        public IMedia<JToken> Put(string value)
+        public IMedia<byte[]> Put(string value)
         {
-            if (Is(JTokenType.Array))
+            if (Is("array"))
             {
-                (this.Token() as JArray).Add(value);
+                (this.Node() as XElement).Add(new XElement(this.arrayItemName, value));
             }
-            else if (Is(JTokenType.Property))
+            else if (Is("prop"))
             {
-                (this.Token() as JProperty).Value = value;
+                (this.Node() as XElement).Value = value;
             }
-            else if (Is(JTokenType.Object))
+            else if (Is("block"))
             {
                 throw new InvalidOperationException($"You cannot put value '{value}' directly into a block.");
             }
             return this;
         }
 
-        private JToken Token()
+        private XContainer Node()
         {
-            return this.token[0];
+            return this.node[0];
         }
 
-        private bool Is(JTokenType type)
+        private bool Is(string brixType)
         {
-            return this.Token().Type == type;
+            return this.brixType[0] == brixType;
         }
 
         private void RejectDuplicates(string name)
         {
-            if (this.existingNames.Contains(name.ToLower()))
+            var existing =
+                new ListOf<string>(
+                    new Yaapii.Atoms.Enumerable.Mapped<XElement, string>(
+                        elem => elem.Name.LocalName.ToLower(),
+                        this.node[0].Elements()
+                    )
+                );
+
+            if (
+                existing.Contains(name.ToLower())
+            )
             {
                 throw new InvalidOperationException($"Cannot add '{name}' because it already exists.");
             }
@@ -183,7 +210,7 @@ namespace BriX.Media
 
         private void RejectDuplicateRoot()
         {
-            if (this.existingNames.Count > 0)
+            if (this.Node().Elements().GetEnumerator().MoveNext())
             {
                 throw new InvalidOperationException($"You cannot put two blocks/arrays into the root, and this already has one.");
             }

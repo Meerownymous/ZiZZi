@@ -1,6 +1,6 @@
 ﻿//MIT License
 
-//Copyright (c) 2020 ICARUS Consulting GmbH
+//Copyright (c) 2022 ICARUS Consulting GmbH
 
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ namespace BriX.Test
         {
             var media = new XmlMedia().Block("root");
             new BxConditional(() => true,
-                new BxProp("Matched", "true")
+                () => new BxProp("Matched", "true")
             ).Print(media);
             Assert.Equal(
                 "<root><Matched>true</Matched></root>",
@@ -45,7 +45,7 @@ namespace BriX.Test
         {
             var media = new XmlMedia().Block("root");
             new BxConditional(() => false,
-                new BxProp("Matched", "true")
+                () => new BxProp("Matched", "true")
             ).Print(media);
             Assert.Equal(
                 "<root />",

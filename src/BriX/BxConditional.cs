@@ -1,6 +1,6 @@
 ﻿//MIT License
 
-//Copyright (c) 2020 ICARUS Consulting GmbH
+//Copyright (c) 2022 ICARUS Consulting GmbH
 
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -34,19 +34,19 @@ namespace BriX
         /// Prints only if the given condition is matched.
         /// Otherwise does nothing.
         /// </summary>
-        public BxConditional(bool condition, IBrix consequence) : this(() => condition, consequence)
+        public BxConditional(bool condition, Func<IBrix> consequence) : this(() => condition, consequence)
         { }
 
         /// <summary>
         /// Prints only if the given condition is matched.
         /// Otherwise does nothing.
         /// </summary>
-        public BxConditional(Func<bool> condition, IBrix consequence) : base(() =>
+        public BxConditional(Func<bool> condition, Func<IBrix> consequence) : base(() =>
         {
             IBrix result = new BxNothing();
             if (condition())
             {
-                result = consequence;
+                result = consequence();
             }
             return result;
         })
