@@ -108,7 +108,7 @@ namespace BriX.Media
                 }
             }
 
-            return new MeasuringXmlMediaTemp(array, "array", itemName, StartSubMeasurement());
+            return new MeasuringXmlMedia(array, "array", itemName, StartSubMeasurement());
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace BriX.Media
                     this.Node().Add(block);
                 }
             }
-            return new MeasuringXmlMediaTemp(block, "block", String.Empty, StartSubMeasurement());
+            return new MeasuringXmlMedia(block, "block", String.Empty, StartSubMeasurement());
         }
 
         public XNode Content()
@@ -191,7 +191,7 @@ namespace BriX.Media
             {
                 throw new InvalidOperationException($"You cannot put prop '{name}' into an array. Props can only exist in blocks.");
             }
-            return new MeasuringXmlMediaTemp(prop, "prop", string.Empty, StartSubMeasurement());
+            return new MeasuringXmlMedia(prop, "prop", string.Empty, StartSubMeasurement());
         }
 
         public IMedia<XNode> Put(string value)
