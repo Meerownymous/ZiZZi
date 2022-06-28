@@ -20,6 +20,7 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using System.Xml.Linq;
 using Xunit;
 using Yaapii.Atoms.Bytes;
 using Yaapii.Atoms.Text;
@@ -51,7 +52,10 @@ namespace BriX.Media.Test
             );
             var json = brix.Print(new JsonMedia()).ToString();
             var xml = brix.Print(new XmlMedia()).ToString();
-            var rebuild = new TextOf(new BytesOf(brix.Print(new RebuildMedia()))).AsString();
+            var rebuild = 
+                new TextOf(
+                    new BytesOf(brix.Print(new RebuildMedia()).Document.Root.ToString(SaveOptions.DisableFormatting))
+                ).AsString();
             var yaml = brix.Print(new YamlMedia()).ToString();
         }
     }
