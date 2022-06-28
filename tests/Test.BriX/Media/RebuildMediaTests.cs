@@ -42,7 +42,7 @@ namespace BriX.Media.Test
             Assert.Equal(
                 "1",
                 new XMLCursor(
-                    new InputOf(media.Content())
+                    media.Content()
                 ).Values("count(/root/key)")[0]
             );
         }
@@ -79,7 +79,7 @@ namespace BriX.Media.Test
             Assert.Contains(
                 "value",
                 new XMLCursor(
-                    new InputOf(media.Content())
+                    media.Content()
                 ).Values("/root/key/text()")
             );
         }
@@ -106,7 +106,7 @@ namespace BriX.Media.Test
             Assert.Contains(
                 "1",
                 new XMLCursor(
-                    new InputOf(media.Content())
+                    media.Content()
                 ).Values("count(/root/my-block/contents)")
             );
         }
@@ -122,7 +122,7 @@ namespace BriX.Media.Test
 
             Assert.Equal(
                 "<array bx-type=\"array\" bx-array-item-name=\"item\"><item bx-type=\"block\"><prop bx-type=\"prop\">eller</prop></item></array>",
-                new TextOf(media.Content()).AsString()
+                media.Content().ToString(SaveOptions.DisableFormatting)
             );
         }
 
@@ -144,7 +144,7 @@ namespace BriX.Media.Test
                 .Block("contents");
             Assert.Equal(
                 "<root bx-type=\"block\"><contents bx-type=\"block\" /></root>",
-                new TextOf(media.Content()).AsString()
+                media.Content().ToString(SaveOptions.DisableFormatting)
             );
         }
 
@@ -156,7 +156,7 @@ namespace BriX.Media.Test
 
             Assert.Equal(
                 "<root bx-type=\"array\" bx-array-item-name=\"key\" />",
-                new TextOf(media.Content()).AsString()
+                media.Content().ToString(SaveOptions.DisableFormatting)
             );
         }
 
@@ -171,7 +171,7 @@ namespace BriX.Media.Test
 
             Assert.Equal(
                 "<root bx-type=\"block\"><keys bx-type=\"array\" bx-array-item-name=\"key\" /></root>",
-                new TextOf(media.Content()).AsString()
+                media.Content().ToString(SaveOptions.DisableFormatting)
             );
         }
 
@@ -186,7 +186,7 @@ namespace BriX.Media.Test
 
             Assert.Equal(
                 "<keys bx-type=\"array\" bx-array-item-name=\"key\"><subarray bx-type=\"array\" bx-array-item-name=\"subkey\" /></keys>",
-                new TextOf(media.Content()).AsString()
+                media.Content().ToString(SaveOptions.DisableFormatting)
             );
         }
 
@@ -215,7 +215,7 @@ namespace BriX.Media.Test
             Assert.Equal(
                 "lock",
                 new XMLCursor(
-                    new InputOf(media.Content())
+                    media.Content()
                 ).Values("/root/key/text()")[0]
             );
         }
@@ -232,7 +232,7 @@ namespace BriX.Media.Test
             Assert.Contains(
                 "ei",
                 new XMLCursor(
-                    new InputOf(media.Content())
+                    media.Content()
                 ).Values("/items/item/text()")[0]
             );
         }
@@ -250,7 +250,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsDuplicateKeyForProp()
         {
-            IMedia<byte[]> media = new RebuildMedia();
+            var media = new RebuildMedia();
 
             var block = media.Block("root");
             block
@@ -265,7 +265,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsDuplicateKeyForBlock()
         {
-            IMedia<byte[]> media = new RebuildMedia();
+            var media = new RebuildMedia();
 
             media.Block("key");
 
@@ -277,7 +277,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsDuplicateKeyForArray()
         {
-            IMedia<byte[]> media = new RebuildMedia();
+            var media = new RebuildMedia();
 
             media.Array("array", "item");
 
@@ -289,7 +289,7 @@ namespace BriX.Media.Test
         [Fact]
         public void RejectsEmptyBlockAsRoot()
         {
-            IMedia<byte[]> media = new RebuildMedia();
+            var media = new RebuildMedia();
             Assert.Contains("You are trying to make a block without a name",
                 Assert.Throws<InvalidOperationException>(() =>
                     media.Block("")

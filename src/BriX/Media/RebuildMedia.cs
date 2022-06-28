@@ -31,7 +31,7 @@ namespace BriX.Media
     /// <summary>
     /// A media which can be used to rebuild a brix.
     /// </summary>
-    public sealed class RebuildMedia : IMedia<byte[]>
+    public sealed class RebuildMedia : IMedia<XNode>
     {
         private readonly XContainer[] node;
         private readonly string arrayItemName;
@@ -58,7 +58,7 @@ namespace BriX.Media
         /// <summary>
         /// A media which can be used to rebuild a brix.
         /// </summary>
-        public IMedia<byte[]> Array(string arrayName, string itemName)
+        public IMedia<XNode> Array(string arrayName, string itemName)
         {
             var array = new XElement(arrayName);
             array.SetAttributeValue("bx-type", "array");
@@ -92,7 +92,7 @@ namespace BriX.Media
         /// <summary>
         /// A media which can be used to rebuild a brix.
         /// </summary>
-        public IMedia<byte[]> Block(string name)
+        public IMedia<XNode> Block(string name)
         {
             var block = new XElement("bootstrap");
             block.SetAttributeValue("bx-type", "block");
@@ -132,15 +132,12 @@ namespace BriX.Media
             return new RebuildMedia(block, "block", String.Empty);
         }
 
-        public byte[] Content()
+        public XNode Content()
         {
-            return
-                new BytesOf(
-                    this.node[0].Document.Root.ToString(SaveOptions.DisableFormatting)
-                ).AsBytes();
+            return this.node[0] as XNode;
         }
 
-        public IMedia<byte[]> Prop(string name)
+        public IMedia<XNode> Prop(string name)
         {
             if (isRoot)
             {
@@ -163,7 +160,7 @@ namespace BriX.Media
             return new RebuildMedia(prop, "prop", string.Empty, false);
         }
 
-        public IMedia<byte[]> Put(string value)
+        public IMedia<XNode> Put(string value)
         {
             if (Is("array"))
             {
