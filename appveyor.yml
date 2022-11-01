@@ -7,7 +7,7 @@ image: Visual Studio 2019
 configuration: Release
 environment:
   GITHUB_TOKEN:
-    secure: 4GT6JbuhjB6v+IzifNiMMXTry/UPkE/Y4DfNyEY0ejKOY3iVVHB/PIvHkzYGBuH2
+    secure: //RzPD6sJwALrAUPet5ffD2C82ETjhYb1XR30sWRHtqNK5E9Q9xN96GNP9OfWCwX
   NUGET_TOKEN:
     secure: 7aFUgpp96O2wnPblxSHS7fVDWWiLgbvVoRdU1qfZjdoD6LdeEkhID4YJSIyTYaw1
 # Do not build feature branch with open Pull Requests
