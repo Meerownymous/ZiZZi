@@ -15,7 +15,6 @@
     <RepositoryUrl>https://github.com/icarus-consulting/BriX.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>https://github.com/icarus-consulting/BriX/releases</PackageReleaseNotes>
-    <LangVersion>10</LangVersion>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\sgKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
