@@ -43,6 +43,18 @@ namespace BriX.Test
         }
 
         [Fact]
+        public void WorksWithNothing()
+        {
+            Assert.Empty(
+                new XMLCursor(
+                    new BxBlock("root",
+                        new BxRebuilt(new BxNothing().Print(new RebuildMedia()))
+                    ).Print(new XmlMedia())
+                ).Nodes("/root/*")
+            );
+        }
+
+        [Fact]
         public void RebuildsEmptyRootArray()
         {
             Assert.Equal(
