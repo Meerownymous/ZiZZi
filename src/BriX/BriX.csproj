@@ -15,6 +15,7 @@
     <RepositoryUrl>https://github.com/icarus-consulting/BriX.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>https://github.com/icarus-consulting/BriX/releases</PackageReleaseNotes>
+    <Version>5.0.1</Version>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\sgKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -27,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Yaapii.JSON" Version="13.3.2" />
     <PackageReference Include="Yaapii.Atoms" Version="3.0.0" />
   </ItemGroup>
 
