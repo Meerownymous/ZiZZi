@@ -7,14 +7,14 @@ namespace BLox
     /// <summary>
     /// Multiple contents.
     /// </summary>
-    public sealed class BxChain : IBrix
+    public sealed class BxChain2 : IBrix2
     {
-        private readonly IEnumerable<IBrix> printables;
+        private readonly IEnumerable<IBrix2> printables;
 
         /// <summary>
         /// Multiple contents.
         /// </summary>
-        public BxChain(params IBrix[] more) : this(
+        public BxChain2(params IBrix2[] more) : this(
             AsEnumerable._(more)
         )
         { }
@@ -22,7 +22,7 @@ namespace BLox
         /// <summary>
         /// Multiple contents.
         /// </summary>
-        public BxChain(IBrix printable, IEnumerable<IBrix> printables) : this(
+        public BxChain2(IBrix2 printable, IEnumerable<IBrix2> printables) : this(
             Joined._(
                 AsEnumerable._(printable),
                 printables
@@ -33,12 +33,12 @@ namespace BLox
         /// <summary>
         /// Multiple contents.
         /// </summary>
-        public BxChain(IEnumerable<IBrix> printables)
+        public BxChain2(IEnumerable<IBrix2> printables)
         {
             this.printables = printables;
         }
 
-        public T Print<T>(IMedia<T> media)
+        public T Print<T>(IShape<T> media)
         {
             Each._(
                 printable => printable.Print(media),

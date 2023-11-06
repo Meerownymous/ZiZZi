@@ -7,11 +7,11 @@ namespace BLox
     /// <summary>
     /// Content which ca be printed to a media.
     /// </summary>
-    public interface IBrix
+    public interface IBrix2
     {
         /// <summary>
         /// Print the content to a media.
         /// </summary>
-        T Print<T>(IMedia<T> media);    
+        T Print<T>(IShape<T> media);    
     }
 }

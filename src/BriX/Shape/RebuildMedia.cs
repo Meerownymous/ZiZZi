@@ -1,35 +1,17 @@
-﻿//MIT License
-
-//Copyright (c) 2022 ICARUS Consulting GmbH
-
-//Permission is hereby granted, free of charge, to any person obtaining a copy
-//of this software and associated documentation files (the "Software"), to deal
-//in the Software without restriction, including without limitation the rights
-//to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//copies of the Software, and to permit persons to whom the Software is
-//furnished to do so, subject to the following conditions:
-
-//The above copyright notice and this permission notice shall be included in all
-//copies or substantial portions of the Software.
-
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-//SOFTWARE.
+﻿
 
 using System;
 using System.Xml.Linq;
+using Yaapii.Atoms.Bytes;
+using Yaapii.Atoms.Error;
 using Yaapii.Atoms.List;
 
-namespace BriX.Media
+namespace BLox.Shape
 {
     /// <summary>
-    /// A media in XML format.
+    /// A media which can be used to rebuild a brix.
     /// </summary>
-    public sealed class XmlMedia : IMedia<XNode>
+    public sealed class RebuildMedia : IMedia<XNode>
     {
         private readonly XContainer[] node;
         private readonly string arrayItemName;
@@ -37,15 +19,15 @@ namespace BriX.Media
         private readonly string[] brixType;
 
         /// <summary>
-        /// A media in XML format.
+        /// A media which can be used to rebuild a brix.
         /// </summary>
-        public XmlMedia() : this(new XDocument(), "block", string.Empty, true)
+        public RebuildMedia() : this(new XDocument(), "block", string.Empty, true)
         { }
 
         /// <summary>
-        /// A media in XML format.
+        /// A media which can be used to rebuild a brix.
         /// </summary>
-        private XmlMedia(XContainer node, string brixType, string arrayItemName, bool isRoot = false)
+        private RebuildMedia(XContainer node, string brixType, string arrayItemName, bool isRoot = false)
         {
             this.node = new XContainer[1] { node };
             this.brixType = new string[1] { brixType };
@@ -54,11 +36,13 @@ namespace BriX.Media
         }
 
         /// <summary>
-        /// A media in XML format.
+        /// A media which can be used to rebuild a brix.
         /// </summary>
         public IMedia<XNode> Array(string arrayName, string itemName)
         {
             var array = new XElement(arrayName);
+            array.SetAttributeValue("bx-type", "array");
+            array.SetAttributeValue("bx-array-item-name", itemName);
             RejectDuplicates(arrayName);
             if (this.isRoot)
             {
@@ -82,15 +66,16 @@ namespace BriX.Media
                     this.Node().Add(array);
                 }
             }
-            return new XmlMedia(array, "array", itemName);
+            return new RebuildMedia(array, "array", itemName);
         }
 
         /// <summary>
-        /// A media in XML format.
+        /// A media which can be used to rebuild a brix.
         /// </summary>
         public IMedia<XNode> Block(string name)
         {
             var block = new XElement("bootstrap");
+            block.SetAttributeValue("bx-type", "block");
             if (this.isRoot)
             {
                 RejectDuplicateRoot();
@@ -124,7 +109,7 @@ namespace BriX.Media
                     this.Node().Add(block);
                 }
             }
-            return new XmlMedia(block, "block", String.Empty);
+            return new RebuildMedia(block, "block", String.Empty);
         }
 
         public XNode Content()
@@ -142,6 +127,7 @@ namespace BriX.Media
             RejectDuplicates(name);
 
             var prop = new XElement(name);
+            prop.SetAttributeValue("bx-type", "prop");
 
             if (Is("block"))
             {
@@ -151,7 +137,7 @@ namespace BriX.Media
             {
                 throw new InvalidOperationException($"You cannot put prop '{name}' into an array. Props can only exist in blocks.");
             }
-            return new XmlMedia(prop, "prop", string.Empty, false);
+            return new RebuildMedia(prop, "prop", string.Empty, false);
         }
 
         public IMedia<XNode> Put(string value)

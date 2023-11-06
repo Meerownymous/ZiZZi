@@ -1,33 +1,11 @@
-﻿//MIT License
-
-//Copyright (c) 2020 ICARUS Consulting GmbH
-
-//Permission is hereby granted, free of charge, to any person obtaining a copy
-//of this software and associated documentation files (the "Software"), to deal
-//in the Software without restriction, including without limitation the rights
-//to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//copies of the Software, and to permit persons to whom the Software is
-//furnished to do so, subject to the following conditions:
-
-//The above copyright notice and this permission notice shall be included in all
-//copies or substantial portions of the Software.
-
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-//SOFTWARE.
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Xml.Linq;
-using Yaapii.Atoms.List;
-using Yaapii.Atoms.Map;
+using Tonga.List;
+using Tonga.Map;
 
-namespace BriX.Media
+namespace BLox.Shape
 {
     /// <summary>
     /// A media in XML format.
@@ -35,7 +13,7 @@ namespace BriX.Media
     public sealed class MeasuringXmlMedia : IMedia<XNode>
     {
         private readonly bool isRootMedia;
-        private readonly IDictionary<string, XNode> nodes;
+        private readonly IDictionary<string, XContainer> nodes;
         private readonly IDictionary<string, string> attributes;
         private readonly IDictionary<string, Stopwatch> stopWatches;
 
@@ -52,23 +30,23 @@ namespace BriX.Media
         {
             this.isRootMedia = isRoot;
             this.stopWatches =
-                new Dictionary<string, Stopwatch>(
-                    new MapOf<string, Stopwatch>(
-                        new KvpOf<string, Stopwatch>("my", stopWatch),
-                        new KvpOf<string, Stopwatch>("sub", new Stopwatch())
+                AsDictionary._(
+                    AsMap._(
+                        AsPair._("my", stopWatch),
+                        AsPair._("sub", new Stopwatch())
                     )
                 );
 
             this.nodes =
-                new Dictionary<string, XNode>(
-                    new MapOf<string, XNode>(
-                        new KvpOf<string, XNode>("my", node),
-                        new KvpOf<string, XNode>("sub", node)
+                AsDictionary._(
+                    AsMap._(
+                        AsPair._("my", node),
+                        AsPair._("sub", node)
                     )
                 );
             this.attributes =
-                new Dictionary<string, string>(
-                    new MapOf(
+                AsDictionary._(
+                    AsMap._(
                         "array-item-name", arrayItemName,
                         "brix-type", brixType
                     )
@@ -219,10 +197,10 @@ namespace BriX.Media
         private void RejectDuplicates(string name)
         {
             var existing =
-                new ListOf<string>(
-                    new Yaapii.Atoms.Enumerable.Mapped<XElement, string>(
+                AsList._(
+                    Mapped._(
                         elem => elem.Name.LocalName.ToLower(),
-                        (this.nodes["my"] as XContainer).Elements()
+                        this.nodes["my"].Elements()
                     )
                 );
 
@@ -279,7 +257,7 @@ namespace BriX.Media
             {
                 (xnode as XElement).SetAttributeValue("time", "0");
             }
-            this.nodes["sub"] = xnode;
+            this.nodes["sub"] = xnode as XContainer;
         }
 
         private void SaveSubMeasurement()

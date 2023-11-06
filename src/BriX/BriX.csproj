@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <DocumentationFile>$(MSBuildThisFileDirectory)bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>ICARUS Consulting GmbH</Authors>
@@ -29,7 +29,15 @@
 
   <ItemGroup>
     <PackageReference Include="Yaapii.JSON" Version="13.3.3" />
-    <PackageReference Include="Yaapii.Atoms" Version="3.0.0" />
+    <PackageReference Include="Tonga" Version="0.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Media\JSON\" />
+    <None Remove="Media\Content\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Media\JSON\" />
+    <Folder Include="Media\Content\" />
+  </ItemGroup>
 </Project>

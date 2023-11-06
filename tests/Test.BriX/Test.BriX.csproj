@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -24,4 +24,12 @@
     <ProjectReference Include="..\..\src\BriX\BriX.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Media\JSON\" />
+    <None Remove="Media\Validated\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Media\JSON\" />
+    <Folder Include="Media\Validated\" />
+  </ItemGroup>
 </Project>
