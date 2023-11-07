@@ -2,7 +2,7 @@
 using Tonga.Enumerable;
 using Tonga.Func;
 
-namespace BLox
+namespace ZiZZi
 {
     /// <summary>
     /// Multiple contents.

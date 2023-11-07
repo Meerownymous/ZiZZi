@@ -1,10 +1,10 @@
 ﻿
 
-using BLox.Shape;
+using ZiZZi.Matter;
 using Xunit;
 using Yaapii.Atoms.Enumerable;
 
-namespace BLox.Test
+namespace ZiZZi.Test
 {
     public sealed class BxArrayTests
     {
@@ -12,7 +12,7 @@ namespace BLox.Test
         public void WritesArray()
         {
             var media = new XmlMedia();
-            new BxArray("ItemArray", "Item", new ManyOf<string>("Entry"))
+            new BxValueArray("ItemArray", "Item", new ManyOf<string>("Entry"))
                 .Print(media);
 
             Assert.Equal(

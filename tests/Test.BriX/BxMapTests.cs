@@ -1,11 +1,9 @@
-﻿
-
-using BLox.Shape;
+﻿using ZiZZi.Matter;
 using Tonga.Map;
 using Xunit;
 using Yaapii.Atoms.Map;
 
-namespace BLox.Test
+namespace ZiZZi.Test
 {
     public sealed class BxMapTests
     {

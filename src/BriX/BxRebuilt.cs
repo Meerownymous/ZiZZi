@@ -7,7 +7,7 @@ using Yaapii.Atoms.Enumerable;
 using Yaapii.Atoms.Scalar;
 using Yaapii.Atoms.Text;
 
-namespace BLox
+namespace ZiZZi
 {
     /// <summary>
     /// A brix which has been transported as raw data.
@@ -116,7 +116,7 @@ namespace BLox
                                             data.Value().Elements()
                                         )
                                     ),
-                                    new BxArray(data.Value().Name.LocalName, data.Value().Attribute("bx-array-item-name").Value,
+                                    new BxValueArray(data.Value().Name.LocalName, data.Value().Attribute("bx-array-item-name").Value,
                                         new Mapped<XElement, string>(
                                             elem => elem.Value,
                                             data.Value().Elements()

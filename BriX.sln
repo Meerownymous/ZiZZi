@@ -15,9 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{D144FF
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BriX", "src\BriX\BriX.csproj", "{4100363A-8976-44B1-9483-68D486A51784}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZiZZi", "src\BriX\ZiZZi.csproj", "{4100363A-8976-44B1-9483-68D486A51784}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.BriX", "tests\Test.BriX\Test.BriX.csproj", "{913504FE-C574-400D-807D-92176B43AA95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.ZiZZi", "tests\Test.BriX\Test.ZiZZi.csproj", "{913504FE-C574-400D-807D-92176B43AA95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

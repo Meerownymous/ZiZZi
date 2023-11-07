@@ -2,7 +2,7 @@
 using System.Globalization;
 using Tonga;
 
-namespace BLox
+namespace ZiZZi
 {
     /// <summary>
     /// A property which has a name and a value.

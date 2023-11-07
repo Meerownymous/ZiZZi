@@ -1,10 +1,10 @@
 ﻿
 
-using BLox.Shape;
+using ZiZZi.Matter;
 using Xunit;
 using Yaapii.Xml;
 
-namespace BLox.Test
+namespace ZiZZi.Test
 {
     public sealed class BxRebuiltTests
     {
@@ -41,7 +41,7 @@ namespace BLox.Test
                 1,
                 new XMLCursor(
                     new BxRebuilt(
-                        new BxArray("root", "sub").Print(new RebuildMedia())
+                        new BxValueArray("root", "sub").Print(new RebuildMedia())
                     ).Print(new XmlMedia())
                 ).Nodes("/root")
                 .Count
@@ -72,7 +72,7 @@ namespace BLox.Test
                 new XMLCursor(
                     new BxRebuilt(
                         new BxBlock("root",
-                            new BxArray("items", "item", "content")
+                            new BxValueArray("items", "item", "content")
                         ).Print(new RebuildMedia())
                     ).Print(new XmlMedia())
                 ).Nodes("/root/items/item[text() = 'content']")

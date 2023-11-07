@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Tonga.Enumerable;
 
-namespace BLox
+namespace ZiZZi
 {
     /// <summary>
     /// A block which can be printed to a media.

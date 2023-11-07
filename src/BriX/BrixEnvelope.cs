@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BLox
+namespace ZiZZi
 {
     /// <summary>
     /// Envelope for brix.

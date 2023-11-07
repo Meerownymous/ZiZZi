@@ -3,7 +3,7 @@ using Tonga;
 using Tonga.Enumerable;
 using Tonga.Map;
 
-namespace BLox
+namespace ZiZZi
 {
     /// <summary>
     /// A brix map (list of <see cref="BxProp"/>).

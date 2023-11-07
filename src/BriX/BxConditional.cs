@@ -2,7 +2,7 @@
 
 using System;
 
-namespace BLox
+namespace ZiZZi
 {
     /// <summary>
     /// Prints only if the given condition is matched.

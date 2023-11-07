@@ -1,8 +1,8 @@
 ﻿
 
-using BLox.Shape;
+using ZiZZi.Matter;
 
-namespace BLox
+namespace ZiZZi
 {
     /// <summary>
     /// Content which ca be printed to a media.

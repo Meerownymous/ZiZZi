@@ -1,9 +1,9 @@
 ﻿
 
-using BLox.Shape;
+using ZiZZi.Matter;
 using Xunit;
 
-namespace BLox.Test
+namespace ZiZZi.Test
 {
     public sealed class BxPropTests
     {

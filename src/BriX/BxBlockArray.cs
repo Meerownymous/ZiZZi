@@ -5,7 +5,7 @@ using Tonga.Enumerable;
 using Tonga.Func;
 using Yaapii.Atoms.Enumerable;
 
-namespace BLox
+namespace ZiZZi
 {
     /// <summary>
     /// A list of blocks.

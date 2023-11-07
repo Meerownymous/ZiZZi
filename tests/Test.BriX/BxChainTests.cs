@@ -1,10 +1,10 @@
 ﻿
 
-using BLox.Shape;
+using ZiZZi.Matter;
 using System.Xml.Linq;
 using Xunit;
 
-namespace BLox.Test
+namespace ZiZZi.Test
 {
     public sealed class BxChainTests
     {

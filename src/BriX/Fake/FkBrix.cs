@@ -2,9 +2,9 @@
 
 
 using System;
-using BLox.Shape;
+using ZiZZi.Matter;
 
-namespace BLox.Fake
+namespace ZiZZi.Fake
 {
     /// <summary>
     /// Fake brix.

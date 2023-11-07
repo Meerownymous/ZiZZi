@@ -1,6 +1,6 @@
 ﻿
 
-namespace BLox
+namespace ZiZZi
 {
     /// <summary>
     /// A media which you can print content to.

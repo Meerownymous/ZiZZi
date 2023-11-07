@@ -4,54 +4,58 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat-square)](http://commitizen.github.io/cz-cli/)
 [![EO principles respected here](http://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org)
 
-## Repo Guidelines
+# ZiZZi
 
-Main responsible for this reposotory is [icaOBU](https://github.com/icaOBU).
-Please request in every single PR a review from him. 
+Create data structures using *object oriented* blocks. 
 
-He will try to review the PR´s within **1 week** and merge applied PR´s within **2 weeks** with a new release. Main review day is monday.
-
-# BriX
-
-Create data structures using *object oriented* bricks.
-
-This library follows all the principles suggested in the two "[Elegant Objects](https://www.amazon.de/Elegant-Objects-Yegor-Bugayenko/dp/1519166915)" books.
+The code follows all the principles suggested in the two "[Elegant Objects](https://www.amazon.de/Elegant-Objects-Yegor-Bugayenko/dp/1519166915)" books.
 
 It adopts the approach of the blog article [printers instead of getters](https://www.yegor256.com/2016/04/05/printers-instead-of-getters.html).
 
+## Origin
+This is a fork of [BriX](https://github.com/icarus-consulting/BriX). This library offers more flexibility over the resulting output.
+
+1. BriX' main goal was to express data in a way that fits json as well as xml. It achieved this by offering a limited set of structuring features:
+For example, json does not have attributes, BriX does not support them.
+
+ZiZZi lets this choice open to the library user.
+
+2. BriX can only express string content. ZiZZi can format typed content, also raw bytes and streams.
+
+
 ```csharp
 var menu =
-    new BxBlock("menu",
-    	new BxBlockArray("meals", "meal",
-            new BxBlock(
-            	new BxProp("name", "Pizza Funghi"),
-                new BxProp("price", "9.50€")
+    new ZiBlock("menu",
+    	new ZiBlockArray("meals", "meal",
+            new ZiBlock(
+            	new ZiProp("name", "Pizza Funghi"),
+                new ZiProp("price", 9.50)
             ),
-            new BxBlock(
-        	new BxProp("name", "Burger Helene with Fritten"),
-	        new BxProp("price", "10.50€")
+            new ZiBlock(
+        	    new ZiProp("name", "Burger Helene with Fritten"),
+	            new ZiProp("price", 10.50)
     	    )
     	),
-	new BxBlockArray("drinks", "drink",
-    	    new BxBlock(
-        	new BxProp("name", "Beer"),
-            	new BxProp("price", "2.50€")
-	    ),
-    	    new BxBlock(
-        	new BxProp("name", "Beer"),
-            	new BxProp("price", "35.00€")
-	    )
+	new ZiBlockArray("drinks", "drink",
+    	    new ZiBlock(
+        	    new ZiProp("name", "Beer"),
+            	    new ZiProp("price", 2.50)
+	        ),
+    	    new ZiBlock(
+        	    new ZiProp("name", "Beer"),
+            	    new ZiProp("price", 35.00)
+	        )
  	)
     );
 ```
 
 And decide later which format you need:
 
-## Print as XML
+## Express as XML
 
 ```csharp
 Console.WriteLine(
-    menu.Print(new XmlMedia())
+    menu.Form(new XmlMatter())
 );
 ```
 
@@ -62,17 +66,17 @@ Will give you
   <meals>
     <meal>
       <Name>Pizza Funghi</Name>
-      <Price>9.50€</Price>
+      <Price>9.50</Price>
     </meal>
     <meal>
       <Name>Burger Helene with Fritten</Name>
-      <Price>10.50€</Price>
+      <Price>10.50</Price>
     </meal>
   </meals>
   <Drinks>
     <Drink>
       <Name>Beer</Name>
-      <Price>2.50€</Price>
+      <Price>2.50</Price>
     </Drink>
     <Drink>
       <Name>Beer</Name>
@@ -82,11 +86,11 @@ Will give you
 </menu>
 ```
 
-## Print as Json
+## Express as Json
 
 ```csharp
 Console.WriteLine(
-    menu.Print(new JsonMedia())
+    menu.Form(new JsonMatter())
 );
 ```
 
@@ -97,21 +101,21 @@ Will give you
   "meals": [
     {
       "Name": "Pizza Funghi",
-      "Price": "9.50€"
+      "Price": 9.50
     },
     {
       "Name": "Burger Helene with Fritten",
-      "Price": "10.50€"
+      "Price": 10.50
     }
   ],
   "Drinks": [
     {
       "Name": "Beer",
-      "Price": "2.50€"
+      "Price": 2.50
     },
     {
       "Name": "Beer",
-      "Price": "35.00€"
+      "Price": 35.00
     }
   ]
 }
