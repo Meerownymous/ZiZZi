@@ -13,14 +13,14 @@ namespace ZiZZi.Matter
     public sealed class JsonMatter : IMatter<JContainer>
     {
         private readonly JContainer basis;
-        private readonly MatterPipe medias;
+        private readonly MatterOrigin medias;
 
         /// <summary>
         /// JSON matter.
         /// </summary>
         public JsonMatter()
         {
-            this.medias = new MatterPipe(new BytesAsToken());
+            this.medias = new MatterOrigin(new BytesAsToken());
             this.basis = new JObject();
         }
 

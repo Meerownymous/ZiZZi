@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Globalization;
 using Tonga;
+using Tonga.Bytes;
+using Tonga.Text;
 
 namespace ZiZZi
 {
@@ -10,104 +11,100 @@ namespace ZiZZi
     public sealed class ZiProp : IBlox
     {
         private readonly string name;
-        private readonly Func<string> value;
+        private readonly string dataType;
+        private readonly Func<IBytes> value;
 
         /// <summary>
         /// A property which has a name and a value.
         /// </summary>
-        public ZiProp(string name, long value) : this(name, () => value.ToString(CultureInfo.InvariantCulture))
+        public ZiProp(string name, bool value) : this(name, "bool",
+            () => AsBytes._(BitConverter.GetBytes(value))
+        )
         { }
 
         /// <summary>
         /// A property which has a name and a value.
         /// </summary>
-        public ZiProp(string name, long value, IFormatProvider culture) : this(name, () => value.ToString(culture))
+        public ZiProp(string name, long value) : this(name, "long", AsBytes._(value))
         { }
 
         /// <summary>
         /// A property which has a name and a value.
         /// </summary>
-        public ZiProp(string name, float value) : this(name, () => value.ToString(CultureInfo.InvariantCulture))
+        public ZiProp(string name, float value) : this(name, "float", AsBytes._(value))
         { }
 
         /// <summary>
         /// A property which has a name and a value.
         /// </summary>
-        public ZiProp(string name, float value, IFormatProvider culture) : this(name, () => value.ToString(culture))
+        public ZiProp(string name, double value) : this(name, "double", AsBytes._(value))
         { }
 
         /// <summary>
         /// A property which has a name and a value.
         /// </summary>
-        public ZiProp(string name, double value) : this(name, () => value.ToString(CultureInfo.InvariantCulture))
+        public ZiProp(string name, int value) : this(name, "integer", AsBytes._(value))
         { }
 
         /// <summary>
         /// A property which has a name and a value.
         /// </summary>
-        public ZiProp(string name, double value, IFormatProvider culture) : this(name, () => value.ToString(culture))
+        public ZiProp(string name, IScalar<string> value) : this(
+            name,
+            "text",
+            AsBytes._(
+                AsText._(value.Value)
+            )
+        )
         { }
 
         /// <summary>
         /// A property which has a name and a value.
         /// </summary>
-        public ZiProp(string name, int value) : this(name, () => value.ToString(CultureInfo.InvariantCulture))
+        public ZiProp(string name, IText value) : this(name, "text", AsBytes._(value))
         { }
 
         /// <summary>
         /// A property which has a name and a value.
         /// </summary>
-        public ZiProp(string name, int value, IFormatProvider culture) : this(name, () => value.ToString(culture))
+        public ZiProp(IPair<string, string> pair) : this(
+            pair.Key(),
+            "string",
+            AsBytes._(AsText._(pair.Value))
+        )
         { }
 
         /// <summary>
         /// A property which has a name and a value.
         /// </summary>
-        public ZiProp(string name, INumber value) : this(name, () => value.AsDouble().ToString())
+        public ZiProp(string name, string value) : this(name, "string", AsBytes._(value))
         { }
 
         /// <summary>
         /// A property which has a name and a value.
         /// </summary>
-        public ZiProp(string name, IScalar<string> value) : this(name, () => value.Value())
+        public ZiProp(string name, string dataType, IBytes value) : this(name, dataType, () => value)
         { }
 
         /// <summary>
         /// A property which has a name and a value.
         /// </summary>
-        public ZiProp(string name, IText value) : this(name, () => value.AsString())
-        { }
-
-        /// <summary>
-        /// A property which has a name and a value.
-        /// </summary>
-        public ZiProp(IPair<string, string> pair) : this(pair.Key(), () => pair.Value())
-        { }
-
-        /// <summary>
-        /// A property which has a name and a value.
-        /// </summary>
-        public ZiProp(string name, string value) : this(name, () => value)
-        { }
-
-        /// <summary>
-        /// A property which has a name and a value.
-        /// </summary>
-        public ZiProp(string name, Func<string> value)
+        public ZiProp(string name, string dataType, Func<IBytes> value)
         {
             this.name = name;
+            this.dataType = dataType;
             this.value = value;
         }
 
         public T Form<T>(IMatter<T> matter)
         {
-            matter.Put(this.name, this.value());
+            matter.Put(this.name, this.dataType, this.value().Bytes());
             return matter.Content();
         }
 
         public override string ToString()
         {
-            return $"PROP({this.name}:{this.value})";
+            return $"PROP({this.name}:{this.dataType}/{this.value().Bytes().Length} bytes)";
         }
     }
 }

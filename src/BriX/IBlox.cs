@@ -1,6 +1,4 @@
-﻿using ZiZZi.Matter;
-
-namespace ZiZZi
+﻿namespace ZiZZi
 {
     /// <summary>
     /// Information focus which can form matter.
@@ -8,8 +6,8 @@ namespace ZiZZi
     public interface IBlox
     {
         /// <summary>
-        /// Form matter from this focus.
+        /// Form matter from this blox.
         /// </summary>
-        T Form<T>(IMatter<T> matter);    
+        T Form<T>(IMatter<T> matter);
     }
 }

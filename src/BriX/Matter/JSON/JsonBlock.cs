@@ -11,11 +11,11 @@ namespace ZiZZi.Matter.JSON
     /// </summary>
     public class JsonBlock : IMatter<JContainer>
     {
-        private readonly MatterPipe matter;
+        private readonly MatterOrigin matter;
         private readonly BytesAsToken bytesAsToken;
         private readonly Lazy<JContainer> container;
 
-        public JsonBlock(MatterPipe matter, BytesAsToken bytesAsToken, JContainer parent, string name)
+        public JsonBlock(MatterOrigin matter, BytesAsToken bytesAsToken, JContainer parent, string name)
         {
             this.matter = matter;
             this.bytesAsToken = bytesAsToken;

@@ -12,7 +12,7 @@ namespace ZiZZi.Matter.JSON.Test
             var root = new JObject();
             var media =
                 new JsonBlock(
-                    new MatterPipe(new BytesAsToken()),
+                    new MatterOrigin(new BytesAsToken()),
                     new BytesAsToken(),
                     root,
                     "User"
@@ -32,7 +32,7 @@ namespace ZiZZi.Matter.JSON.Test
             var root = new JObject();
             var media =
                 new JsonBlock(
-                    new MatterPipe(new BytesAsToken()),
+                    new MatterOrigin(new BytesAsToken()),
                     new BytesAsToken(),
                     root,
                     "User"
@@ -52,7 +52,7 @@ namespace ZiZZi.Matter.JSON.Test
             var root = new JObject();
             var media =
                 new JsonBlock(
-                    new MatterPipe(new BytesAsToken()),
+                    new MatterOrigin(new BytesAsToken()),
                     new BytesAsToken(),
                     root,
                     "User"

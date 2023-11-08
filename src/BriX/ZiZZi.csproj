@@ -4,20 +4,18 @@
     <TargetFramework>net7.0</TargetFramework>
     <DocumentationFile>$(MSBuildThisFileDirectory)bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Authors>ICARUS Consulting GmbH</Authors>
+    <Authors>Miro Tunk</Authors>
     <Description>Build object oriented data structures and format them when needed.</Description>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Copyright>Copyright (c) 2022 ICARUS Consulting GmbH</Copyright>
+    <Copyright>Copyright (c) 2023 NACLWARE</Copyright>
     <PackageTags>data structures, xml, json, intermediate, oop, cactoos</PackageTags>
-    <PackageProjectUrl>https://github.com/icarus-consulting/BriX</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/icarus-consulting/BriX.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Meerownymous/Tonga</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Meerownymous/Tonga.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>https://github.com/icarus-consulting/BriX/releases</PackageReleaseNotes>
-    <Version>5.0.2</Version>
-    <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\sgKey.snk</AssemblyOriginatorKeyFile>
+    <PackageReleaseNotes>https://github.com/Meerownymous/Tonga/releases</PackageReleaseNotes>
+    <Version>0.5.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,7 +27,13 @@
 
   <ItemGroup>
     <PackageReference Include="Yaapii.JSON" Version="13.3.3" />
-    <PackageReference Include="Tonga" Version="0.3.0" />
+    <PackageReference Include="Tonga" Version="0.5.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Matter\XML\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Matter\XML\" />
+  </ItemGroup>
 </Project>

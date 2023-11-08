@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{D144FF1C-1574-4269-98DC-04480144CD34}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		appveyor.yml = appveyor.yml
+		build.cake = build.cake
+		.github\ISSUE_TEMPLATE.md = .github\ISSUE_TEMPLATE.md
+		LICENSE.txt = LICENSE.txt
+		.github\PULL_REQUEST_TEMPLATE.md = .github\PULL_REQUEST_TEMPLATE.md
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZiZZi", "src\BriX\ZiZZi.csproj", "{4100363A-8976-44B1-9483-68D486A51784}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.ZiZZi", "tests\Test.BriX\Test.ZiZZi.csproj", "{913504FE-C574-400D-807D-92176B43AA95}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4100363A-8976-44B1-9483-68D486A51784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4100363A-8976-44B1-9483-68D486A51784}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4100363A-8976-44B1-9483-68D486A51784}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4100363A-8976-44B1-9483-68D486A51784}.Release|Any CPU.Build.0 = Release|Any CPU
+		{913504FE-C574-400D-807D-92176B43AA95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{913504FE-C574-400D-807D-92176B43AA95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{913504FE-C574-400D-807D-92176B43AA95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{913504FE-C574-400D-807D-92176B43AA95}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {439ACD8D-8BE0-4852-9964-8D368A50E6E2}
+	EndGlobalSection
+EndGlobal
