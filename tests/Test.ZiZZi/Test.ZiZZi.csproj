@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\BriX\ZiZZi.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Media\JSON\" />
     <None Remove="Media\Validated\" />
     <None Remove="Matter\XML\" />
@@ -32,5 +28,8 @@
   <ItemGroup>
     <Folder Include="Matter\JSON\" />
     <Folder Include="Matter\XML\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ZiZZi\ZiZZi.csproj" />
   </ItemGroup>
 </Project>
