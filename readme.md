@@ -125,42 +125,42 @@ Will give you
 
 ## Lazy Data aggregation
 
-You can build Brix which will aggregate data only when printed:
+You can build Blox which will aggregate data only when printed:
 
 ```csharp
 var report =
-    new BxBlock("Weather Report",
-    	new BxBlock(
-	    new BxProp("Temperature", () => weatherServer.Degrees("Berlin").AsDouble()) //not yet read
+    new ZiBlock("Weather Report",
+    	new ZiBlock(
+	    new ZiProp("Temperature", () => weatherServer.Degrees("Berlin").AsDouble()) //not yet read
 	)
     );
 
-report.Print(new XmlMedia()); //Temperature is read while printing
+report.Form(new XmlMatter()); //Temperature is read while printing
 ```
 
 
 
 ## Usage
 
-With BriX you can build data structures without deciding which format someone should use to work with it. This has advantages for example when designing a web-API: When you add a new usecase, you design the output using brix and can leave the decision if the user needs xml or json to the http request header.
+With ZiZZi you can build data structures without deciding which format someone should use to work with it. This has advantages for example when designing a web-API: When you add a new usecase, you design the output using brix and can leave the decision if the user needs xml or json to the http request header.
 
 ```csharp
 var report = 
-    new BxBlock("report", 
-        new BxProp("All good", "Yes")
+    new ZiBlock("report", 
+        new ZiProp("All good", "Yes")
     );
 
 if(new Header.Of("accept", httpRequest) == "application/xml")
 {
-    return myReport.Print(new XmlMedia()).ToString();
+    return myReport.Form(new XmlMatter()).ToString();
 }
 else if(new Header.Of("accept", httpRequest) == "application/json")
 {
-    return myReport.Print(new JsonMedia()).ToString();
+    return myReport.Form(new JsonMatter()).ToString();
 }
 ```
 
- In other scenarios you may deliver a non printed BriX block as payload of another object, and if the user just needs the head of your object, but not the payload, computation time can be saved.
+ In other scenarios you may deliver a non printed ZiZZi block as payload of another object, and if the user just needs the head of your object, but not the payload, computation time can be saved.
 
 ```csharp
 //Someone sends this:
@@ -168,11 +168,11 @@ public void Send()
 {
     var signal =
     	new SignalOf("Event", "Something is on fire",
-            new BxArray("Burning things"
+            new ZiArray("Burning things"
             	new ListOf<string>(
                     () => BurningThings()
 	        )
-    	    )
+    	)
 	);
 }
 
@@ -195,14 +195,15 @@ if(signal.Prop("event" == "Something exploded")) //is false in this example
 {
     var payload = 
         signal.Payload()
-            .Print(new XmlMedia()); //Only when you print, the burning things would be inspected.
+            .Form(new XmlMatter()); //Only when you print, the burning things would be inspected.
 }
 ```
 
 
 ## Data Conventions
-BriX can print XML and Json, and more media formats can be added by implementing the IMedia<TOutput> interface.
-Because XML and Json have different feature sets, BriX limits these features to ensure BriX are compatible to both xml and json. 
+ZiZZi can form XML and Json, and more media formats can be added by implementing the IMatter<TOutput> interface.
+Because XML and Json have different feature sets, ZiZZi's offered objects use only these features to ensure Blox are compatible to both xml and json.
+However, the IMatter interface can be implemented to support more features of a speccific format.
 
 ### Block names
 Every Block must have a name:
@@ -219,18 +220,18 @@ Every Block must have a name:
 }
 
 //C#
-var brix =
-    new BxBlock(
+var blox =
+    new ZiBlock(
         "root", //name must be specified.
-	    new BxProp("branch", "My Branch")
+	    new ZiProp("branch", "My Branch")
     );
 ```
 
-Obviously, the name "root" is lost when printing to Json. But Brix enforces that you specify it, because it is needed for Xml.
+Obviously, the name "root" is lost when printing to Json. But ZiZZi encourages that you specify it, because it is needed for Xml.
 
 ### Simple Arrays
 
-The same is the case for arrays:
+The same is the case for lists:
 
 ```
 //Xml
@@ -252,16 +253,16 @@ The same is the case for arrays:
 
 //C#
 var list =
-    new BxBlock("shopping-list",
-    	new BxArray("fruits", "fruit", //"fruit" as name for entries must be specified
+    new ZiBlock("shopping-list",
+    	new BxValueList("fruits", "fruit", //"fruit" as name for entries must be specified
     	    "Apple", 
     	    "Banana"
         )
     );
 ```
 
-### Complex Arrays
-And for complex arrays:
+### Complex Lists
+And for block lists:
 ```
 //Xml
 <shopping-list>
@@ -294,22 +295,22 @@ And for complex arrays:
 
 //C#
 var list =
-    new BxBlock("shopping-list",
-	    new BxBlockArray("fruits", "fruit", //"fruit" as name for entries must be specified
-	        new BxBlock(
-	            new BxProp("name", "Apple"), 
-	            new BxProp("weight", "500")
+    new ZiBlock("shopping-list",
+	    new ZiBlockArray("fruits", "fruit", //"fruit" as name for entries must be specified
+	        new ZiBlock(
+	            new ZiProp("name", "Apple"), 
+	            new ZiProp("weight", "500")
             ), 
-            new BxBlock(
-                new BxProp("name", "Banana"), 
-                new BxProp("weight", "300")
+            new ZiBlock(
+                new ZiProp("name", "Banana"), 
+                new ZiProp("weight", "300")
             )
         )
     );
 ```
 
 ### Xml Attributes
-Json does not support attributes, so they are not included in BriX objects. If you need them, you might implement or extend the JsonMedia interface to support them and write BriX objects.
+Json does not support attributes, so they are not included in Blox objects. If you need them, you might implement or extend the JsonMatter objects to support them and write Blox objects.
 ### BxMap
 Easy way for adding mutiple Props by KeyValuePairs. Note: no duplicated keys are allowed!
 ```
