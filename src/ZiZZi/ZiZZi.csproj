@@ -15,7 +15,6 @@
     <RepositoryUrl>https://github.com/Meerownymous/Tonga.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>https://github.com/Meerownymous/Tonga/releases</PackageReleaseNotes>
-    <Version>0.5.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
