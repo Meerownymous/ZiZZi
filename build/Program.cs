@@ -163,7 +163,7 @@ public sealed class NugetBuildTask : FrostingTask<BuildContext>
         //settings.ArgumentCustomization = args => args.Append("--include-symbols").Append("-p:SymbolPackageFormat=snupkg");
         settings.MSBuildSettings =
             new DotNetMSBuildSettings()
-                .SetVersionPrefix("0.1.0");
+                .SetVersionPrefix(Settings.Version);
 
         foreach (var module in context.GetSubDirectories(Settings.ModulePath))
         {
