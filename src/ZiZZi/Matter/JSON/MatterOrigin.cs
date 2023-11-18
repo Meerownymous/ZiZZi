@@ -33,7 +33,7 @@ namespace ZiZZi.Matter.JSON
                     "block-array",
                     AsSwap._<JContainer, string, IMatter<JContainer>>((parent, name) =>
                         new ListGuard<JContainer>(
-                            new JsonBlockArray(this, bytesAsToken, parent, name),
+                            new JsonBlockArray(this, parent, name),
                             name,
                             false
                         )

@@ -25,7 +25,7 @@ namespace ZiZZi.Matter
         public ListGuard(IMatter<T> origin, string arrayName, bool isValueArray)
         {
             this.origin = origin;
-            this.itemName = new List<string>();
+            this.itemName = new System.Collections.Generic.List<string>();
             this.isValueArray = isValueArray;
             this.arrayName = arrayName;
         }

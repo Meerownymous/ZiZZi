@@ -12,14 +12,12 @@ namespace ZiZZi.Matter.JSON
     {
         private readonly Lazy<JArray> container;
         private readonly ISwap<string, JContainer, string, IMatter<JContainer>> matter;
-        private readonly ISwap<string, byte[], JToken> bytesAsToken;
 
         /// <summary>
         /// Array of blocks which can contain more attributes and sub blocks.
         /// </summary>
         public JsonBlockArray(
             ISwap<string, JContainer, string, IMatter<JContainer>> matter,
-            ISwap<string, byte[], JToken> bytesAsToken,
             JContainer parent,
             string arrayName
         )

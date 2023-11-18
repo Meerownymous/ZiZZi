@@ -160,7 +160,6 @@ public sealed class NugetBuildTask : FrostingTask<BuildContext>
             NoRestore = true,
             IncludeSymbols = true
         };
-        //settings.ArgumentCustomization = args => args.Append("--include-symbols").Append("-p:SymbolPackageFormat=snupkg");
         settings.MSBuildSettings =
             new DotNetMSBuildSettings()
                 .SetVersionPrefix(Settings.Version);

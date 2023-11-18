@@ -14,7 +14,6 @@ namespace ZiZZi.Matter.JSON.Test
             var matter =
                 new JsonBlockArray(
                     new MatterOrigin(new BytesAsToken()),
-                    new BytesAsToken(),
                     root,
                     "Worlds"
                 );
@@ -32,7 +31,6 @@ namespace ZiZZi.Matter.JSON.Test
             var matter =
                 new JsonBlockArray(
                     new MatterOrigin(new BytesAsToken()),
-                    new BytesAsToken(),
                     root,
                     "Worlds"
                 );

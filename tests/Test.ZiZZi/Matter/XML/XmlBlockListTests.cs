@@ -23,7 +23,7 @@ namespace ZiZZi.Matter.XML.Test
         }
 
         [Fact]
-        public void OpensBlockInArray()
+        public void OpensBlockInList()
         {
             var matter =
                 new XmlBlockList(

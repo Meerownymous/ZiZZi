@@ -6,7 +6,7 @@ using Tonga.Swap;
 namespace ZiZZi.Matter.XML
 {
     /// <summary>
-    /// Delivers matter of given contentype  which is rooted in the given JToken.
+    /// Delivers matter of given contentype  which is rooted in the given XNode.
     /// </summary>
     public sealed class MatterOrigin : ISwap<string, XNode, string, IMatter<XNode>>
     {
