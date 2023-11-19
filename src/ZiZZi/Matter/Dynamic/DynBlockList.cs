@@ -26,7 +26,7 @@ namespace ZiZZi.Matter.Dynamic
         {
             this.container = new Lazy<IList<object>>(() =>
             {
-                IList<object> content = new List<object>();
+                IList<object> content = new System.Collections.Generic.List<object>();
                 ((IDictionary<string, object>)parent)[listName] = content;
                 return content;
             });

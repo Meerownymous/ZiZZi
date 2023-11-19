@@ -40,10 +40,13 @@ namespace ZiZZi
 
         public T Form<T>(IMatter<T> media)
         {
-            Each._(
-                printable => printable.Form(media),
-                this.information
-            ).Invoke();
+            foreach (var p in this.information)
+                p.Form(media);
+
+            //Each._(
+            //    printable => printable.Form(media),
+            //    this.information
+            //).Invoke();
             return media.Content();
         }
     }

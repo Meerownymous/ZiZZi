@@ -12,6 +12,7 @@ namespace ZiZZi.Matter.Dynamic
     /// </summary>
     public class DynBlock : IMatter<object>
     {
+        private readonly string name;
         private readonly MatterOrigin matter;
         private readonly BytesAsTyped bytesAsTyped;
         private readonly Lazy<IDictionary<string, object>> container;
@@ -27,6 +28,7 @@ namespace ZiZZi.Matter.Dynamic
             bool parentIsArray
         )
         {
+            this.name = name;
             this.matter = matter;
             this.bytesAsTyped = bytesAsTyped;
             this.container =

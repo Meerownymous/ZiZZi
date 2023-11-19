@@ -39,7 +39,7 @@ namespace ZiZZi.Matter.Dynamic.Test
         }
 
         [Fact]
-        public void PutsByteBasedContentIntoList()
+        public void PutsByteBasedContentAsStringIntoList()
         {
             dynamic root = new ExpandoObject();
             new DynValueList(
@@ -49,7 +49,7 @@ namespace ZiZZi.Matter.Dynamic.Test
             ).Put("MagicNumber", "double", BitConverter.GetBytes(12.12));
 
             Assert.Equal(
-                12.12,
+                "12.12",
                 root.MagicNumbers[0]
             );
         }

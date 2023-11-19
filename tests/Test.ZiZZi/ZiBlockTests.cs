@@ -51,5 +51,22 @@ namespace ZiZZi.Test
                 matter.Content().ToString(SaveOptions.DisableFormatting)
             );
         }
+
+        [Fact]
+        public void MaterializesProps()
+        {
+            var matter = new XmlMatter();
+
+            new ZiBlock("mein-block",
+                new ZiProp("stockwerk", "16"),
+                new ZiProp("blocknummer", "3")
+            )
+            .Form(matter);
+
+            Assert.Equal(
+                "<mein-block><stockwerk>16</stockwerk><blocknummer>3</blocknummer></mein-block>",
+                matter.Content().ToString(SaveOptions.DisableFormatting)
+            );
+        }
     }
 }

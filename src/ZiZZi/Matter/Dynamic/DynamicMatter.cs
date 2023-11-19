@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
-using System.Net.Mime;
-using System.Xml.Linq;
-using Tonga.Scalar;
-using ZiZZi.Matter.XML;
 
 namespace ZiZZi.Matter.Dynamic
 {
@@ -44,7 +40,7 @@ namespace ZiZZi.Matter.Dynamic
         public void Put(string name, string content)
         {
             throw new InvalidOperationException(
-                "You cannot put content into the root of xml. " +
+                "You cannot put content into the root of the dynamic. " +
                 $"You must first open a block or array."
             );
         }
@@ -52,7 +48,7 @@ namespace ZiZZi.Matter.Dynamic
         public void Put(string name, string dataType, byte[] content)
         {
             throw new InvalidOperationException(
-                "You cannot put content into the root of xml. " +
+                "You cannot put content into the root of the dynamic. " +
                 $"You must first open a block or array."
             );
         }
@@ -60,7 +56,7 @@ namespace ZiZZi.Matter.Dynamic
         public void Put(string name, string dataType, Stream content)
         {
             throw new InvalidOperationException(
-                "You cannot put content into the root of xml. " +
+                "You cannot put content into the root of the dynamic. " +
                 $"You must first open a block or array."
             );
         }

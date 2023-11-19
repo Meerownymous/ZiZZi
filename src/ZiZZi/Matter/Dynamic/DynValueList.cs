@@ -12,7 +12,7 @@ namespace ZiZZi.Matter.Dynamic
     /// </summary>
     public class DynValueList : IMatter<object>
     {
-        private readonly Lazy<IList<object>> list;
+        private readonly Lazy<IList<string>> list;
         private readonly ISwap<string, string, byte[], object> bytesAsTyped;
 
         /// <summary>
@@ -24,9 +24,9 @@ namespace ZiZZi.Matter.Dynamic
             string arrayName
         )
         {
-            this.list = new Lazy<IList<object>>(() =>
+            this.list = new Lazy<IList<string>>(() =>
             {
-                var list = new List<object>();
+                var list = new List<string>();
                 ((IDictionary<string, object>)parent)[arrayName] = list;
                 return list;
             });
@@ -53,7 +53,7 @@ namespace ZiZZi.Matter.Dynamic
         {
             this.list.Value
                 .Add(
-                    this.bytesAsTyped.Flip(dataType, name, content)
+                    this.bytesAsTyped.Flip(dataType, name, content).ToString()
                 );
         }
 

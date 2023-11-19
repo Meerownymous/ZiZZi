@@ -52,7 +52,7 @@ namespace ZiZZi
 
         public T Form<T>(IMatter<T> media)
         {
-            return this.content.Form(media.Open("block", this.name));
+            return this.content.Form(media.Open("block", this.name));  
         }
 
         public override string ToString()

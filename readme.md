@@ -22,6 +22,8 @@ ZiZZi lets this choice open to the library user.
 
 2. BriX can only express string content. ZiZZi can format typed content, also raw bytes and streams.
 
+3. With ZiZZi, you can form real objects (Alpha).
+
 
 ```csharp
 var menu =
@@ -121,6 +123,30 @@ Will give you
 }
 ```
 
+## Form an Object
+
+```csharp
+    var obj =
+        new ZiObject(
+            new ZiProp("Name", "Mr.Object")
+        ).Form(ExpandingMatter.For(new { Name = "" });
+
+    //will give you an anonymous object with the properties filled by the defined ZiZZi.
+
+    Assert.Equal("Mr.Object", obj.Name);
+
+    //Currently, nested anonymous objects with properties are supported, as well as string lists.
+    //Other types are work in progress.
+
+    //But if you do not need typing, you can use DynamicMatter:
+    dynamic obj =
+        new ZiObject(
+            new ZiProp("Name", "Mr.Object")
+        ).Form(ExpandingMatter.For(new { Name = "" });
+
+    Assert.Equal("Mr.Object", obj.Name);
+);
+```
 
 
 ## Lazy Data aggregation
@@ -142,7 +168,7 @@ report.Form(new XmlMatter()); //Temperature is read while printing
 
 ## Usage
 
-With ZiZZi you can build data structures without deciding which format someone should use to work with it. This has advantages for example when designing a web-API: When you add a new usecase, you design the output using brix and can leave the decision if the user needs xml or json to the http request header.
+With ZiZZi you can build data structures without deciding which format someone should use to work with it. This has advantages for example when designing a web-API: When you add a new usecase, you design the output using ZiZZi objects and can leave the decision if the user needs xml or json to the http request header.
 
 ```csharp
 var report = 
@@ -254,7 +280,7 @@ The same is the case for lists:
 //C#
 var list =
     new ZiBlock("shopping-list",
-    	new BxValueList("fruits", "fruit", //"fruit" as name for entries must be specified
+    	new ZiValueList("fruits", "fruit", //"fruit" as name for entries must be specified
     	    "Apple", 
     	    "Banana"
         )
@@ -338,40 +364,18 @@ new BxBlock(
     )
 )
 ```
-## Conditional BriX
+## Conditional Object
 Instead of using large if/else constructs:
 
 ```csharp
-new BxBlock("Todos",
-    new BxConditional(() => Now.IsDay(),
-        new BxProp("Todo", "Daylight dependent tasks")
+new ZiBlock("Todos",
+    new ZiConditional(() => Now.IsDay(),
+        new ZiProp("Todo", "Daylight dependent tasks")
     ),
-    new BxConditional(() => Now.IsNight(),
-        new BxProp("Todo", "Nightly tasks")
+    new ZiConditional(() => Now.IsNight(),
+        new ZiProp("Todo", "Nightly tasks")
     )
 )
 ```
-
-## Rebuildable Brix
-For sending a BriX e.g. as a response of a request, it´s possible to print a BriX to a RebuildMedia. 
-
-```csharp
-    var response =
-        new BxBlock("Weather Report",
-    	    new BxBlock(
-	        new BxProp("Temperature", () => weatherServer.Degrees("Berlin").AsDouble())
-	    )
-    );
-
-report.Print(new RebuildMedia());
-return report.Content(); // the byte[] of the BriX as xml 
-```
-
-At the requesting side, you can reconstruct the BriX with BxRebuilt
-```csharp
-var brix = response.Body()
-var rebuildedBrix = new BxRebuild(brix);
-```
-
 
 

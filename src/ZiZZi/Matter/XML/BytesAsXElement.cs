@@ -22,15 +22,12 @@ namespace ZiZZi.Matter.XML
         {
             this.swap =
                 SwapSwitch._(
-                    Lambda._(
-                        () => Debug.WriteLine("BytesAsXElement enumeration"),
-                        AsEnumerable._(
-                            Case._("double", (name, data) => new XElement(name, AsDouble._(data).Value())),
-                            Case._("integer", (name, data) => new XElement(name, AsInteger._(data).Value())),
-                            Case._("long", (name, data) => new XElement(name, AsLong._(data).Value())),
-                            Case._("bool", (name, data) => new XElement(name, AsBool._(data).Value())),
-                            Case._("string", (name, data) => new XElement(name, AsText._(data).AsString()))
-                        )
+                    AsEnumerable._(
+                        Case._("double", (name, data) => new XElement(name, AsDouble._(data).Value())),
+                        Case._("integer", (name, data) => new XElement(name, AsInteger._(data).Value())),
+                        Case._("long", (name, data) => new XElement(name, AsLong._(data).Value())),
+                        Case._("bool", (name, data) => new XElement(name, AsBool._(data).Value())),
+                        Case._("string", (name, data) => new XElement(name, AsText._(data).AsString()))
                     )
                 );
         }
