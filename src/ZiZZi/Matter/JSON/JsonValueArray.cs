@@ -39,27 +39,33 @@ namespace ZiZZi.Matter.JSON
             return new Dead<JContainer>();
         }
 
-        public void Put(string name, Func<string> content)
+        public void Present(string name, Func<IContent<string>> content)
         {
-            this.content.Value.Add(content());
+            this.content.Value.Add(content().Value());
         }
 
-        public void Put(string name, string dataType, Func<byte[]> content)
+        public void Present(string name, string dataType, Func<IContent<byte[]>> content)
         {
             this.content
                 .Value
                 .Add(
-                    this.pipe.Flip(dataType, content())
+                    this.pipe.Flip(dataType, content().Value())
                 );
         }
 
-        public void Put(string name, string dataType, Func<Stream> content)
+        public void Present(string name, string dataType, Func<IContent<Stream>> content)
         {
-            this.Put(name, dataType,
-                () => new AsBytes(
-                    new AsInput(content())
-                ).Bytes()
-            );
+            this.content
+                .Value
+                .Add(
+                    this.pipe
+                        .Flip(
+                            dataType,
+                            new AsBytes(
+                                new AsInput(content().Value())
+                        ).Bytes()
+                    )
+                );
         }
     }
 }

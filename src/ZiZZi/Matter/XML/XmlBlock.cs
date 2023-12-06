@@ -48,28 +48,32 @@ namespace ZiZZi.Matter.XML
             return subMedia;
         }
 
-        public void Put(string name, Func<string> content)
+        public void Present(string name, Func<IContent<string>> content)
         {
-            this.container.Value.Add(new XElement(name, content()));
+            this.container.Value.Add(new XElement(name, content().Value()));
         }
 
-        public void Put(string name, string dataType, Func<byte[]> content)
+        public void Present(string name, string dataType, Func<IContent<byte[]>> content)
         {
             this.container
                 .Value
                 .Add(
-                    this.bytesAsElement.Flip(dataType, name, content())
+                    this.bytesAsElement.Flip(dataType, name, content().Value())
                 );
         }
 
-        public void Put(string name, string dataType, Func<Stream> content)
+        public void Present(string name, string dataType, Func<IContent<Stream>> content)
         {
-            this.Put(
-                name, dataType,
-                () => new AsBytes(
-                    new AsInput(content)
-                ).Bytes()
-            );
+            this.container
+                .Value
+                .Add(
+                    this.bytesAsElement
+                        .Flip(dataType, name,
+                            new AsBytes(
+                                new AsInput(content().Value())
+                            ).Bytes()
+                        )
+                );
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Tonga.Enumerable;
 using Xunit;
 
 namespace ZiZZi.Matter.Object.Test
@@ -29,7 +30,13 @@ namespace ZiZZi.Matter.Object.Test
                 "1000000",
                 new ZiBlock("root",
                     new ZiProp("ID", "1000000"),
-                    new ZiProp("Name", () => throw new System.Exception("I shall not be called"))
+                    new ZiProp("Name", () => throw new System.Exception("I shall not be called")),
+                    new ZiValueList("Addresses", "Address", () =>
+                        Lambda._(
+                            () => throw new System.Exception("I shall not be raised"),
+                            AsEnumerable._("I shall not be enumerated")
+                        )
+                    )
                 ).Form(
                     ObjectMatter.Fill(
                         new { ID = "" }

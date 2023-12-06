@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Tonga.Enumerable;
 using Tonga.Scalar;
+using ZiZZi.Matter.Dynamic;
 
 namespace ZiZZi.Matter.Object
 {
@@ -67,46 +68,51 @@ namespace ZiZZi.Matter.Object
 
         public IMatter<TResult> Open(string contentType, string name)
         {
-            Type blueprint;
+            IMatter<TResult> result;
             if (this.level == 0)
-                blueprint = this.blueprint;
+            {
+                result =
+                    new ObjectMatter<TResult>(
+                        this.matter.Open(contentType, name),
+                        this.blueprint,
+                        this.level + 1
+                    );
+            }
             else
             {
                 var has = HasProperty(name, this.blueprint);
-                blueprint =
+                result =
                     has ?
-                        this.blueprint.GetProperty(name).PropertyType
-                        :
-                        typeof(object);
+                    new ObjectMatter<TResult>(
+                        this.matter.Open(contentType, name),
+                        this.blueprint.GetProperty(name).PropertyType,
+                        this.level + 1
+                    )
+                    :
+                    new VoidMatter<TResult>();
             }
-
-            return
-                new ObjectMatter<TResult>(
-                    this.matter.Open(contentType, name),
-                    blueprint,
-                    this.level + 1
-                );
+            return result;
         }
 
-        public void Put(string name, Func<string> content)
+        public void Present(string name, Func<IContent<string>> content)
         {
             this.contents++;
             if(HasProperty(name, this.blueprint) || IsArrayFamily(this.blueprint))
-                this.matter.Put(name, content);
+                this.matter.Present(name, content);
         }
 
-        public void Put(string name, string dataType, Func<byte[]> content)
+        public void Present(string name, string dataType, Func<IContent<byte[]>> content)
         {
             this.contents++;
-            if (HasProperty(name, this.blueprint))
-                this.matter.Put(name, dataType, content);
+            if (HasProperty(name, this.blueprint) || IsArrayFamily(this.blueprint))
+                this.matter.Present(name, dataType, content);
         }
 
-        public void Put(string name, string dataType, Func<Stream> content)
+        public void Present(string name, string dataType, Func<IContent<Stream>> content)
         {
             this.contents++;
-            if (HasProperty(name, this.blueprint))
-                this.matter.Put(name, dataType, content);
+            if (HasProperty(name, this.blueprint) || IsArrayFamily(this.blueprint))
+                this.matter.Present(name, dataType, content);
         }
 
         private TExpanded ExpandedAnonymousType<TExpanded>(ExpandoObject source)

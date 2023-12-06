@@ -16,17 +16,17 @@ namespace ZiZZi
         /// <summary>
         /// Put text content into the matter.
         /// </summary>
-        void Put(string name, Func<string> content);
+        void Present(string name, Func<IContent<string>> content);
 
         /// <summary>
         /// Put content into the matter.
         /// </summary>
-        void Put(string name, string dataType, Func<byte[]> content);
+        void Present(string name, string dataType, Func<IContent<byte[]>> content);
 
         /// <summary>
         /// Put content into the matter.
         /// </summary>
-        void Put(string name, string dataType, Func<Stream> content);
+        void Present(string name, string dataType, Func<IContent<Stream>> content);
 
         /// <summary>
         /// The final matter.

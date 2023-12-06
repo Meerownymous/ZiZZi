@@ -43,27 +43,33 @@ namespace ZiZZi.Matter.Object
             return new Dead<object>();
         }
 
-        public void Put(string name, Func<string> content)
+        public void Present(string name, Func<IContent<string>> content)
         {
             this.list.Value
-                .Add(content());
+                .Add(content().Value());
         }
 
-        public void Put(string name, string dataType, Func<byte[]> content)
+        public void Present(string name, string dataType, Func<IContent<byte[]>> content)
         {
             this.list.Value
                 .Add(
-                    this.bytesAsTyped.Flip(dataType, name, content()).ToString()
+                    this.bytesAsTyped.Flip(dataType, name, content().Value()).ToString()
                 );
         }
 
-        public void Put(string name, string dataType, Func<Stream> content)
+        public void Present(string name, string dataType, Func<IContent<Stream>> content)
         {
-            this.Put(name, dataType,
-                () => new AsBytes(
-                    new AsInput(content)
-                ).Bytes()
-            );
+            this.list.Value
+                .Add(
+                    this.bytesAsTyped
+                        .Flip(
+                            dataType,
+                            name,
+                            new AsBytes(
+                                new AsInput(content().Value())
+                            ).Bytes()
+                        ).ToString()
+                );
         }
     }
 }

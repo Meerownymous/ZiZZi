@@ -54,32 +54,38 @@ namespace ZiZZi.Matter.JSON
             return subMedia;
         }
 
-        public void Put(string name, Func<string> content)
+        public void Present(string name, Func<IContent<string>> content)
         {
-            this.container.Value.Add(new JProperty(name, content()));
+            this.container.Value.Add(new JProperty(name, content().Value()));
         }
 
-        public void Put(string name, string dataType, Func<byte[]> content)
+        public void Present(string name, string dataType, Func<IContent<byte[]>> content)
         {
             this.container
                 .Value
                 .Add(
                     new JProperty(
                         name,
-                        this.bytesAsToken.Flip(dataType, content())
+                        this.bytesAsToken.Flip(dataType, content().Value())
                     )
                 );
         }
 
-        public void Put(string name, string dataType, Func<Stream> content)
+        public void Present(string name, string dataType, Func<IContent<Stream>> content)
         {
-            this.Put(
-                name, dataType,
-                () =>
-                new AsBytes(
-                    new AsInput(content)
-                ).Bytes()
-            );
+            this.container
+                .Value
+                .Add(
+                    new JProperty(
+                        name,
+                        this.bytesAsToken.Flip(
+                            dataType,
+                            new AsBytes(
+                                new AsInput(content().Value())
+                            ).Bytes()
+                        )
+                    )
+                );
         }
     }
 }

@@ -24,7 +24,7 @@ namespace ZiZZi.Matter.JSON.Test
             var root = new JObject();
             var media = new JsonValueArray(new BytesAsToken(), root, "Todos");
 
-            media.Put("Todo", () => "Nothing");
+            media.Present("Todo", () => TakeContent._("Nothing"));
 
             Assert.Equal(
                 """{"Todos":["Nothing"]}""",
@@ -37,7 +37,7 @@ namespace ZiZZi.Matter.JSON.Test
         {
             var root = new JObject();
             new JsonValueArray(new BytesAsToken(), root, "Todos")
-                .Put("Todo", "double", () => BitConverter.GetBytes(12.12));
+                .Present("Todo", "double", () => TakeContent._(BitConverter.GetBytes(12.12)));
 
             Assert.Equal(
                 """{"Todos":[12.12]}""",

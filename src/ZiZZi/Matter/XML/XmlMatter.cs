@@ -37,7 +37,7 @@ namespace ZiZZi.Matter.XML
             return this.matters.Flip(contentType, this.document, name);
         }
 
-        public void Put(string name, Func<string> content)
+        public void Present(string name, Func<IContent<string>> content)
         {
             throw new InvalidOperationException(
                 "You cannot put content into the root of xml. " +
@@ -45,7 +45,7 @@ namespace ZiZZi.Matter.XML
             );
         }
 
-        public void Put(string name, string dataType, Func<byte[]> content)
+        public void Present(string name, string dataType, Func<IContent<byte[]>> content)
         {
             throw new InvalidOperationException(
                 "You cannot put content into the root of xml. " +
@@ -53,7 +53,7 @@ namespace ZiZZi.Matter.XML
             );
         }
 
-        public void Put(string name, string dataType, Func<Stream> content)
+        public void Present(string name, string dataType, Func<IContent<Stream>> content)
         {
             throw new InvalidOperationException(
                 "You cannot put content into the root of xml. " +

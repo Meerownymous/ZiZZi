@@ -20,12 +20,16 @@ namespace ZiZZi.Matter.Object
                 SwapSwitch._<string, dynamic, string, IMatter<object>>(
                     "block",
                     AsSwap._<object, string, IMatter<object>>((parent, name) =>
-                        new DynBlock(this, bytesAsTyped, parent, name, false)
+                        new ContentAware<object>(
+                            new DynBlock(this, bytesAsTyped, parent, name, false)
+                        )
                     ),
                     "value-list",
                     AsSwap._<object, string, IMatter<object>>((parent, name) =>
                         new ListGuard<object>(
-                            new DynValueList(bytesAsTyped, parent, name),
+                            new ContentAware<object>(
+                                new DynValueList(bytesAsTyped, parent, name)
+                            ),
                             name,
                             true
                         )
@@ -33,14 +37,18 @@ namespace ZiZZi.Matter.Object
                     "block-list",
                     AsSwap._<object, string, IMatter<object>>((parent, name) =>
                         new ListGuard<object>(
-                            new DynBlockList(this, parent, name),
+                            new ContentAware<object>(
+                                new DynBlockList(this, parent, name)
+                            ),
                             name,
                             false
                         )
                     ),
                     "block-inside-list",
                     AsSwap._<dynamic, string, IMatter<dynamic>>((parent, name) =>
-                        new DynBlock(this, bytesAsTyped, parent, name, true)
+                        new ContentAware<object>(
+                            new DynBlock(this, bytesAsTyped, parent, name, true)
+                        )
                     )
                 );
         }

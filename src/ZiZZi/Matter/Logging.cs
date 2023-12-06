@@ -41,22 +41,26 @@ namespace ZiZZi.Matter.Validated
                 );
         }
 
-        public void Put(string name, Func<string> content)
+        public void Present(string name, Func<IContent<string>> content)
         {
-            this.log.Invoke($"Put \"{name}\" : \"content\"");
-            this.origin.Put(name, content);
+            var text = content().Value();
+            this.log.Invoke($"Put \"{name}\" : \"{text}\"");
+            this.origin.Present(name, () => TakeContent._(text));
         }
 
-        public void Put(string name, string dataType, Func<byte[]> content)
+        public void Present(string name, string dataType, Func<IContent<byte[]>> content)
         {
-            this.log.Invoke($"Put \"{dataType}\" named \"{name}\" \"{this.bytesAsToken.Flip(dataType, content())}\"");
-            this.origin.Put(name, dataType, content);
+            var bytes = content().Value();
+            this.log.Invoke($"Put \"{dataType}\" named \"{name}\" \"{this.bytesAsToken.Flip(dataType, bytes)}\"");
+            this.origin.Present(name, dataType, () => TakeContent._(bytes));
         }
 
-        public void Put(string name, string dataType, Func<Stream> content)
+        public void Present(string name, string dataType, Func<IContent<Stream>> content)
         {
-            this.Put(name, dataType, () => new AsBytes(new AsInput(content())).Bytes());
+            var stream = content().Value();
+            var bytes = new AsBytes(new AsInput(stream)).Bytes();
+            this.log.Invoke($"Put \"{dataType}\" named \"{name}\" \"{this.bytesAsToken.Flip(dataType, bytes)}\"");
+            this.origin.Present(name, dataType, () => TakeContent._(bytes));
         }
     }
 }
-

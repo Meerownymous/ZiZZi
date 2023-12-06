@@ -1,5 +1,6 @@
 ﻿
 
+using System;
 using System.Collections.Generic;
 using Tonga.Enumerable;
 
@@ -12,7 +13,7 @@ namespace ZiZZi
     {
         private readonly string name;
         private readonly string itemName;
-        private readonly IEnumerable<string> contents;
+        private readonly Lazy<IEnumerator<string>> contents;
 
         /// <summary>
         /// A list of values.
@@ -26,19 +27,40 @@ namespace ZiZZi
         /// <summary>
         /// A list of values.
         /// </summary>
-        public ZiValueList(string name, string itemName, IEnumerable<string> contents)
+        public ZiValueList(string name, string itemName, IEnumerable<string> contents) : this(
+            name, itemName, () => contents
+        )
+        { }
+
+        /// <summary>
+        /// A list of values.
+        /// </summary>
+        public ZiValueList(string name, string itemName, Func<IEnumerable<string>> contents)
         {
             this.name = name;
             this.itemName = itemName;
-            this.contents = contents;
+            this.contents = new Lazy<IEnumerator<string>>(() => contents().GetEnumerator());
         }
 
         public T Form<T>(IMatter<T> matter)
         {
             var array = matter.Open("value-list", this.name);
-            foreach (var value in this.contents)
+            var contentTaken = true;
+            while (contentTaken)
             {
-                array.Put(this.itemName, () => value);
+                contentTaken = false;
+                array.Present(
+                    this.itemName,
+                    () =>
+                    {
+                        contentTaken = this.contents.Value.MoveNext();
+                        return contentTaken
+                        ?
+                        TakeContent._(this.contents.Value.Current)
+                        :
+                        new NoContent<string>();
+                    }
+                );
             }
             return matter.Content();
         }

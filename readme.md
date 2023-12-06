@@ -20,11 +20,12 @@ For example, json does not have attributes, BriX does not support them.
 
 ZiZZi lets this choice open to the library user.
 
-2. BriX can only express string content. ZiZZi can format typed content, also raw bytes and streams.
+2. With ZiZZi you can transform to anonymous objects - only compiling the necessary properties - which can be handy for UI building.
 
-3. With ZiZZi, you can form real objects (Alpha).
+3. ZiZZi can express typed content, also raw bytes and streams - BriX is limited to streams.
 
 
+## This is how you declare a ZiZZi object
 ```csharp
 var menu =
     new ZiBlock("menu",
@@ -51,7 +52,23 @@ var menu =
     );
 ```
 
-And decide later which format you need:
+## Form an Object
+
+```csharp
+    var obj =
+        new ZiObject(
+            new ZiProp("Name", "Mr.Object")
+        ).Form(
+            ObjectMatter.Fill(new { Name = "" }
+        );
+
+    //will give you an anonymous object with the properties filled by the defined ZiZZi.
+    Assert.Equal("Mr.Object", obj.Name);
+
+    //Currently, nested anonymous objects with properties are supported, as well as string lists.
+    //Other types are work in progress.
+);
+```
 
 ## Express as XML
 
@@ -121,31 +138,6 @@ Will give you
     }
   ]
 }
-```
-
-## Form an Object
-
-```csharp
-    var obj =
-        new ZiObject(
-            new ZiProp("Name", "Mr.Object")
-        ).Form(ExpandingMatter.For(new { Name = "" });
-
-    //will give you an anonymous object with the properties filled by the defined ZiZZi.
-
-    Assert.Equal("Mr.Object", obj.Name);
-
-    //Currently, nested anonymous objects with properties are supported, as well as string lists.
-    //Other types are work in progress.
-
-    //But if you do not need typing, you can use DynamicMatter:
-    dynamic obj =
-        new ZiObject(
-            new ZiProp("Name", "Mr.Object")
-        ).Form(ExpandingMatter.For(new { Name = "" });
-
-    Assert.Equal("Mr.Object", obj.Name);
-);
 ```
 
 

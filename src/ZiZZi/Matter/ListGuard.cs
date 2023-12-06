@@ -25,7 +25,7 @@ namespace ZiZZi.Matter
         public ListGuard(IMatter<T> origin, string arrayName, bool isValueArray)
         {
             this.origin = origin;
-            this.itemName = new System.Collections.Generic.List<string>();
+            this.itemName = new List<string>();
             this.isValueArray = isValueArray;
             this.arrayName = arrayName;
         }
@@ -42,23 +42,25 @@ namespace ZiZZi.Matter
             return this.origin.Open(contentType, Validated(this.itemName, this.arrayName, name));
         }
 
-        public void Put(string name, Func<string> content)
+        public void Present(string name, Func<IContent<string>> content)
         {
             if (!this.isValueArray)
                 throw new InvalidOperationException($"Cannot put simple values into a block array.");
-            this.origin.Put(Validated(this.itemName, this.arrayName, name), content);
+            this.origin.Present(Validated(this.itemName, this.arrayName, name), content);
         }
 
-        public void Put(string name, string dataType, Func<byte[]> content)
+        public void Present(string name, string dataType, Func<IContent<byte[]>> content)
         {
             if (!this.isValueArray)
                 throw new InvalidOperationException($"Cannot put simple values into a block array.");
-            this.origin.Put(Validated(this.itemName, this.arrayName, name), dataType, content);
+            this.origin.Present(Validated(this.itemName, this.arrayName, name), dataType, content);
         }
 
-        public void Put(string name, string dataType, Func<Stream> content)
+        public void Present(string name, string dataType, Func<IContent<Stream>> content)
         {
-            this.Put(name, dataType, () => new AsBytes(new AsInput(content)).Bytes());
+            if (!this.isValueArray)
+                throw new InvalidOperationException($"Cannot put simple values into a block array.");
+            this.origin.Present(Validated(this.itemName, this.arrayName, name), dataType, content);
         }
 
         private static string Validated(IList<string> itemName, string arrayName, string candidate)

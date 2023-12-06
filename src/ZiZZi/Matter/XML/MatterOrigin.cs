@@ -21,12 +21,16 @@ namespace ZiZZi.Matter.XML
                 SwapSwitch._(
                     "block",
                     AsSwap._<XNode, string, IMatter<XNode>>((parent, name) =>
-                        new XmlBlock(this, bytesAsElement, parent, name)
+                        new ContentAware<XNode>(
+                            new XmlBlock(this, bytesAsElement, parent, name)
+                        )
                     ),
                     "value-list",
                     AsSwap._<XNode, string, IMatter<XNode>>((parent, name) =>
                         new ListGuard<XNode>(
-                            new XmlValueList(bytesAsElement, parent, name),
+                            new ContentAware<XNode>(
+                                new XmlValueList(bytesAsElement, parent, name)
+                            ),
                             name,
                             true
                         )
@@ -34,14 +38,18 @@ namespace ZiZZi.Matter.XML
                     "block-list",
                     AsSwap._<XNode, string, IMatter<XNode>>((parent, name) =>
                         new ListGuard<XNode>(
-                            new XmlBlockList(this, parent, name),
+                            new ContentAware<XNode>(
+                                new XmlBlockList(this, parent, name)
+                            ),
                             name,
                             false
                         )
                     ),
                     "block-inside-list",
                     AsSwap._<XNode, string, IMatter<XNode>>((parent, name) =>
-                        new XmlBlock(this, bytesAsElement, parent, name)
+                        new ContentAware<XNode>(
+                            new XmlBlock(this, bytesAsElement, parent, name)
+                        )
                     )
                 );
         }

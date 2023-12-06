@@ -19,7 +19,7 @@ namespace ZiZZi.Matter.Object.Test
                 parent,
                 "TheBlock",
                 false
-            ).Put("Name", () => "Mr.Block");
+            ).Present("Name", () => TakeContent._("Mr.Block"));
 
             Assert.Equal("Mr.Block", parent.TheBlock.Name);
         }
@@ -34,7 +34,7 @@ namespace ZiZZi.Matter.Object.Test
                 parent,
                 "TheBlock",
                 false
-            ).Put("Age", "integer", () => AsBytes._(2000).Bytes());
+            ).Present("Age", "integer", () => TakeContent._(AsBytes._(2000).Bytes()));
 
             Assert.Equal(2000, parent.TheBlock.Age);
         }
@@ -50,7 +50,7 @@ namespace ZiZZi.Matter.Object.Test
                 "User",
                 false
             ).Open("block", "Skills")
-            .Put("Thinking", () => "Dynamic");
+            .Present("Thinking", () => TakeContent._("Dynamic"));
 
             Assert.Equal(
                 "Dynamic",

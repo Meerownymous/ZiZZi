@@ -33,7 +33,7 @@ namespace ZiZZi.Matter.Object.Test
                 "Worlds"
             )
             .Open("block", "UpsideDown")
-            .Put("FloorLocation", () => "up");
+            .Present("FloorLocation", () => TakeContent._("up"));
 
             Assert.Equal(
                 "up",

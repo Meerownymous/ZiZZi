@@ -18,9 +18,9 @@ namespace ZiZZi.Matter.Test
                     message => result += message + "\r\n"
                 );
                 var block = matter.Open("block", "Street");
-                block.Put("Name", () => "Oosterhaven");
+                block.Present("Name", () => TakeContent._("Oosterhaven"));
                 block.Open("block", "Location")
-                    .Put("Number", () => "2");
+                    .Present("Number", () => TakeContent._("2"));
 
 
         }

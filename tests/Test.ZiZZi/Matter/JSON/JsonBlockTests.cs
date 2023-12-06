@@ -38,7 +38,7 @@ namespace ZiZZi.Matter.JSON.Test
                     "User"
                 );
 
-            media.Put("Name", () => "Bob");
+            media.Present("Name", () => TakeContent._("Bob"));
 
             Assert.Equal(
                 """{"User":{"Name":"Bob"}}""",
