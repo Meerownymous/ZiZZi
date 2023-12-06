@@ -38,7 +38,7 @@ namespace ZiZZi
             var array = matter.Open("value-list", this.name);
             foreach (var value in this.contents)
             {
-                array.Put(this.itemName, value);
+                array.Put(this.itemName, () => value);
             }
             return matter.Content();
         }

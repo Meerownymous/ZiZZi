@@ -42,23 +42,23 @@ namespace ZiZZi.Matter
             return this.origin.Open(contentType, Validated(this.itemName, this.arrayName, name));
         }
 
-        public void Put(string name, string content)
+        public void Put(string name, Func<string> content)
         {
             if (!this.isValueArray)
                 throw new InvalidOperationException($"Cannot put simple values into a block array.");
             this.origin.Put(Validated(this.itemName, this.arrayName, name), content);
         }
 
-        public void Put(string name, string dataType, byte[] content)
+        public void Put(string name, string dataType, Func<byte[]> content)
         {
             if (!this.isValueArray)
                 throw new InvalidOperationException($"Cannot put simple values into a block array.");
             this.origin.Put(Validated(this.itemName, this.arrayName, name), dataType, content);
         }
 
-        public void Put(string name, string dataType, Stream content)
+        public void Put(string name, string dataType, Func<Stream> content)
         {
-            this.Put(name, dataType, new AsBytes(new AsInput(content)).Bytes());
+            this.Put(name, dataType, () => new AsBytes(new AsInput(content)).Bytes());
         }
 
         private static string Validated(IList<string> itemName, string arrayName, string candidate)

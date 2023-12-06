@@ -41,21 +41,21 @@ namespace ZiZZi.Matter.Validated
                 );
         }
 
-        public void Put(string name, string content)
+        public void Put(string name, Func<string> content)
         {
             this.log.Invoke($"Put \"{name}\" : \"content\"");
             this.origin.Put(name, content);
         }
 
-        public void Put(string name, string dataType, byte[] content)
+        public void Put(string name, string dataType, Func<byte[]> content)
         {
-            this.log.Invoke($"Put \"{dataType}\" named \"{name}\" \"{this.bytesAsToken.Flip(dataType, content)}\"");
+            this.log.Invoke($"Put \"{dataType}\" named \"{name}\" \"{this.bytesAsToken.Flip(dataType, content())}\"");
             this.origin.Put(name, dataType, content);
         }
 
-        public void Put(string name, string dataType, Stream content)
+        public void Put(string name, string dataType, Func<Stream> content)
         {
-            this.Put(name, dataType, new AsBytes(new AsInput(content)).Bytes());
+            this.Put(name, dataType, () => new AsBytes(new AsInput(content())).Bytes());
         }
     }
 }

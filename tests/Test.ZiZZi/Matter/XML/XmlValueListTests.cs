@@ -31,7 +31,7 @@ namespace ZiZZi.Matter.XML.Test
                     new XElement("Root"),
                     "Todos"
                 );
-            matter.Put("Todo", "Nothing");
+            matter.Put("Todo", () => "Nothing");
 
             Assert.Equal(
                 "<Todos><Todo>Nothing</Todo></Todos>",
@@ -49,7 +49,7 @@ namespace ZiZZi.Matter.XML.Test
                     "Todos"
                 );
 
-            matter.Put("Todo", "double", BitConverter.GetBytes(12.12));
+            matter.Put("Todo", "double", () => BitConverter.GetBytes(12.12));
 
             Assert.Equal(
                 "<Todos><Todo>12.12</Todo></Todos>",

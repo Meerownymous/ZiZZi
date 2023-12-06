@@ -5,7 +5,7 @@ using Tonga.Bytes;
 using Xunit;
 using ZiZZi.Matter.XML;
 
-namespace ZiZZi.Matter.Dynamic.Tests
+namespace ZiZZi.Matter.Dynamic.Test
 {
     public sealed class DynBlockTests
     {
@@ -19,7 +19,7 @@ namespace ZiZZi.Matter.Dynamic.Tests
                 parent,
                 "TheBlock",
                 false
-            ).Put("Name", "Mr.Block");
+            ).Put("Name", () => "Mr.Block");
 
             Assert.Equal("Mr.Block", parent.TheBlock.Name);
         }
@@ -34,7 +34,7 @@ namespace ZiZZi.Matter.Dynamic.Tests
                 parent,
                 "TheBlock",
                 false
-            ).Put("Age", "integer", AsBytes._(2000).Bytes());
+            ).Put("Age", "integer", () => AsBytes._(2000).Bytes());
 
             Assert.Equal(2000, parent.TheBlock.Age);
         }
@@ -50,7 +50,7 @@ namespace ZiZZi.Matter.Dynamic.Tests
                 "User",
                 false
             ).Open("block", "Skills")
-            .Put("Thinking", "Dynamic");
+            .Put("Thinking", () => "Dynamic");
 
             Assert.Equal(
                 "Dynamic",

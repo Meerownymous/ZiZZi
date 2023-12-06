@@ -38,7 +38,7 @@ namespace ZiZZi.Matter.JSON.Test
                     "User"
                 );
 
-            media.Put("Name", "Bob");
+            media.Put("Name", () => "Bob");
 
             Assert.Contains(
                 "Bob",

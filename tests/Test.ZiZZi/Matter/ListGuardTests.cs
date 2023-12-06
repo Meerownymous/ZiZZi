@@ -34,7 +34,7 @@ namespace ZiZZi.Matter.Test
                     isValueArray: false
                 );
 
-            matter.Open("block", "Box").Put("Character", "Jack");
+            matter.Open("block", "Box").Put("Character", () => "Jack");
 
             Assert.Equal(
                 "<Box><Character>Jack</Character></Box>",
@@ -52,7 +52,7 @@ namespace ZiZZi.Matter.Test
                     isValueArray: false
                 );
 
-            matter.Open("block", "Box").Put("JackCount", "integer", AsBytes._(1337).Bytes());
+            matter.Open("block", "Box").Put("JackCount", "integer", () => AsBytes._(1337).Bytes());
 
             Assert.Equal(
                 "<Box><JackCount>1337</JackCount></Box>",
@@ -72,7 +72,7 @@ namespace ZiZZi.Matter.Test
 
             matter.Open("block", "Box")
                 .Put("JackCount", "integer",
-                    new MemoryStream(AsBytes._(1337).Bytes())
+                    () => new MemoryStream(AsBytes._(1337).Bytes())
                 );
 
             Assert.Equal(
@@ -101,7 +101,7 @@ namespace ZiZZi.Matter.Test
                     new XmlMatter(),
                     "Unittests",
                     true
-                ).Put("some-thing", "yada")
+                ).Put("some-thing", () => "yada")
             );
         }
 
@@ -113,7 +113,7 @@ namespace ZiZZi.Matter.Test
                     new XmlMatter(),
                     "Unittests",
                     true
-                ).Put("some-thing", "integer", new byte[0])
+                ).Put("some-thing", "integer", () => new byte[0])
             );
         }
 
@@ -125,7 +125,7 @@ namespace ZiZZi.Matter.Test
                     new XmlMatter(),
                     "Unittests",
                     true
-                ).Put("some-thing", "integer", new MemoryStream(new byte[0]))
+                ).Put("some-thing", "integer", () => new MemoryStream(new byte[0]))
             );
         }
     }

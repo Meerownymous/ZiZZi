@@ -37,7 +37,7 @@ namespace ZiZZi.Matter.Dynamic
             return sub;
         }
 
-        public void Put(string name, string content)
+        public void Put(string name, Func<string> content)
         {
             throw new InvalidOperationException(
                 "You cannot put content into the root of the dynamic. " +
@@ -45,7 +45,7 @@ namespace ZiZZi.Matter.Dynamic
             );
         }
 
-        public void Put(string name, string dataType, byte[] content)
+        public void Put(string name, string dataType, Func<byte[]> content)
         {
             throw new InvalidOperationException(
                 "You cannot put content into the root of the dynamic. " +
@@ -53,7 +53,7 @@ namespace ZiZZi.Matter.Dynamic
             );
         }
 
-        public void Put(string name, string dataType, Stream content)
+        public void Put(string name, string dataType, Func<Stream> content)
         {
             throw new InvalidOperationException(
                 "You cannot put content into the root of the dynamic. " +

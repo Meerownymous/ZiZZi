@@ -30,7 +30,7 @@ namespace ZiZZi.Matter.Dynamic.Test
                 new BytesAsTyped(),
                 root,
                 "Todos"
-            ).Put("Todo", "Remove Typesafety");
+            ).Put("Todo", () => "Remove Typesafety");
 
             Assert.Equal(
                 "Remove Typesafety",
@@ -46,7 +46,7 @@ namespace ZiZZi.Matter.Dynamic.Test
                 new BytesAsTyped(),
                 root,
                 "MagicNumbers"
-            ).Put("MagicNumber", "double", BitConverter.GetBytes(12.12));
+            ).Put("MagicNumber", "double", () => BitConverter.GetBytes(12.12));
 
             Assert.Equal(
                 "12.12",

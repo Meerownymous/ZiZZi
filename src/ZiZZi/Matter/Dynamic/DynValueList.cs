@@ -43,24 +43,24 @@ namespace ZiZZi.Matter.Dynamic
             return new Dead<object>();
         }
 
-        public void Put(string name, string content)
+        public void Put(string name, Func<string> content)
         {
             this.list.Value
-                .Add(content);
+                .Add(content());
         }
 
-        public void Put(string name, string dataType, byte[] content)
+        public void Put(string name, string dataType, Func<byte[]> content)
         {
             this.list.Value
                 .Add(
-                    this.bytesAsTyped.Flip(dataType, name, content).ToString()
+                    this.bytesAsTyped.Flip(dataType, name, content()).ToString()
                 );
         }
 
-        public void Put(string name, string dataType, Stream content)
+        public void Put(string name, string dataType, Func<Stream> content)
         {
             this.Put(name, dataType,
-                new AsBytes(
+                () => new AsBytes(
                     new AsInput(content)
                 ).Bytes()
             );

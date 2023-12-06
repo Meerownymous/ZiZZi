@@ -36,8 +36,8 @@ namespace ZiZZi.Matter.XML.Test
                     "User"
                 );
 
-            matter.Put("Name", "string", AsBytes._("Bob").Bytes());
-            matter.Put("Friends", "string", AsBytes._("Jay").Bytes());
+            matter.Put("Name", "string", () => AsBytes._("Bob").Bytes());
+            matter.Put("Friends", "string", () => AsBytes._("Jay").Bytes());
 
             Assert.Equal(
                 "<Root><User><Name>Bob</Name><Friends>Jay</Friends></User></Root>",

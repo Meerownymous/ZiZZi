@@ -34,17 +34,17 @@ namespace ZiZZi.Matter
                 this.origin.Open(contentType, this.allowedName);
         }
 
-        public void Put(string name, string content)
+        public void Put(string name, Func<string> content)
         {
             this.origin.Put(name, content);
         }
 
-        public void Put(string name, string dataType, byte[] content)
+        public void Put(string name, string dataType, Func<byte[]> content)
         {
             this.origin.Put(name, dataType, content);
         }
 
-        public void Put(string name, string dataType, Stream content)
+        public void Put(string name, string dataType, Func<Stream> content)
         {
             this.origin.Put(name, dataType, content);
         }

@@ -98,7 +98,7 @@ namespace ZiZZi
 
         public T Form<T>(IMatter<T> matter)
         {
-            matter.Put(this.name, this.dataType, this.value().Bytes());
+            matter.Put(this.name, this.dataType, () => this.value().Bytes());
             return matter.Content();
         }
 

@@ -26,7 +26,7 @@ namespace ZiZZi.Matter.Dynamic
         {
             this.container = new Lazy<IList<object>>(() =>
             {
-                IList<object> content = new System.Collections.Generic.List<object>();
+                IList<object> content = new List<object>();
                 ((IDictionary<string, object>)parent)[listName] = content;
                 return content;
             });
@@ -49,17 +49,17 @@ namespace ZiZZi.Matter.Dynamic
             return subMedia;
         }
 
-        public void Put(string name, string content)
+        public void Put(string name, Func<string> content)
         {
             throw new InvalidOperationException();
         }
 
-        public void Put(string name, string dataType, byte[] content)
+        public void Put(string name, string dataType, Func<byte[]> content)
         {
             throw new InvalidOperationException();
         }
 
-        public void Put(string name, string dataType, Stream content)
+        public void Put(string name, string dataType, Func<Stream> content)
         {
             throw new InvalidOperationException();
         }

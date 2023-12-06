@@ -67,19 +67,19 @@ namespace ZiZZi.Matter.Dynamic
                 );
         }
 
-        public void Put(string name, string content)
+        public void Put(string name, Func<string> content)
         {
             this.contents++;
             this.matter.Put(name, content);
         }
 
-        public void Put(string name, string dataType, byte[] content)
+        public void Put(string name, string dataType, Func<byte[]> content)
         {
             this.contents++;
             this.matter.Put(name, dataType, content);
         }
 
-        public void Put(string name, string dataType, Stream content)
+        public void Put(string name, string dataType, Func<Stream> content)
         {
             this.contents++;
             this.matter.Put(name, dataType, content);
