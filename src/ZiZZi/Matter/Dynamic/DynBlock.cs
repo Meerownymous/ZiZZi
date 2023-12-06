@@ -5,14 +5,13 @@ using System.IO;
 using Tonga.Bytes;
 using Tonga.IO;
 
-namespace ZiZZi.Matter.Dynamic
+namespace ZiZZi.Matter.Object
 {
     /// <summary>
     /// A dynamic block. It can contain properties, arrays and other blocks.
     /// </summary>
     public class DynBlock : IMatter<object>
     {
-        private readonly string name;
         private readonly MatterOrigin matter;
         private readonly BytesAsTyped bytesAsTyped;
         private readonly Lazy<IDictionary<string, object>> container;
@@ -28,7 +27,6 @@ namespace ZiZZi.Matter.Dynamic
             bool parentIsArray
         )
         {
-            this.name = name;
             this.matter = matter;
             this.bytesAsTyped = bytesAsTyped;
             this.container =

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using Tonga.Enumerable;
 using Tonga.Scalar;
 
-namespace ZiZZi.Matter.Dynamic
+namespace ZiZZi.Matter.Object
 {
     /// <summary>
     /// Expands a ZiZZi object into a real object.
@@ -14,6 +16,7 @@ namespace ZiZZi.Matter.Dynamic
         where TResult : class
     {
         private readonly IMatter<object> matter;
+        private readonly Type blueprint;
         private readonly int level;
         private int contents;
 
@@ -21,16 +24,19 @@ namespace ZiZZi.Matter.Dynamic
         /// Expands a ZiZZi object into a real object.
         /// </summary>
         public ObjectMatter() : this(
-            new DynamicMatter(), 0
+            new DynamicMatter(),
+            typeof(TResult),
+            0
         )
         { }
 
         /// <summary>
         /// Expands a ZiZZi object into a real object.
         /// </summary>
-        private ObjectMatter(IMatter<object> origin, int level)
+        private ObjectMatter(IMatter<object> origin, Type blueprint, int level)
         {
             this.matter = origin;
+            this.blueprint = blueprint;
             this.level = level;
             this.contents = 0;
         }
@@ -61,28 +67,46 @@ namespace ZiZZi.Matter.Dynamic
 
         public IMatter<TResult> Open(string contentType, string name)
         {
+            Type blueprint;
+            if (this.level == 0)
+                blueprint = this.blueprint;
+            else
+            {
+                var has = HasProperty(name, this.blueprint);
+                blueprint =
+                    has ?
+                        this.blueprint.GetProperty(name).PropertyType
+                        :
+                        typeof(object);
+            }
+
             return
                 new ObjectMatter<TResult>(
-                    this.matter.Open(contentType, name), this.level + 1
+                    this.matter.Open(contentType, name),
+                    blueprint,
+                    this.level + 1
                 );
         }
 
         public void Put(string name, Func<string> content)
         {
             this.contents++;
-            this.matter.Put(name, content);
+            if(HasProperty(name, this.blueprint) || IsArrayFamily(this.blueprint))
+                this.matter.Put(name, content);
         }
 
         public void Put(string name, string dataType, Func<byte[]> content)
         {
             this.contents++;
-            this.matter.Put(name, dataType, content);
+            if (HasProperty(name, this.blueprint))
+                this.matter.Put(name, dataType, content);
         }
 
         public void Put(string name, string dataType, Func<Stream> content)
         {
             this.contents++;
-            this.matter.Put(name, dataType, content);
+            if (HasProperty(name, this.blueprint))
+                this.matter.Put(name, dataType, content);
         }
 
         private TExpanded ExpandedAnonymousType<TExpanded>(ExpandoObject source)
@@ -125,6 +149,28 @@ namespace ZiZZi.Matter.Dynamic
         private TResult ExpandedSolidType(ExpandoObject source)
         {
             throw new ArgumentException("Expanding into non-Anonymous types is not yet supported.");
+        }
+
+        private static bool HasProperty(string name, Type blueprint)
+        {
+            return
+                Length._(
+                    Filtered._(
+                        propName => propName == name,
+                        Mapped._(
+                            prop => prop.Name,
+                            blueprint.GetProperties()
+                        )
+                    )
+                ).Value() > 0;
+        }
+
+        private static bool IsArrayFamily(Type candidate)
+        {
+            return
+                candidate.IsArray
+                ||
+                (candidate.IsGenericType && candidate.GetGenericTypeDefinition().GetInterface("ICollection") != null);
         }
     }
 

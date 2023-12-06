@@ -1,8 +1,5 @@
-﻿using System;
-using System.Xml.Linq;
-using Newtonsoft.Json.Linq;
+﻿using System.Xml.Linq;
 using Xunit;
-using Yaapii.JSON;
 
 namespace ZiZZi.Matter.XML.Test
 {

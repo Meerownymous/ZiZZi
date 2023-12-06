@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
+using Tonga.Enumerable;
+using Tonga.Scalar;
 using Xunit;
-using Yaapii.JSON;
-
 namespace ZiZZi.Matter.JSON.Test
 {
     public sealed class JsonBlockTests
@@ -21,8 +21,8 @@ namespace ZiZZi.Matter.JSON.Test
             media.Content();
 
             Assert.Equal(
-                1,
-                new JSONOf(root).Nodes("$.User").Count
+                """{"User":{}}""",
+                root.ToString(Newtonsoft.Json.Formatting.None)
             );
         }
 
@@ -40,9 +40,9 @@ namespace ZiZZi.Matter.JSON.Test
 
             media.Put("Name", () => "Bob");
 
-            Assert.Contains(
-                "Bob",
-                new JSONOf(root).Values("$.User.Name")
+            Assert.Equal(
+                """{"User":{"Name":"Bob"}}""",
+                root.ToString(Newtonsoft.Json.Formatting.None)
             );
         }
 
@@ -61,8 +61,8 @@ namespace ZiZZi.Matter.JSON.Test
             media.Open("block", "Skills");
 
             Assert.Equal(
-                1,
-                new JSONOf(root).Nodes("$.User.Skills").Count
+                """{"User":{"Skills":{}}}""",
+                root.ToString(Newtonsoft.Json.Formatting.None)
             );
         }
     }

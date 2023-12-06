@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 
-namespace ZiZZi.Matter.Dynamic
+namespace ZiZZi.Matter.Object
 {
     public sealed class DynamicMatter : IMatter<object>
     {

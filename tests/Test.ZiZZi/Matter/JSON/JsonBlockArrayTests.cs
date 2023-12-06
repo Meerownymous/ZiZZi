@@ -1,7 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json.Linq;
 using Xunit;
-using Yaapii.JSON;
 
 namespace ZiZZi.Matter.JSON.Test
 {
@@ -38,8 +37,8 @@ namespace ZiZZi.Matter.JSON.Test
             matter.Open("block", "UpsideDown");
 
             Assert.Equal(
-                "{}",
-                new JSONOf(root).Node("$.Worlds[0]").Token().ToString()
+                """{"Worlds":[{}]}""",
+                root.ToString(Newtonsoft.Json.Formatting.None)
             );
         }
     }

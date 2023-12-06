@@ -2,7 +2,7 @@
 using Tonga;
 using Tonga.Swap;
 
-namespace ZiZZi.Matter.Dynamic
+namespace ZiZZi.Matter.Object
 {
     /// <summary>
     /// Delivers matter of given contentype  which is rooted in the given dynamic object.

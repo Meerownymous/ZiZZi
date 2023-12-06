@@ -5,7 +5,7 @@ using Tonga;
 using Tonga.Bytes;
 using Tonga.IO;
 
-namespace ZiZZi.Matter.Dynamic
+namespace ZiZZi.Matter.Object
 {
     /// <summary>
     /// Simple value list of items.

@@ -1,7 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json.Linq;
 using Xunit;
-using Yaapii.JSON;
 
 namespace ZiZZi.Matter.JSON.Test
 {
@@ -28,8 +27,8 @@ namespace ZiZZi.Matter.JSON.Test
             media.Put("Todo", () => "Nothing");
 
             Assert.Equal(
-                "Nothing",
-                new JSONOf(root).Value("$.Todos[0]")
+                """{"Todos":["Nothing"]}""",
+                root.ToString(Newtonsoft.Json.Formatting.None)
             );
         }
 
@@ -41,8 +40,8 @@ namespace ZiZZi.Matter.JSON.Test
                 .Put("Todo", "double", () => BitConverter.GetBytes(12.12));
 
             Assert.Equal(
-                "12.12",
-                new JSONOf(root).Value("$.Todos[0]")
+                """{"Todos":[12.12]}""",
+                root.ToString(Newtonsoft.Json.Formatting.None)
             );
         }
     }

@@ -4,7 +4,7 @@ using Tonga;
 using Tonga.Map;
 using Tonga.Swap;
 
-namespace ZiZZi.Matter.Dynamic
+namespace ZiZZi.Matter.Object
 {
     /// <summary>
     /// Use with swapswitch to swap if given type is matched.

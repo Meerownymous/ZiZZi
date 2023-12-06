@@ -3,7 +3,7 @@ using System.Dynamic;
 using System.Xml.Linq;
 using Xunit;
 
-namespace ZiZZi.Matter.Dynamic.Test
+namespace ZiZZi.Matter.Object.Test
 {
     public sealed class DynBlockListTests
     {

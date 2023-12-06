@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using Xunit;
 
-namespace ZiZZi.Matter.Dynamic.Test
+namespace ZiZZi.Matter.Object.Test
 {
     public sealed class ObjectMatterTests
     {
-
         [Fact]
         public void ExpandsPropertyValues()
         {
@@ -14,15 +13,28 @@ namespace ZiZZi.Matter.Dynamic.Test
                 "The Expandables",
                 new ZiBlock("root",
                     new ZiProp("ID", "1000000"),
-                    new ZiProp("Name", "The Expandables"),
-                    new ZiBlock("Address",
-                        new ZiProp("Street", "Heroplace 1")
-                    )
+                    new ZiProp("Name", "The Expandables")
                 ).Form(
                     ObjectMatter.Fill(
                         new { ID = "", Name = "" }
                     )
                 ).Name
+            );
+        }
+
+        [Fact]
+        public void DoesNotCompileNonRequestedProperties()
+        {
+            Assert.Equal(
+                "1000000",
+                new ZiBlock("root",
+                    new ZiProp("ID", "1000000"),
+                    new ZiProp("Name", () => throw new System.Exception("I shall not be called"))
+                ).Form(
+                    ObjectMatter.Fill(
+                        new { ID = "" }
+                    )
+                ).ID
             );
         }
 

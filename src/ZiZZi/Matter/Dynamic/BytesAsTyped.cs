@@ -5,7 +5,7 @@ using Tonga.Swap;
 using Tonga.Text;
 using System.Diagnostics;
 
-namespace ZiZZi.Matter.Dynamic
+namespace ZiZZi.Matter.Object
 {
     /// <summary>
     /// Makes typed content from name and bytes to print into dynamic objects.

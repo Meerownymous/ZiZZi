@@ -7,7 +7,7 @@ using System.Reflection;
 using Tonga.Enumerable;
 using Xunit;
 
-namespace ZiZZi.Matter.Dynamic.Test
+namespace ZiZZi.Matter.Object.Test
 {
     public sealed class DynMatterTests
     {

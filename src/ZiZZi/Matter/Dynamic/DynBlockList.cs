@@ -5,7 +5,7 @@ using System.IO;
 using System.Xml.Linq;
 using Tonga;
 
-namespace ZiZZi.Matter.Dynamic
+namespace ZiZZi.Matter.Object
 {
     /// <summary>
     /// List of blocks which themselves can contain more properties and sub blocks.

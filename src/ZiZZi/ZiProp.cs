@@ -77,7 +77,13 @@ namespace ZiZZi
         /// <summary>
         /// A property which has a name and a value.
         /// </summary>
-        public ZiProp(string name, string value) : this(name, "string", AsBytes._(value))
+        public ZiProp(string name, string value) : this(name, () => value)
+        { }
+
+        /// <summary>
+        /// A property which has a name and a value.
+        /// </summary>
+        public ZiProp(string name, Func<string> value) : this(name, "string", () => AsBytes._(value()))
         { }
 
         /// <summary>

@@ -5,7 +5,7 @@ using Tonga.Bytes;
 using Xunit;
 using ZiZZi.Matter.XML;
 
-namespace ZiZZi.Matter.Dynamic.Test
+namespace ZiZZi.Matter.Object.Test
 {
     public sealed class DynBlockTests
     {
