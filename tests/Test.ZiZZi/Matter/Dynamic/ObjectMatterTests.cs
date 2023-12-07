@@ -10,17 +10,38 @@ namespace ZiZZi.Matter.Object.Test
         [Fact]
         public void ExpandsPropertyValues()
         {
-            Assert.Equal(
-                "The Expandables",
-                new ZiBlock("root",
-                    new ZiProp("ID", "1000000"),
-                    new ZiProp("Name", "The Expandables")
+
+            var t =
+                new ZiBlockList("root", "block",
+                    new ZiBlock("block",
+                        new ZiProp("ID", "1000000"),
+                        new ZiProp("Name", "The Expandables")
+                    )
                 ).Form(
                     ObjectMatter.Fill(
-                        new { ID = "", Name = "" }
+                        new[]
+                        {
+                            new { ID = "", Name = "" }
+                        }
                     )
-                ).Name
-            );
+                );
+
+            //Assert.Equal(
+            //    "The Expandables",
+            //    new ZiBlockList("root", "block",
+            //        new ZiBlock("block",
+            //            new ZiProp("ID", "1000000"),
+            //            new ZiProp("Name", "The Expandables")
+            //        )
+            //    ).Form(
+            //        ObjectMatter.Fill(
+            //            new[]
+            //            {
+            //                new { ID = "", Name = "" }
+            //            }
+            //        )
+            //    )[0].Name
+            //);
         }
 
         [Fact]

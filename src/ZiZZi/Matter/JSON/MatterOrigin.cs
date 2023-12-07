@@ -22,7 +22,7 @@ namespace ZiZZi.Matter.JSON
                     AsSwap._<JContainer, string, IMatter<JContainer>>((parent, name) =>
                         new JsonBlock(this, bytesAsToken, parent, name)
                     ),
-                    "value-array",
+                    "value-list",
                     AsSwap._<JContainer, string, IMatter<JContainer>>((parent, name) =>
                         new ListGuard<JContainer>(
                             new ContentAware<JContainer>(
@@ -32,7 +32,7 @@ namespace ZiZZi.Matter.JSON
                             true
                         )
                     ),
-                    "block-array",
+                    "block-list",
                     AsSwap._<JContainer, string, IMatter<JContainer>>((parent, name) =>
                         new ListGuard<JContainer>(
                             new ContentAware<JContainer>(
@@ -42,7 +42,7 @@ namespace ZiZZi.Matter.JSON
                             false
                         )
                     ),
-                    "block-inside-array",
+                    "block-inside-list",
                     AsSwap._<JContainer, string, IMatter<JContainer>>((parent, name) =>
                         new ContentAware<JContainer>(
                             new JsonBlock(this, bytesAsToken, parent, name)

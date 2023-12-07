@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json.Linq;
 using Tonga.Enumerable;
 using Tonga.Scalar;
 using ZiZZi.Matter.Dynamic;
@@ -52,17 +53,28 @@ namespace ZiZZi.Matter.Object
             else if (this.level == 1 && this.contents == 0)
             {
                 ExpandoObject content = (ExpandoObject)this.matter.Content();
-                
-                if (this.level == 1 && this.contents == 0)
+                result =
+                    typeof(TResult).Name.StartsWith("<>f__AnonymousType") ?
+                    ExpandedAnonymousType<TResult>(content)
+                    :
+                    ExpandedSolidType(content);
+            }
+            else if(this.level == 0 && this.contents == 0)
+            {
+                var c = this.matter.Content();
+                if(IsArrayFamily(typeof(TResult)))
                 {
-                    result =
-                        typeof(TResult).Name.StartsWith("<>f__AnonymousType") ?
-                        ExpandedAnonymousType<TResult>(content)
-                        :
-                        ExpandedSolidType(content);
+                    var elementType = typeof(TResult).GetElementType();
+                    Type genericType = typeof(List<>).MakeGenericType(elementType);
+                    dynamic casted = Activator.CreateInstance(genericType);
+                    MethodInfo addMethod = casted.GetType().GetMethod("Add");
+                    foreach (var item in c as List<object>)
+                    {
+                        addMethod.Invoke(casted, new object[] { ExpandedAnonymousType(elementType, item as ExpandoObject) });
+                    }
+                    result = casted;
                 }
             }
-
             return result;
         }
 
@@ -80,11 +92,15 @@ namespace ZiZZi.Matter.Object
             }
             else
             {
-                var has = HasProperty(name, this.blueprint);
+                var has = HasProperty(name, this.blueprint) || IsArrayFamily(this.blueprint);
                 result =
                     has ?
                     new ObjectMatter<TResult>(
                         this.matter.Open(contentType, name),
+                        IsArrayFamily(this.blueprint)
+                        ?
+                        this.blueprint
+                        :
                         this.blueprint.GetProperty(name).PropertyType,
                         this.level + 1
                     )

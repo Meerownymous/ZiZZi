@@ -26,7 +26,7 @@ namespace ZiZZi.Matter.JSON
                         Case._("integer", data => new JValue(AsInteger._(data).Value())),
                         Case._("long", data => new JValue(AsLong._(data).Value())),
                         Case._("bool", data => new JValue(AsBool._(data).Value())),
-                        Case._("string", data => new JValue(AsText._(data).ToString()))
+                        Case._("string", data => new JValue(AsText._(data).AsString()))
                     )
                 );
         }

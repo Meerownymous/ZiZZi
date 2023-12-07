@@ -23,9 +23,9 @@ namespace ZiZZi.Matter.Object
                 SwapSwitch._(
                     AsEnumerable._(
                         Case._("double", (name, data) => AsDouble._(data).Value()),
-                        Case._("integer", (name, data) => AsInteger._(data).Value()),
-                        Case._("long", (name, data) => AsLong._(data).Value()),
-                        Case._("bool", (name, data) => AsBool._(data).Value()),
+                        Case._("int32", (name, data) => AsInteger._(data).Value()),
+                        Case._("int64", (name, data) => AsLong._(data).Value()),
+                        Case._("boolean", (name, data) => AsBool._(data).Value()),
                         Case._("string", (name, data) => AsText._(data).AsString())
                     )
                 );
