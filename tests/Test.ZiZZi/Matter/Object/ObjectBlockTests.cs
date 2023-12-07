@@ -21,7 +21,6 @@ namespace ZiZZi.Matter.Object.Test
             dynamic block =
                 Activator.CreateInstance(
                     blockType,
-                    "TheBlock",
                     blueprint,
                     new BytesAsTyped()
                 );
@@ -45,7 +44,6 @@ namespace ZiZZi.Matter.Object.Test
             dynamic block =
                 Activator.CreateInstance(
                     blockType,
-                    "TheBlock",
                     blueprint,
                     new BytesAsTyped()
                 );
@@ -69,7 +67,6 @@ namespace ZiZZi.Matter.Object.Test
             dynamic block =
                 Activator.CreateInstance(
                     blockType,
-                    "TheBlock",
                     blueprint,
                     new BytesAsTyped()
                 );
@@ -89,7 +86,6 @@ namespace ZiZZi.Matter.Object.Test
                 Activator.CreateInstance(
                     typeof(ObjectBlock2<>)
                         .MakeGenericType(blueprint.GetType()),
-                    "TheBlock",
                     blueprint,
                     new BytesAsTyped()
                 );
@@ -108,7 +104,6 @@ namespace ZiZZi.Matter.Object.Test
                 Activator.CreateInstance(
                     typeof(ObjectBlock2<>)
                         .MakeGenericType(blueprint.GetType()),
-                    "TheBlock",
                     blueprint,
                     new BytesAsTyped()
                 );
@@ -129,7 +124,6 @@ namespace ZiZZi.Matter.Object.Test
             dynamic block =
                 Activator.CreateInstance(
                     blockType,
-                    "TheBlock",
                     blueprint,
                     new BytesAsTyped()
                 );
@@ -155,7 +149,6 @@ namespace ZiZZi.Matter.Object.Test
                 Activator.CreateInstance(
                     typeof(ObjectBlock2<>)
                         .MakeGenericType(blueprint.GetType()),
-                    "Book",
                     blueprint,
                     new BytesAsTyped()
                 );
@@ -186,7 +179,6 @@ namespace ZiZZi.Matter.Object.Test
                 Activator.CreateInstance(
                     typeof(ObjectBlock2<>)
                         .MakeGenericType(blueprint.GetType()),
-                    "Book",
                     blueprint,
                     new BytesAsTyped()
                 );

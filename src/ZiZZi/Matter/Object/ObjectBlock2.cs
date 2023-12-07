@@ -13,14 +13,13 @@ namespace ZiZZi.Matter.Object
 {
     public sealed class ObjectBlock2<TResult> : IMatter<object>
     {
-        private readonly string name;
         private readonly dynamic blueprint;
         private readonly BytesAsTyped conversion;
         private readonly Dictionary<string, IMatter<dynamic>> subObjects;
         private readonly IDictionary<string, object> properties;
         private readonly AsMap<string, Type> propertyTypes;
 
-        public ObjectBlock2(string name, dynamic blueprint, BytesAsTyped conversion)
+        public ObjectBlock2(dynamic blueprint, BytesAsTyped conversion)
         {
             this.subObjects = new Dictionary<string, IMatter<dynamic>>();
             this.properties = new Dictionary<string, object>();
@@ -33,10 +32,8 @@ namespace ZiZZi.Matter.Object
                         )
                     )
                 );
-            this.name = name;
             this.blueprint = blueprint;
             this.conversion = conversion;
-
         }
 
         public dynamic Content()
@@ -74,7 +71,6 @@ namespace ZiZZi.Matter.Object
                     Activator.CreateInstance(
                         typeof(ObjectBlock2<>)
                             .MakeGenericType(this.propertyTypes[name]),
-                            name,
                             typeof(TResult).GetProperty(name).GetValue(this.blueprint),
                             new BytesAsTyped()
                     );
