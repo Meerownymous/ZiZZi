@@ -6,10 +6,16 @@
 
 # ZiZZi
 
-Create data structures using *object oriented* blocks. 
+Create data using *object oriented* blocks, DTO-free.
+
+With ZiZZi, you can create the declaration of data before deciding about its format.
+You can then transform the declaration to a property object as well as xml, json, or whatever you need.
+
+ZiZZi is different from common serialization principles. It is built as a "printer", not a transformer.
+It does not take some input data format/which is then transformed - instead, it just funnels the content directly from the sources.
+This can lead to less complex code and offer interesting advantages, like near-costless data masking.
 
 The code follows all the principles suggested in the two "[Elegant Objects](https://www.amazon.de/Elegant-Objects-Yegor-Bugayenko/dp/1519166915)" books.
-
 It adopts the approach of the blog article [printers instead of getters](https://www.yegor256.com/2016/04/05/printers-instead-of-getters.html).
 
 ## Origin
