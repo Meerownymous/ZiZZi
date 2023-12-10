@@ -333,32 +333,35 @@ var list =
 
 ### Xml Attributes
 Json does not support attributes, so they are not included in Blox objects. If you need them, you might implement or extend the JsonMatter objects to support them and write Blox objects.
-### BxMap
+
+### ZiMap
 Easy way for adding mutiple Props by KeyValuePairs. Note: no duplicated keys are allowed!
 ```
+
+//C#
+new ZiBlock(
+    "person", //this key is visible in xml, but not in json or result objects.
+    new ZiMap(
+        "name", "George",
+        "gender", "male"
+    )
+);
+
 //xml
 <person>
     <name>George</name>
-    <age>23</age>
     <gender>male</gender>
 </person>
 
 //json
 {
     "name": "George",
-    "age": "23",
     "gender": "male"
 }
 
-//C#
-new BxBlock(
-    "person",
-    new BxMap(
-        "name", "George",
-        "age", "23",
-        "gender", "male"
-    )
-)
+//object
+new { Name: "George", Gender: "Male" }
+
 ```
 ## Conditional Object
 Instead of using large if/else constructs:
