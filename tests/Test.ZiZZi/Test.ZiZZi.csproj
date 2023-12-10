@@ -24,13 +24,11 @@
     <None Remove="Media\JSON\" />
     <None Remove="Media\Validated\" />
     <None Remove="Matter\XML\" />
-    <None Remove="Matter\Dynamic\" />
     <None Remove="Matter\Object\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Matter\JSON\" />
     <Folder Include="Matter\XML\" />
-    <Folder Include="Matter\Dynamic\" />
     <Folder Include="Matter\Object\" />
   </ItemGroup>
   <ItemGroup>

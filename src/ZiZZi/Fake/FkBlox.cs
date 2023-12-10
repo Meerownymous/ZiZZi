@@ -28,6 +28,7 @@ namespace ZiZZi.Fake
         }
 
         public T Form<T>(IMatter<T> matter)
+            where T : class
         {
             this.form();
             return matter.Content();

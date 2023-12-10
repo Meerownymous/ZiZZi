@@ -43,6 +43,7 @@ namespace ZiZZi
         }
 
         public T Form<T>(IMatter<T> matter)
+            where T : class
         {
             var array = matter.Open("value-list", this.name);
             var contentTaken = true;

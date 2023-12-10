@@ -2,6 +2,7 @@
 using Tonga.Map;
 using Xunit;
 using ZiZZi.Matter.XML;
+using System.Xml.Linq;
 
 namespace ZiZZi.Test
 {
@@ -20,7 +21,7 @@ namespace ZiZZi.Test
 
             Assert.Equal(
                 "<map><firstname>Förster</firstname><lastname>Laster</lastname></map>",
-                matter.Content().ToString(System.Xml.Linq.SaveOptions.DisableFormatting)
+                matter.Content().ToString(SaveOptions.DisableFormatting)
             );
         }
     }

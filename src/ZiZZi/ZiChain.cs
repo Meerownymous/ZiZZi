@@ -39,6 +39,7 @@ namespace ZiZZi
         }
 
         public T Form<T>(IMatter<T> media)
+            where T : class
         {
             foreach (var p in this.information)
                 p.Form(media);

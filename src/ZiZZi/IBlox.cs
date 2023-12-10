@@ -8,6 +8,7 @@
         /// <summary>
         /// Form matter from this blox.
         /// </summary>
-        T Form<T>(IMatter<T> matter);
+        T Form<T>(IMatter<T> matter)
+            where T : class;
     }
 }

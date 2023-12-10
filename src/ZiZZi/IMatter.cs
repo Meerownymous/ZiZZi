@@ -6,12 +6,12 @@ namespace ZiZZi
     /// <summary>
     /// A matter formed by information.
     /// </summary>
-    public interface IMatter<T>
+    public interface IMatter<TContent>
     {
         /// <summary>
         /// Open a matter box.
         /// </summary>
-        IMatter<T> Open(string contentType, string name);
+        IMatter<TContent> Open(string contentType, string name);
 
         /// <summary>
         /// Put text content into the matter.
@@ -31,6 +31,6 @@ namespace ZiZZi
         /// <summary>
         /// The final matter.
         /// </summary>
-        T Content();
+        TContent Content();
     }
 }

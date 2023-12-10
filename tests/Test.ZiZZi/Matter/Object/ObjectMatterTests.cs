@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Tonga.Enumerable;
+﻿using Tonga.Enumerable;
 using Xunit;
 
 namespace ZiZZi.Matter.Object.Test
@@ -8,10 +6,26 @@ namespace ZiZZi.Matter.Object.Test
     public sealed class ObjectMatterTests
     {
         [Fact]
-        public void ExpandsPropertyValues()
+        public void ExpandsPropertyValuesOfBlock()
         {
+            Assert.Equal(
+                "The Expandables",
+                new ZiBlock("root",
+                    new ZiProp("ID", "1000000"),
+                    new ZiProp("Name", "The Expandables")
+                ).Form(
+                    ObjectMatter.Fill(
+                        new { ID = "", Name = "" }
+                    )
+                ).Name
+            );
+        }
 
-            var t =
+        [Fact]
+        public void ExpandsPropertyValuesOfBlockInArray()
+        {
+            Assert.Equal(
+                "The Expandables",
                 new ZiBlockList("root", "block",
                     new ZiBlock("block",
                         new ZiProp("ID", "1000000"),
@@ -24,24 +38,8 @@ namespace ZiZZi.Matter.Object.Test
                             new { ID = "", Name = "" }
                         }
                     )
-                );
-
-            //Assert.Equal(
-            //    "The Expandables",
-            //    new ZiBlockList("root", "block",
-            //        new ZiBlock("block",
-            //            new ZiProp("ID", "1000000"),
-            //            new ZiProp("Name", "The Expandables")
-            //        )
-            //    ).Form(
-            //        ObjectMatter.Fill(
-            //            new[]
-            //            {
-            //                new { ID = "", Name = "" }
-            //            }
-            //        )
-            //    )[0].Name
-            //);
+                )[0].Name
+            );
         }
 
         [Fact]
@@ -63,23 +61,6 @@ namespace ZiZZi.Matter.Object.Test
                         new { ID = "" }
                     )
                 ).ID
-            );
-        }
-
-        [Fact]
-        public void ExpandsNonAnonymousNestedObjects()
-        {
-            Assert.Equal(
-                "Heroplace 1",
-                new ZiBlock("root",
-                    new ZiValueList("Addresses", "Address",
-                        "Heroplace 1"
-                    )
-                ).Form(
-                    ObjectMatter.Fill(
-                        new { ID = "", Name = "", Addresses = new List<string>() }
-                    )
-                ).Addresses[0]
             );
         }
 

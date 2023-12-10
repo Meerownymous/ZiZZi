@@ -50,7 +50,7 @@ namespace ZiZZi
             this.content = content;
         }
 
-        public T Form<T>(IMatter<T> media)
+        public T Form<T>(IMatter<T> media) where T : class
         {
             return this.content.Form(media.Open("block", this.name));  
         }

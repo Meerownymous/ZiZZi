@@ -103,6 +103,7 @@ namespace ZiZZi
         }
 
         public T Form<T>(IMatter<T> matter)
+            where T : class
         {
             matter.Present(this.name, this.dataType, () => TakeContent._(this.value().Bytes()));
             return matter.Content();

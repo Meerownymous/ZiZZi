@@ -18,6 +18,7 @@ namespace ZiZZi
         }
 
         public T Form<T>(IMatter<T> matter)
+            where T : class
         {
             return this.blox().Form(matter);
         }

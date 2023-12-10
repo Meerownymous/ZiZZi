@@ -11,9 +11,9 @@ namespace ZiZZi.Matter
     /// Asserts that new blocks are placed using the correct item name,
     /// with which the array was defined.
     /// </summary>
-    public sealed class ListGuard<T> : IMatter<T>
+    public sealed class ListGuard<TContent> : IMatter<TContent>
     {
-        private readonly IMatter<T> origin;
+        private readonly IMatter<TContent> origin;
         private readonly IList<string> itemName;
         private readonly bool isValueArray;
         private readonly string arrayName;
@@ -22,7 +22,7 @@ namespace ZiZZi.Matter
         /// Asserts that new blocks are placed using the correct item name,
         /// with which the array was defined.
         /// </summary>
-        public ListGuard(IMatter<T> origin, string arrayName, bool isValueArray)
+        public ListGuard(IMatter<TContent> origin, string arrayName, bool isValueArray)
         {
             this.origin = origin;
             this.itemName = new List<string>();
@@ -30,12 +30,12 @@ namespace ZiZZi.Matter
             this.arrayName = arrayName;
         }
 
-        public T Content()
+        public TContent Content()
         {
             return this.origin.Content();
         }
 
-        public IMatter<T> Open(string contentType, string name)
+        public IMatter<TContent> Open(string contentType, string name)
         {
             if(this.isValueArray)
                 throw new InvalidOperationException($"Opening a {contentType} inside a value-array is not allowed.");

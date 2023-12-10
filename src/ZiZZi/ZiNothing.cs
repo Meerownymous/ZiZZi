@@ -10,6 +10,7 @@ namespace ZiZZi
     public sealed class ZiNothing : IBlox
     {
         public T Form<T>(IMatter<T> matter)
+            where T : class
         {
             return matter.Content();
         }

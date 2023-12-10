@@ -214,19 +214,6 @@ public sealed class NugetReleaseTask : FrostingTask<BuildContext>
                     }
                 );
             }
-            var symbols = context.GetFiles($"{Settings.ArtifactPath}/*.snupkg");
-            foreach (var symbol in symbols)
-            {
-                context.NuGetPush(
-                symbol,
-                    new NuGetPushSettings
-                    {
-                        Source = Settings.NugetSource,
-                        ApiKey = Settings.NugetReleaseToken,
-                        SkipDuplicate = true
-                    }
-                );
-            }
         }
     }
 }

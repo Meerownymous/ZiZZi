@@ -35,6 +35,7 @@ namespace ZiZZi
         }
 
         public T Form<T>(IMatter<T> matter)
+            where T : class
         {
             var target =
                 new NameGuard<T>(

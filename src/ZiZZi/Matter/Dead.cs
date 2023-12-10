@@ -6,18 +6,18 @@ namespace ZiZZi.Matter
     /// <summary>
     /// Dead media refusing everything.
     /// </summary>
-    public class Dead<T> : IMatter<T>
+    public class Dead<TContent> : IMatter<TContent>
     {
         public Dead()
         {
         }
 
-        public T Content()
+        public TContent Content()
         {
             throw new InvalidOperationException("Media is dead.");
         }
 
-        public IMatter<T> Open(string contentType, string name)
+        public IMatter<TContent> Open(string contentType, string name)
         {
             throw new InvalidOperationException("Media is dead.");
         }

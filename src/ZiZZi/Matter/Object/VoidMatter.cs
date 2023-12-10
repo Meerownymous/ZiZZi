@@ -1,20 +1,21 @@
 ﻿using System;
 using System.IO;
 
-namespace ZiZZi.Matter.Dynamic
+namespace ZiZZi.Matter.Object
 {
-    public sealed class VoidMatter<T> : IMatter<T>
+    public sealed class VoidMatter<TResult> : IMatter<TResult> where TResult : class
     {
         public VoidMatter()
         {
+
         }
 
-        public T Content()
+        public TResult Content()
         {
-            return default(T);
+            return default(TResult);
         }
 
-        public IMatter<T> Open(string contentType, string name)
+        public IMatter<TResult> Open(string contentType, string name)
         {
             return this;
         }
@@ -35,4 +36,3 @@ namespace ZiZZi.Matter.Dynamic
         }
     }
 }
-
