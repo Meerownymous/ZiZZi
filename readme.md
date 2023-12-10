@@ -16,13 +16,11 @@ It adopts the approach of the blog article [printers instead of getters](https:/
 This is a fork of [BriX](https://github.com/icarus-consulting/BriX). This library offers more flexibility over the resulting output.
 
 1. BriX' main goal was to express data in a way that fits json as well as xml. It achieved this by offering a limited set of structuring features:
-For example, json does not have attributes, BriX does not support them.
-
-ZiZZi lets this choice open to the library user.
+For example, json does not have attributes, BriX does not support them. ZiZZi lets this choice open to the library user, as the interfaces can be used to introduce more types.
 
 2. With ZiZZi you can transform to anonymous objects - only compiling the necessary properties - which can be handy for UI building.
 
-3. ZiZZi can express typed content, also raw bytes and streams - BriX is limited to streams.
+3. ZiZZi can express typed content, also raw bytes and streams - BriX is limited to strings.
 
 
 ## This is how you declare a ZiZZi object
