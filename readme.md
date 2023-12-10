@@ -61,16 +61,15 @@ var menu =
 ```csharp
     var obj =
         new ZiObject(
-            new ZiProp("Name", "Mr.Object")
+            new ZiProp("Name", "Mr.Object"),
+            new ZiProp("Information", () => ComplexInformation())
         ).Form(
-            ObjectMatter.Fill(new { Name = "" }
+            ObjectMatter.Fill(new { Name = "" })
         );
 
     //will give you an anonymous object with the properties filled by the defined ZiZZi.
+    //"Information" is not requested, so the ComplexInformation method is not being executed.
     Assert.Equal("Mr.Object", obj.Name);
-
-    //Currently, nested anonymous objects with properties are supported, as well as string lists.
-    //Other types are work in progress.
 );
 ```
 
