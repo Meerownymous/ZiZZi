@@ -10,12 +10,13 @@ namespace ZiZZi.Matter.Object.Test
         {
             Assert.Equal(
                 "The Expandables",
-                new ZiBlock("root",
+                new ZiBlock("Propulation",
                     new ZiProp("ID", "1000000"),
-                    new ZiProp("Name", "The Expandables")
+                    new ZiProp("Name", "The Expandables"),
+                    new ZiProp("Name2", "The Expandables")
                 ).Form(
                     ObjectMatter.Fill(
-                        new { ID = "", Name = "" }
+                        new { ID = "", Name = "", Name2 = "" }
                     )
                 ).Name
             );
@@ -26,7 +27,7 @@ namespace ZiZZi.Matter.Object.Test
         {
             Assert.Equal(
                 "The Expandables",
-                new ZiBlockList("root", "block",
+                new ZiBlockList("Listing", "block",
                     new ZiBlock("block",
                         new ZiProp("ID", "1000000"),
                         new ZiProp("Name", "The Expandables")
@@ -47,7 +48,7 @@ namespace ZiZZi.Matter.Object.Test
         {
             Assert.Equal(
                 "1000000",
-                new ZiBlock("root",
+                new ZiBlock("Lazy",
                     new ZiProp("ID", "1000000"),
                     new ZiProp("Name", () => throw new System.Exception("I shall not be called")),
                     new ZiValueList("Addresses", "Address", () =>

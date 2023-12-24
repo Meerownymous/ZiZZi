@@ -10,7 +10,7 @@ namespace ZiZZi.Matter.JSON
     /// <summary>
     /// Simple value array of items.
     /// </summary>
-    public class JsonValueArray : IMatter<JContainer>
+    public sealed class JsonValueArray : IMatter<JContainer>
     {
         private readonly Lazy<JArray> content;
         private readonly ISwap<string, byte[], JToken> pipe;

@@ -61,16 +61,15 @@ var menu =
 ```csharp
     var obj =
         new ZiObject(
-            new ZiProp("Name", "Mr.Object")
+            new ZiProp("Name", "Mr.Object"),
+            new ZiProp("Information", () => ComplexInformation())
         ).Form(
-            ObjectMatter.Fill(new { Name = "" }
+            ObjectMatter.Fill(new { Name = "" })
         );
 
     //will give you an anonymous object with the properties filled by the defined ZiZZi.
+    //"Information" is not requested, so the ComplexInformation method is not being executed.
     Assert.Equal("Mr.Object", obj.Name);
-
-    //Currently, nested anonymous objects with properties are supported, as well as string lists.
-    //Other types are work in progress.
 );
 ```
 
@@ -153,8 +152,8 @@ You can build Blox which will aggregate data only when printed:
 var report =
     new ZiBlock("Weather Report",
     	new ZiBlock(
-	    new ZiProp("Temperature", () => weatherServer.Degrees("Berlin").AsDouble()) //not yet read
-	)
+	        new ZiProp("Temperature", () => weatherServer.Degrees("Berlin").AsDouble()) //not yet read
+	    )
     );
 
 report.Form(new XmlMatter()); //Temperature is read while printing
@@ -333,32 +332,35 @@ var list =
 
 ### Xml Attributes
 Json does not support attributes, so they are not included in Blox objects. If you need them, you might implement or extend the JsonMatter objects to support them and write Blox objects.
-### BxMap
+
+### ZiMap
 Easy way for adding mutiple Props by KeyValuePairs. Note: no duplicated keys are allowed!
 ```
+
+//C#
+new ZiBlock(
+    "person", //this key is visible in xml, but not in json or result objects.
+    new ZiMap(
+        "name", "George",
+        "gender", "male"
+    )
+);
+
 //xml
 <person>
     <name>George</name>
-    <age>23</age>
     <gender>male</gender>
 </person>
 
 //json
 {
     "name": "George",
-    "age": "23",
     "gender": "male"
 }
 
-//C#
-new BxBlock(
-    "person",
-    new BxMap(
-        "name", "George",
-        "age", "23",
-        "gender", "male"
-    )
-)
+//object
+new { Name: "George", Gender: "Male" }
+
 ```
 ## Conditional Object
 Instead of using large if/else constructs:

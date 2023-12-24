@@ -14,12 +14,14 @@ namespace ZiZZi.Matter.Object
         where TResult : class
     {
         private readonly IMatter<TResult> origin;
-        private readonly JToken mask;
+        private readonly Lazy<JToken> mask;
+        private bool isRoot;
 
-        public MaskedMatter(IMatter<TResult> origin, JToken mask)
+        public MaskedMatter(IMatter<TResult> origin, Func<JToken> mask)
         {
             this.origin = origin;
-            this.mask = mask;
+            this.mask = new Lazy<JToken>(mask);
+            this.isRoot = true;
         }
 
         public TResult Content()
@@ -29,15 +31,16 @@ namespace ZiZZi.Matter.Object
 
         public IMatter<TResult> Open(string contentType, string name)
         {
-            IMatter<TResult> matter = this.origin.Open(contentType, name); ;
-            var subMask = name == "root" ? mask : mask[name];
+            IMatter<TResult> matter = this.origin.Open(contentType, name);
+            var subMask = this.isRoot ? mask.Value : mask.Value[name];
+            this.isRoot = false;
             if (subMask.Type == JTokenType.Object)
                 matter = new MaskedBlock<TResult>(matter, subMask);
             else if (subMask.Type == JTokenType.Array)
             {
                 if ((subMask as JArray).Count == 0)
                     matter = new VoidMatter<TResult>();
-                else if ((mask as JArray)[0].Type != JTokenType.Object)
+                else if ((mask.Value as JArray)[0].Type != JTokenType.Object)
                     matter = new MaskedValueList<TResult>(matter, subMask);
                 else
                     matter = new MaskedObjectList<TResult>(matter, subMask);
