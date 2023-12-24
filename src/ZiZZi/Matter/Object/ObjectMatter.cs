@@ -46,20 +46,13 @@ namespace ZiZZi.Matter.Object
         public TResult Content()
         {
             TResult result = default(TResult);
-            if (this.level == 1)
+            if (this.level == 1) //object
             {
-                if (this.contents != 0)
-                {
-                    this.contents--;
-                }
-                else if (this.level == 1 && this.contents == 0) //object
-                {
-                    var content = this.matter.Content();
-                    result = JsonConvert.DeserializeAnonymousType(
-                        content.ToString(),
-                        this.blueprint
-                    );
-                }
+                var content = this.matter.Content();
+                result = JsonConvert.DeserializeAnonymousType(
+                    content.ToString(),
+                    this.blueprint
+                );
             }
             else if (this.level == 0 && this.contents == 0) //array
             {

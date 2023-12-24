@@ -1,4 +1,5 @@
-﻿using Tonga.Enumerable;
+﻿using System;
+using Tonga.Enumerable;
 using Xunit;
 
 namespace ZiZZi.Matter.Object.Test
@@ -19,6 +20,19 @@ namespace ZiZZi.Matter.Object.Test
                         new { ID = "", Name = "", Name2 = "" }
                     )
                 ).Name
+            );
+        }
+
+        [Fact]
+        public void ExpandsWithOnlyOneProperty()
+        {
+            Assert.Equal(
+                "Success-Avenue",
+                new ZiBlock("Something",
+                    new ZiProp("Street", "Success-Avenue")
+                )
+                .Form(ObjectMatter.Fill(new { Street = String.Empty }))
+                .Street
             );
         }
 
