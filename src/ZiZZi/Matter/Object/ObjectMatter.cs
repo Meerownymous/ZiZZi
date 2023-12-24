@@ -25,7 +25,7 @@ namespace ZiZZi.Matter.Object
         public ObjectMatter(TResult blueprint) : this(
             new MaskedMatter<JContainer>(
                 new JsonMatter(),
-                JToken.Parse(JsonConvert.SerializeObject(blueprint))
+                () => JToken.Parse(JsonConvert.SerializeObject(blueprint))
             ),
             blueprint,
             0
@@ -55,7 +55,10 @@ namespace ZiZZi.Matter.Object
                 else if (this.level == 1 && this.contents == 0) //object
                 {
                     var content = this.matter.Content();
-                    result = JsonConvert.DeserializeAnonymousType(content.ToString(), this.blueprint);
+                    result = JsonConvert.DeserializeAnonymousType(
+                        content.ToString(),
+                        this.blueprint
+                    );
                 }
             }
             else if (this.level == 0 && this.contents == 0) //array
