@@ -60,7 +60,7 @@ var menu =
 
 ```csharp
     var obj =
-        new ZiObject(
+        new ZiBlock(
             new ZiProp("Name", "Mr.Object"),
             new ZiProp("Information", () => ComplexInformation())
         ).Form(
@@ -151,9 +151,7 @@ You can build Blox which will aggregate data only when printed:
 ```csharp
 var report =
     new ZiBlock("Weather Report",
-    	new ZiBlock(
-	        new ZiProp("Temperature", () => weatherServer.Degrees("Berlin").AsDouble()) //not yet read
-	    )
+        new ZiProp("Temperature", () => weatherServer.Degrees("Berlin").AsDouble()) //not yet read
     );
 
 report.Form(new XmlMatter()); //Temperature is read while printing
